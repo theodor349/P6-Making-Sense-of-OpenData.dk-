@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{41D878AE-62B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenDataParser", "Parser\OpenDataParser\OpenDataParser.csproj", "{ECCEEDFD-DBC4-487B-8E31-74E6D134D667}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Parser\Shared\Shared.csproj", "{53808C8D-57D1-4A70-9B4B-57A2620C012B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +19,17 @@ Global
 		{ECCEEDFD-DBC4-487B-8E31-74E6D134D667}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECCEEDFD-DBC4-487B-8E31-74E6D134D667}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECCEEDFD-DBC4-487B-8E31-74E6D134D667}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53808C8D-57D1-4A70-9B4B-57A2620C012B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53808C8D-57D1-4A70-9B4B-57A2620C012B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53808C8D-57D1-4A70-9B4B-57A2620C012B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53808C8D-57D1-4A70-9B4B-57A2620C012B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ECCEEDFD-DBC4-487B-8E31-74E6D134D667} = {41D878AE-62BE-42C4-99E8-EFF9493A02C0}
+		{53808C8D-57D1-4A70-9B4B-57A2620C012B} = {41D878AE-62BE-42C4-99E8-EFF9493A02C0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A553F2C4-4AA3-47A4-9FF5-C18E7C4E249F}
