@@ -35,7 +35,7 @@ namespace IntermediateGenerator
         {
             string jsonString = File.ReadAllText(file.FullName);
             JObject jsonObject = JObject.Parse(jsonString);
-            string prop = jsonObject.SelectToken("$.features.EJER").Value<string>();
+            string prop = (string)jsonObject.SelectToken("$.features[0].properties.EJER");
             _logger.LogInformation(prop);
         }
     }
