@@ -1,4 +1,7 @@
-﻿using IntermediateGenerator;
+﻿using DatasetDecider;
+using DatasetParser;
+using IntermediateGenerator;
+using LabelRecognizer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +25,9 @@ var host = Host.CreateDefaultBuilder()
     {
         services.AddTransient<IDataParser, DataParser>();
         services.AddIntermediateGenerator();
+        services.AddDatasetDecider();
+        services.AddDatasetParser();
+        services.AddLabelRecognizer();
     })
     .UseSerilog()
     .Build();
