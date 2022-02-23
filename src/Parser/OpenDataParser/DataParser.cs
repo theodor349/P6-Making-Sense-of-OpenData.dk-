@@ -20,12 +20,18 @@ namespace OpenDataParser
         private readonly IConfiguration _configuration;
         private readonly ILogger<DataParser> _logger;
         private readonly IIntermediateGenerator _intermediateGenerator;
+        private readonly ILabelGenerator _labelGenerator;
+        private readonly IDatasetClassifier _datasetClassifier;
+        private readonly IDatasetParser _datasetParser;
 
-        public DataParser(IConfiguration configuration, ILogger<DataParser> logger, IIntermediateGenerator intermediateGenerator) 
+        public DataParser(IConfiguration configuration, ILogger<DataParser> logger, IIntermediateGenerator intermediateGenerator, ILabelGenerator labelGenerator, IDatasetClassifier datasetClassifier, IDatasetParser datasetParser)
         {
             _configuration = configuration;
             _logger = logger;
             _intermediateGenerator = intermediateGenerator;
+            _labelGenerator = labelGenerator;
+            _datasetClassifier = datasetClassifier;
+            _datasetParser = datasetParser;
         }
 
         public async Task Run()
@@ -33,6 +39,9 @@ namespace OpenDataParser
             _logger.LogInformation("Hello World");
             _logger.LogInformation(_configuration["HelloWorldString"]);
             var dataset = await _intermediateGenerator.GenerateAsync();
+            await _labelGenerator.AddLabels(dataset);
+            await _datasetClassifier.Classify(dataset);
+            await _datasetParser.Parse(dataset);
         }
     }
     
