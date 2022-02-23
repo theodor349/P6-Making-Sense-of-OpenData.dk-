@@ -1,6 +1,7 @@
 ﻿using IntermediateGenerator;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Shared.ComponentInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

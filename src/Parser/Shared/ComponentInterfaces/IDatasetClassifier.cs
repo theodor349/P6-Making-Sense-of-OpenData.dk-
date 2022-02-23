@@ -1,6 +1,6 @@
 ﻿using Shared.Models;
 
-namespace DatasetDecider
+namespace Shared.ComponentInterfaces
 {
     public interface IDatasetClassifier
     {

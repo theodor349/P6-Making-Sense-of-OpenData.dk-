@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using Shared.ComponentInterfaces;
 using Shared.Models;
 using System.IO;
 

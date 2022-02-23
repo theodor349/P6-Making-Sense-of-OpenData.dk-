@@ -1,6 +1,6 @@
 ﻿using Shared.Models;
 
-namespace DatasetParser
+namespace Shared.ComponentInterfaces
 {
     public interface IDatasetParser
     {

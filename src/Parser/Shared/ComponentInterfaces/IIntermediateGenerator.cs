@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntermediateGenerator
+namespace Shared.ComponentInterfaces
 {
     public interface IIntermediateGenerator
     {

@@ -1,6 +1,6 @@
 ﻿using Shared.Models;
 
-namespace LabelRecognizer
+namespace Shared.ComponentInterfaces
 {
     public interface ILabelGenerator
     {
