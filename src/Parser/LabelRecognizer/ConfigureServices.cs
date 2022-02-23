@@ -6,6 +6,7 @@ namespace LabelRecognizer
     {
         public static void AddLabelRecognizer(this IServiceCollection services)
         {
+            services.AddTransient<ILabelGenerator, LabelGenerator>();
         }
     }
 }

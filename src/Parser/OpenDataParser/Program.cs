@@ -25,7 +25,7 @@ var host = Host.CreateDefaultBuilder()
     {
         services.AddTransient<IDataParser, DataParser>();
         services.AddIntermediateGenerator();
-        services.AddDatasetDecider();
+        services.AddDatasetClassifier();
         services.AddDatasetParser();
         services.AddLabelRecognizer();
     })
