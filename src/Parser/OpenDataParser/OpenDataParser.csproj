@@ -21,6 +21,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DatasetDecider\DatasetDecider.csproj" />
+    <ProjectReference Include="..\DatasetParser\DatasetParser.csproj" />
+    <ProjectReference Include="..\IntermediateGenerator\IntermediateGenerator.csproj" />
+    <ProjectReference Include="..\LabelRecognizer\LabelRecognizer.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

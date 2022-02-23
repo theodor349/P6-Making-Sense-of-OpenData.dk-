@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using IntermediateGenerator;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenDataParser;
@@ -20,12 +21,13 @@ var host = Host.CreateDefaultBuilder()
     .ConfigureServices((context, services) =>
     {
         services.AddTransient<IDataParser, DataParser>();
+        services.AddIntermediateGenerator();
     })
     .UseSerilog()
     .Build();
 
 var svc = ActivatorUtilities.CreateInstance<DataParser>(host.Services);
-svc.Run();
+await svc.Run();
 
 void BuildConfig(ConfigurationBuilder builder)
 {
