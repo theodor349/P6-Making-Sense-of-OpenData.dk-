@@ -8,53 +8,47 @@ using System.Threading.Tasks;
 using Shared.ComponentInterfaces;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Shared.Models.ObjectAttributes;
 
-namespace IntermediateGenerator.ParseJson
+namespace IntermediateGenerator.ParseFile
 {
-    public class ParseJson
+    public class ParseJson : IParseJson
     {
-        public Task<DatasetObject> GenerateAsync()
-        {
-            ParseFile(new FileInfo("C:\\Users\\Emil-\\Desktop\\Dataset parking\\34.20.12_Parkeringsarealer.geojson"));
-            return Task.FromResult(new DatasetObject());
-        }
+        
         private readonly ILogger<ParseJson> _logger;
         public ParseJson(ILogger<ParseJson> logger)
         {
             _logger = logger;
         }
 
-
-        public void ParseFile(FileInfo file)
+        public Task<DatasetObject> Parse(string stringFile, string extensionName, string fileName)
         {
-            {
-                if (file.Extension == ".geojson")
-                {
-                    Parse(file);
-                }
-                else
-                {
-                    _logger.LogError("Wrong file format " + file.Extension);
-                }
-            }
-        }
-        public DatasetObject Parse(FileInfo file)
-        {
-            string stringFile = File.ReadAllText(file.FullName);
+            DatasetObject datasetObj = new DatasetObject(extensionName.ToLower(), fileName.ToLower());
             JsonTextReader reader = new JsonTextReader(new StringReader(stringFile));
+
+            IntermediateObject currentParent = new IntermediateObject();
             while (reader.Read())
             {
                 if (reader.Value != null)
                 {
-                    
-
+                    _logger.LogInformation("Token: " + reader.TokenType + " Value: " + reader.Value);
                 }
+                else
+                {
+                    if (reader.TokenType.Equals(JsonToken.StartArray) || reader.TokenType.Equals(JsonToken.StartObject))
+                    {
+
+                        //currentParent.Attributes.Add();
+                    }
+                    _logger.LogInformation("Token: " + reader.TokenType);
+                }
+
             }
 
-        
+
             //_logger.LogInformation();
 
-        return null;
+            return Task.FromResult(datasetObj);
         }
     }
 }

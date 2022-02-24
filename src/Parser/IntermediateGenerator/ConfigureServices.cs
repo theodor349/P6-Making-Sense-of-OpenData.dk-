@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using IntermediateGenerator.ParseFile;
+using Microsoft.Extensions.DependencyInjection;
 using Shared.ComponentInterfaces;
 
 namespace IntermediateGenerator
@@ -8,6 +9,7 @@ namespace IntermediateGenerator
         public static void AddIntermediateGenerator(this IServiceCollection services)
         {
             services.AddTransient<IIntermediateGenerator, IntermediateGenerator>();
+            services.AddTransient<IParseJson, ParseJson>();
         }
     }
 }

@@ -21,9 +21,9 @@ namespace IntermediateGenerator
             var file = new FileInfo(filePath);
             switch (file.Extension.ToLower())
             {
-                case "geojson":
-                    return _parseJson.Parse(file);
-                    
+                case ".geojson":
+                case ".json":
+                    return _parseJson.Parse(File.ReadAllText(file.FullName), file.Extension, file.Name);
             }
             throw new NotImplementedException("File extension `" + file.Extension + "` not found");
         }

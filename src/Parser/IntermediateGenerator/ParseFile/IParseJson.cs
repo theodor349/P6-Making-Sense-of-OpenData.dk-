@@ -9,6 +9,6 @@ namespace IntermediateGenerator.ParseFile
 {
     public interface IParseJson
     {
-        Task<DatasetObject> Parse(FileInfo file);
+        Task<DatasetObject> Parse(string stringFile, string extensionName, string fileName);
     }
 }
