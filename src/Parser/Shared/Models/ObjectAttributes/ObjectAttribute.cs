@@ -28,7 +28,7 @@
 
     public class ListAttribute : ObjectAttribute
     {
-        public ListAttribute(string name, List<ObjectAttribute> value) : base(name, value)
+        public ListAttribute(string name, object value) : base(name, value)
         {
         }
     }
