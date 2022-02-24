@@ -15,7 +15,13 @@ namespace Shared.Models
             this.originalExtensionName = originalExtensionName;
             this.originalName = originalName;
         }
-       
+        public DatasetObject(string originalExtensionName, string originalName, List<IntermediateObject> objects)
+        {
+            this.originalExtensionName = originalExtensionName;
+            this.originalName = originalName;
+            Objects = objects;
+        }
+
         public List<IntermediateObject> Objects { get; set; } = new List<IntermediateObject>();
         public IntermediateObject? ObjectSchema { get; set; }
     }
