@@ -19,6 +19,14 @@
         }
     }
 
+    public class DoubleAttribute : ObjectAttribute
+    {
+        public DoubleAttribute(string name, double value) : base(name, value)
+        {
+        }
+    }
+
+
     public class TextAttribute : ObjectAttribute
     {
         public TextAttribute(string name, string value) : base(name, value)
@@ -28,8 +36,9 @@
 
     public class ListAttribute : ObjectAttribute
     {
-        public ListAttribute(string name, object value) : base(name, value)
+        public ListAttribute(string name) : base(name, new List<ObjectAttribute>())
         {
         }
+       
     }
 }
