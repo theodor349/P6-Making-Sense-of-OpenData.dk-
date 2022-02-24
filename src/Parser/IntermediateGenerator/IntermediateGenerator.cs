@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using IntermediateGenerator.ParseFile;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using Shared.ComponentInterfaces;
 using Shared.Models;
@@ -8,11 +9,23 @@ namespace IntermediateGenerator
 {
     public class IntermediateGenerator : IIntermediateGenerator
     {
-        
-        public Task<DatasetObject> GenerateAsync()
+        private readonly IParseJson _parseJson;
+
+        public IntermediateGenerator(IParseJson parseJson)
         {
-            //ParseFile(new FileInfo("C:\\Users\\Emil-\\Desktop\\Dataset parking\\34.20.12_Parkeringsarealer.geojson"));
-            return Task.FromResult(new DatasetObject());
+            _parseJson = parseJson;
+        }
+        
+        public Task<DatasetObject> GenerateAsync(string filePath)
+        {
+            var file = new FileInfo(filePath);
+            switch (file.Extension.ToLower())
+            {
+                case "geojson":
+                    return _parseJson.Parse(file);
+                    
+            }
+            throw new NotImplementedException("File extension `" + file.Extension + "` not found");
         }
     }
 }

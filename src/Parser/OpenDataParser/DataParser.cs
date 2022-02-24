@@ -38,7 +38,16 @@ namespace OpenDataParser
         {
             _logger.LogInformation("Hello World");
             _logger.LogInformation(_configuration["HelloWorldString"]);
-            var dataset = await _intermediateGenerator.GenerateAsync();
+            var datasetList = Directory.GetFiles(_configuration["Input:FolderPath"]);
+            foreach (var dataset in datasetList)
+            {
+                await ParseDataset(dataset);
+            }
+        }
+
+        private async Task ParseDataset(string file)
+        {
+            var dataset = await _intermediateGenerator.GenerateAsync(file);
             await _labelGenerator.AddLabels(dataset);
             await _datasetClassifier.Classify(dataset);
             await _datasetParser.Parse(dataset);

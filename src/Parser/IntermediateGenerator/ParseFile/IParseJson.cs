@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.ComponentInterfaces
+namespace IntermediateGenerator.ParseFile
 {
-    public interface IIntermediateGenerator
+    public interface IParseJson
     {
-        Task<DatasetObject> GenerateAsync(string filePath);
+        Task<DatasetObject> Parse(FileInfo file);
     }
 }
-
