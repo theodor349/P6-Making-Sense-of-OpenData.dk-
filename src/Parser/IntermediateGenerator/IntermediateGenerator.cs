@@ -11,7 +11,7 @@ namespace IntermediateGenerator
         
         public Task<DatasetObject> GenerateAsync()
         {
-            ParseFile(new FileInfo("C:\\Users\\Emil-\\Desktop\\Dataset parking\\34.20.12_Parkeringsarealer.geojson"));
+            //ParseFile(new FileInfo("C:\\Users\\Emil-\\Desktop\\Dataset parking\\34.20.12_Parkeringsarealer.geojson"));
             return Task.FromResult(new DatasetObject());
         }
     }

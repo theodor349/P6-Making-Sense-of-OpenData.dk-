@@ -18,7 +18,7 @@ namespace IntermediateGenerator.Parse_file
         {
             if (file.Extension == ".geojson")
             {
-               // ParseJson(file);
+                //Kald parseJson of some sort
             }
             else
             {

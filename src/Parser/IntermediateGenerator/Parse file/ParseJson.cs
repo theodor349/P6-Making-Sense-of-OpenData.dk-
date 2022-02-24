@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace IntermediateGenerator.Parse_file
 {
-    internal class ParseJson
+    public class ParseJson
     {
         private readonly ILogger<ParseJson> _logger;
         public ParseJson(ILogger<ParseJson> logger)
@@ -18,12 +18,15 @@ namespace IntermediateGenerator.Parse_file
             _logger = logger;
         }
 
-        private void parseJson(FileInfo file)
+        private DatasetObject Parse(FileInfo file)
         {
             string jsonString = File.ReadAllText(file.FullName);
             JObject jsonObject = JObject.Parse(jsonString);
             string prop = (string)jsonObject.SelectToken("$.features[0].properties.EJER");
             _logger.LogInformation(prop);
+
+
+            return null;
         }
     }
 }
