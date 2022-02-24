@@ -9,8 +9,6 @@ using OpenDataParser;
 using Serilog;
 
 var builder = new ConfigurationBuilder();
-BuildConfig(builder);
-
 
 Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Build())
@@ -34,11 +32,3 @@ var host = Host.CreateDefaultBuilder()
 
 var svc = ActivatorUtilities.CreateInstance<DataParser>(host.Services);
 await svc.Run();
-
-void BuildConfig(ConfigurationBuilder builder)
-{
-    builder.SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-        .AddEnvironmentVariables();
-}
