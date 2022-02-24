@@ -12,24 +12,13 @@ namespace IntermediateGenerator.Parse_file
 {
     internal class ParseJson
     {
-        private readonly ILogger<IntermediateGenerator> _logger;
-        public ParseJson(ILogger<IntermediateGenerator> logger)
+        private readonly ILogger<ParseJson> _logger;
+        public ParseJson(ILogger<ParseJson> logger)
         {
             _logger = logger;
         }
-        public void ParseFile(FileInfo file)
-        {
-            if (file.Extension == ".geojson")
-            {
-                ParseJson(file);
-            }
-            else
-            {
-                _logger.LogError("Wrong file format " + file.Extension);
-            }
-        }
 
-        private void ParseJson(FileInfo file)
+        private void parseJson(FileInfo file)
         {
             string jsonString = File.ReadAllText(file.FullName);
             JObject jsonObject = JObject.Parse(jsonString);
