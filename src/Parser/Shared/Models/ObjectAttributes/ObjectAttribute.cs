@@ -39,6 +39,10 @@
         public ListAttribute(string name) : base(name, new List<ObjectAttribute>())
         {
         }
-       
+
+        public ListAttribute(string name, List<ObjectAttribute> list) : base(name, list)
+        {  
+        }
     }
+
 }
