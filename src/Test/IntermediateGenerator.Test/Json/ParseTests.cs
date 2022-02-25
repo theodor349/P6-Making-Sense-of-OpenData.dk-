@@ -36,7 +36,7 @@ namespace IntermediateGenerator.Test.Json
                 new TextAttribute("attr2", "Two"),
                 new TextAttribute("attr3", "Three"),
             }));
-            var expected = new DatasetObject(fileExtension, fileName, objects);
+            var expected = new DatasetObject(fileExtension.ToLower(), fileName.ToLower(), objects);
 
             var parser = setup.GetParseJson();
             var task = parser.Parse(inputString, fileExtension, fileName);
