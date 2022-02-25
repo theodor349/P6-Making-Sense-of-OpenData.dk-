@@ -26,7 +26,7 @@ namespace IntermediateGenerator.ParseFile
             DatasetObject datasetObj = new DatasetObject(extensionName.ToLower(), fileName.ToLower());
             JsonTextReader reader = new JsonTextReader(new StringReader(stringFile));
 
-            IntermediateObject intermediate = new IntermediateObject();
+            IntermediateObject intermediate = null;
             ListAttribute? currentListAttr = null;
             int attrDepth = 0;
             string? propName = null;
@@ -34,15 +34,19 @@ namespace IntermediateGenerator.ParseFile
             {
                 if (reader.Value != null)
                 {
-                    if (attrDepth == 0)
+                    if (reader.TokenType.Equals(JsonToken.PropertyName))
                     {
-                        if (reader.TokenType.Equals(JsonToken.PropertyName))
+                        propName = reader.Value.ToString();
+                    }
+                    else
+                    {
+                        if (attrDepth == 0)
                         {
-                            propName = reader.Value.ToString();
+                            intermediate.Attributes.Add(FindAndCreateType(propName, reader));
                         }
                         else
                         {
-                            intermediate.Attributes.Add(FindAndCreateType(propName, reader));
+                            ((List<ObjectAttribute>)currentListAttr.Value).Add(FindAndCreateType(propName, reader));
                         }
                     }
                     _logger.LogInformation("Token: " + reader.TokenType + " Value: " + reader.Value);
@@ -51,17 +55,25 @@ namespace IntermediateGenerator.ParseFile
                 {
                     if (reader.TokenType.Equals(JsonToken.StartArray) || reader.TokenType.Equals(JsonToken.StartObject))
                     {
-                        ListAttribute newListAttr = new ListAttribute(reader.TokenType.ToString());
-                        if (attrDepth == 0)
+                        if (intermediate == null)
                         {
-                            intermediate.Attributes.Add(newListAttr);
-                            currentListAttr = newListAttr;
-                            attrDepth++;
+                            intermediate = new IntermediateObject();
+                            datasetObj.Objects.Add(intermediate);
                         }
                         else
                         {
-                            ((List<ObjectAttribute>)currentListAttr.Value).Add(newListAttr);
-                        }
+                            ListAttribute newListAttr = new ListAttribute(reader.TokenType.ToString());
+                            if (attrDepth == 0)
+                            {
+                                intermediate.Attributes.Add(newListAttr);
+                                currentListAttr = newListAttr;
+                                attrDepth++;
+                            }
+                            else
+                            {
+                                ((List<ObjectAttribute>)currentListAttr.Value).Add(newListAttr);
+                            }
+                        }   
                     }
                     else if (reader.TokenType.Equals(JsonToken.EndArray) || reader.TokenType.Equals(JsonToken.EndObject))
                     {
