@@ -62,7 +62,15 @@ namespace IntermediateGenerator.ParseFile
                         }
                         else
                         {
-                            ListAttribute newListAttr = new ListAttribute(reader.TokenType.ToString());
+                            ListAttribute newListAttr;
+                            if (reader.TokenType.Equals(JsonToken.StartObject))
+                            {
+                                newListAttr = new ListAttribute(propName);
+                            }
+                            else
+                            {
+                                newListAttr = new ListAttribute(reader.TokenType.ToString());
+                            }
                             if (attrDepth == 0)
                             {
                                 intermediate.Attributes.Add(newListAttr);
