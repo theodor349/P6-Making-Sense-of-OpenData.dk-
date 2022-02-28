@@ -45,20 +45,17 @@ namespace IntermediateGenerator.Test.Json
 
             res.Should().BeEquivalentTo(expected);
         }
+
         [TestMethod]
-        public void Parse_OneNested_CorrectOutput()
+        public void Parse_Long_CorrectOutput()
         {
             string fileName = "fileName";
             string fileExtension = ".geojson";
-            var nestedObj = new
-            {
-                attr1 = "One",
-                attr2 = "Two",
-                attr3 = "Three",
-            };
             var jsonObj = new
             {
-                nestedObj = nestedObj,
+                attr1 = 1,
+                attr2 = 2,
+                attr3 = 3,
             };
             string inputString = JsonConvert.SerializeObject(jsonObj);
             var setup = new TestSetup();
@@ -66,12 +63,9 @@ namespace IntermediateGenerator.Test.Json
             var objects = new List<IntermediateObject>();
             objects.Add(new IntermediateObject(new List<ObjectAttribute>()
             {
-                new ListAttribute("nestedObj", new List<ObjectAttribute>()
-                {
-                    new TextAttribute("attr1", "One"),
-                    new TextAttribute("attr2", "Two"),
-                    new TextAttribute("attr3", "Three"),
-                }),
+                new LongAttribute("attr1", 1.1),
+                new LongAttribute("attr2", 2.2),
+                new LongAttribute("attr3", 3.3),
             }));
             var expected = new DatasetObject(fileExtension.ToLower(), fileName.ToLower(), objects);
 
