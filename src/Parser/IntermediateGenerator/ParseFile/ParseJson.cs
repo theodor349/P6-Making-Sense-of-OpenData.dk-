@@ -27,8 +27,7 @@ namespace IntermediateGenerator.ParseFile
             JsonTextReader reader = new JsonTextReader(new StringReader(stringFile));
 
             IntermediateObject intermediate = null;
-            ListAttribute? currentListAttr = null;
-            int attrDepth = 0;
+            Stack<ListAttribute> currentListAttr = new Stack<ListAttribute>();
             string? propName = null;
             while (reader.Read())
             {
@@ -40,13 +39,13 @@ namespace IntermediateGenerator.ParseFile
                     }
                     else
                     {
-                        if (attrDepth == 0)
+                        if (currentListAttr.Count == 0)
                         {
                             intermediate.Attributes.Add(FindAndCreateType(propName, reader));
                         }
                         else
                         {
-                            ((List<ObjectAttribute>)currentListAttr.Value).Add(FindAndCreateType(propName, reader));
+                            ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(FindAndCreateType(propName, reader));
                         }
                     }
                     _logger.LogInformation("Token: " + reader.TokenType + " Value: " + reader.Value);
@@ -71,24 +70,24 @@ namespace IntermediateGenerator.ParseFile
                             {
                                 newListAttr = new ListAttribute(reader.TokenType.ToString());
                             }
-                            if (attrDepth == 0)
+                            if (currentListAttr.Count == 0)
                             {
                                 intermediate.Attributes.Add(newListAttr);
-                                currentListAttr = newListAttr;
-                                attrDepth++;
+                                currentListAttr.Push(newListAttr);
                             }
                             else
                             {
-                                ((List<ObjectAttribute>)currentListAttr.Value).Add(newListAttr);
+                                ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(newListAttr);
                             }
-                        }   
+                            currentListAttr.Push(newListAttr);
+
+                        }
                     }
                     else if (reader.TokenType.Equals(JsonToken.EndArray) || reader.TokenType.Equals(JsonToken.EndObject))
                     {
-                        attrDepth--;
-                        if (attrDepth == 0)
+                        if (currentListAttr.Count > 0)
                         {
-                            currentListAttr = null;
+                            currentListAttr.Pop();
                         }
                     }
                     _logger.LogInformation("Token: " + reader.TokenType);
