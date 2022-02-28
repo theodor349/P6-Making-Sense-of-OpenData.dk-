@@ -63,9 +63,9 @@ namespace IntermediateGenerator.Test.Json
             var objects = new List<IntermediateObject>();
             objects.Add(new IntermediateObject(new List<ObjectAttribute>()
             {
-                new LongAttribute("attr1", 1.1),
-                new LongAttribute("attr2", 2.2),
-                new LongAttribute("attr3", 3.3),
+                new LongAttribute("attr1", 1),
+                new LongAttribute("attr2", 2),
+                new LongAttribute("attr3", 3),
             }));
             var expected = new DatasetObject(fileExtension.ToLower(), fileName.ToLower(), objects);
 
