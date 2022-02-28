@@ -109,14 +109,16 @@ namespace IntermediateGenerator.Test.Json
         }
 
         [TestMethod]
-        public void Parse_DateTime_CorrectOutput()
+        [DataRow("2000-12-24T18:30:10")]
+        [DataRow("2000-24-12T18:30:10.420")]
+        public void Parse_DateTime_CorrectOutput(string dateString)
         {
             string fileName = "fileName";
             string fileExtension = ".geojson";
-            DateTime date = new DateTime(2000, 12, 24, 18, 30, 10, 420);
+            DateTime expectedDate = DateTime.Parse(dateString);
             var jsonObj = new
             {
-                attr1 = date,
+                attr1 = dateString,
             };
             string inputString = JsonConvert.SerializeObject(jsonObj);
             var setup = new TestSetup();
@@ -124,7 +126,7 @@ namespace IntermediateGenerator.Test.Json
             var objects = new List<IntermediateObject>();
             objects.Add(new IntermediateObject(new List<ObjectAttribute>()
             {
-                new DateAttribute("attr1", date),
+                new DateAttribute("attr1", expectedDate),
             }));
             var expected = new DatasetObject(fileExtension.ToLower(), fileName.ToLower(), objects);
 
