@@ -16,7 +16,7 @@ namespace IntermediateGenerator.Test.Json
     public class ParseTests
     {
         [TestMethod]
-        public void Parse_NonNested_CorrectOutput()
+        public void Parse_Text_CorrectOutput()
         {
             string fileName = "fileName";
             string fileExtension = ".geojson";
@@ -83,5 +83,35 @@ namespace IntermediateGenerator.Test.Json
             res.Should().BeEquivalentTo(expected);
         }
 
+        [TestMethod]
+        public void Parse_Int_CorrectOutput()
+        {
+            string fileName = "fileName";
+            string fileExtension = ".geojson";
+            var jsonObj = new
+            {
+                attr1 = 1,
+                attr2 = 2,
+                attr3 = 3,
+            };
+            string inputString = JsonConvert.SerializeObject(jsonObj);
+            var setup = new TestSetup();
+
+            var objects = new List<IntermediateObject>();
+            objects.Add(new IntermediateObject(new List<ObjectAttribute>()
+            {
+                new IntegerAttribute("attr1", 1),
+                new IntegerAttribute("attr2", 2),
+                new IntegerAttribute("attr3", 3),
+            }));
+            var expected = new DatasetObject(fileExtension.ToLower(), fileName.ToLower(), objects);
+
+            var parser = setup.GetParseJson();
+            var task = parser.Parse(inputString, fileExtension, fileName);
+            task.Wait();
+            var res = task.Result;
+
+            res.Should().BeEquivalentTo(expected);
+        }
     }
 }
