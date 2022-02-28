@@ -84,15 +84,15 @@ namespace IntermediateGenerator.Test.Json
         }
 
         [TestMethod]
-        public void Parse_Int_CorrectOutput()
+        public void Parse_Double_CorrectOutput()
         {
             string fileName = "fileName";
             string fileExtension = ".geojson";
             var jsonObj = new
             {
-                attr1 = 1,
-                attr2 = 2,
-                attr3 = 3,
+                attr1 = 1.1,
+                attr2 = 2.2,
+                attr3 = 3.3,
             };
             string inputString = JsonConvert.SerializeObject(jsonObj);
             var setup = new TestSetup();
@@ -100,9 +100,9 @@ namespace IntermediateGenerator.Test.Json
             var objects = new List<IntermediateObject>();
             objects.Add(new IntermediateObject(new List<ObjectAttribute>()
             {
-                new IntegerAttribute("attr1", 1),
-                new IntegerAttribute("attr2", 2),
-                new IntegerAttribute("attr3", 3),
+                new DoubleAttribute("attr1", 1.1),
+                new DoubleAttribute("attr2", 2.2),
+                new DoubleAttribute("attr3", 3.3),
             }));
             var expected = new DatasetObject(fileExtension.ToLower(), fileName.ToLower(), objects);
 
