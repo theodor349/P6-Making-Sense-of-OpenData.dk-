@@ -107,5 +107,33 @@ namespace IntermediateGenerator.Test.Json
 
             res.Should().BeEquivalentTo(expected);
         }
+
+        [TestMethod]
+        public void Parse_DateTime_CorrectOutput()
+        {
+            string fileName = "fileName";
+            string fileExtension = ".geojson";
+            DateTime date = new DateTime(2000, 12, 24, 18, 30, 10, 420);
+            var jsonObj = new
+            {
+                attr1 = date,
+            };
+            string inputString = JsonConvert.SerializeObject(jsonObj);
+            var setup = new TestSetup();
+
+            var objects = new List<IntermediateObject>();
+            objects.Add(new IntermediateObject(new List<ObjectAttribute>()
+            {
+                new DateAttribute("attr1", date),
+            }));
+            var expected = new DatasetObject(fileExtension.ToLower(), fileName.ToLower(), objects);
+
+            var parser = setup.GetParseJson();
+            var task = parser.Parse(inputString, fileExtension, fileName);
+            task.Wait();
+            var res = task.Result;
+
+            res.Should().BeEquivalentTo(expected);
+        }
     }
 }
