@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace IntermediateGenerator.Test.Json
 {
     [TestClass]
-    public class ParseTests
+    public class ParseTypeTests
     {
         [TestMethod]
         public void Parse_Text_CorrectOutput()
