@@ -12,9 +12,9 @@
         }
     }
 
-    public class IntegerAttribute : ObjectAttribute
+    public class LongAttribute : ObjectAttribute
     {
-        public IntegerAttribute(string name, int value) : base(name, value)
+        public LongAttribute(string name, long value) : base(name, value)
         {
         }
     }
@@ -26,6 +26,12 @@
         }
     }
 
+    public class DateAttribute : ObjectAttribute
+    {
+        public DateAttribute(string name, DateTime value) : base(name, value)
+        {
+        }
+    }
 
     public class TextAttribute : ObjectAttribute
     {

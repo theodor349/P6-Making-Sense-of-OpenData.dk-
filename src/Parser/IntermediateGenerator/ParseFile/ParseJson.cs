@@ -121,7 +121,7 @@ namespace IntermediateGenerator.ParseFile
                 case JsonToken.Raw:
                     break;
                 case JsonToken.Integer:
-                    return new IntegerAttribute(propName, (int)reader.Value);
+                    return new LongAttribute(propName, (long)reader.Value);
                     break;
                 case JsonToken.Float:
                     return new DoubleAttribute(propName, (double)reader.Value);
@@ -142,6 +142,7 @@ namespace IntermediateGenerator.ParseFile
                 case JsonToken.EndConstructor:
                     break;
                 case JsonToken.Date:
+                    return new DateAttribute(propName, (DateTime)reader.Value);
                     break;
                 case JsonToken.Bytes:
                     break;
