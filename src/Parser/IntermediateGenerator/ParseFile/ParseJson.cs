@@ -35,49 +35,58 @@ namespace IntermediateGenerator.ParseFile
                 {
                     propName = HandleValueToken(reader, intermediate, currentListAttr, propName);
                 }
-                else
+                else if (reader.TokenType.Equals(JsonToken.StartArray) || reader.TokenType.Equals(JsonToken.StartObject))
                 {
-                    if (reader.TokenType.Equals(JsonToken.StartArray) || reader.TokenType.Equals(JsonToken.StartObject))
+                    if (intermediate == null)
                     {
-                        if (intermediate == null)
+                        intermediate = new IntermediateObject();
+                        datasetObj.Objects.Add(intermediate);
+                    }
+                    else
+                    {
+                        ListAttribute newListAttr;
+                        if (propName != null)
                         {
-                            intermediate = new IntermediateObject();
-                            datasetObj.Objects.Add(intermediate);
+                            newListAttr = new ListAttribute(propName);
+                            propName = null;
                         }
                         else
                         {
-                            ListAttribute newListAttr;
-                            if (propName != null)
-                            {
-                                newListAttr = new ListAttribute(propName);
-                                propName = null;
-                            }
-                            else
-                            {
-                                newListAttr = new ListAttribute(reader.TokenType.ToString());
-                            }
-                            if (currentListAttr.Count == 0)
-                            {
-                                intermediate.Attributes.Add(newListAttr);
-                                currentListAttr.Push(newListAttr);
-                            }
-                            else
-                            {
-                                ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(newListAttr);
-                            }
+                            newListAttr = new ListAttribute(reader.TokenType.ToString());
+                        }
+                        if (currentListAttr.Count == 0)
+                        {
+                            intermediate.Attributes.Add(newListAttr);
                             currentListAttr.Push(newListAttr);
                         }
-                    }
-                    else if (reader.TokenType.Equals(JsonToken.EndArray) || reader.TokenType.Equals(JsonToken.EndObject))
-                    {
-                        if (currentListAttr.Count > 0)
+                        else
                         {
-                            currentListAttr.Pop();
+                            ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(newListAttr);
                         }
+                        currentListAttr.Push(newListAttr);
                     }
-                    _logger.LogInformation("Token: " + reader.TokenType);
                 }
-
+                else if (reader.TokenType.Equals(JsonToken.EndArray) || reader.TokenType.Equals(JsonToken.EndObject))
+                {
+                    if (currentListAttr.Count > 0)
+                    {
+                        currentListAttr.Pop();
+                    }
+                }
+                else if (reader.TokenType.Equals(JsonToken.Null))
+                {
+                    if (currentListAttr.Count == 0)
+                    {
+                        intermediate.Attributes.Add(FindAndCreateType(propName, reader));
+                        propName = null;
+                    }
+                    else
+                    {
+                        ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(FindAndCreateType(propName, reader));
+                        propName = null;
+                    }
+                }
+                _logger.LogInformation("Token: " + reader.TokenType);
             }
             //_logger.LogInformation();
             return Task.FromResult(datasetObj);
@@ -102,8 +111,8 @@ namespace IntermediateGenerator.ParseFile
                     propName = null;
                 }
             }
-            return propName;
             _logger.LogInformation("Token: " + reader.TokenType + " Value: " + reader.Value);
+            return propName;
         }
 
         private ObjectAttribute FindAndCreateType(string propName, JsonTextReader reader)
