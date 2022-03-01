@@ -34,6 +34,7 @@ namespace IntermediateGenerator.ParseFile
                 if (reader.Value != null)
                 {
                     propName = HandleValueToken(reader, intermediate, currentListAttr, propName);
+                    _logger.LogInformation("Token: " + reader.TokenType);
                 }
                 else if (reader.TokenType.Equals(JsonToken.StartArray) || reader.TokenType.Equals(JsonToken.StartObject))
                 {
@@ -44,25 +45,7 @@ namespace IntermediateGenerator.ParseFile
                     }
                     else
                     {
-                        ListAttribute newListAttr;
-                        if (propName != null)
-                        {
-                            newListAttr = new ListAttribute(propName);
-                            propName = null;
-                        }
-                        else
-                        {
-                            newListAttr = new ListAttribute(reader.TokenType.ToString());
-                        }
-                        if (currentListAttr.Count == 0)
-                        {
-                            intermediate.Attributes.Add(newListAttr);
-                            currentListAttr.Push(newListAttr);
-                        }
-                        else
-                        {
-                            ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(newListAttr);
-                        }
+                        ListAttribute newListAttr = (ListAttribute)GenerateAttribute(reader, intermediate, currentListAttr, propName);                       
                         currentListAttr.Push(newListAttr);
                     }
                 }
@@ -86,13 +69,11 @@ namespace IntermediateGenerator.ParseFile
                         propName = null;
                     }
                 }
-                _logger.LogInformation("Token: " + reader.TokenType);
             }
-            //_logger.LogInformation();
             return Task.FromResult(datasetObj);
         }
 
-        public string HandleValueToken(JsonTextReader reader, IntermediateObject? intermediate, Stack<ListAttribute> currentListAttr, string? propName)
+        private string HandleValueToken(JsonTextReader reader, IntermediateObject? intermediate, Stack<ListAttribute> currentListAttr, string? propName)
         {
             if (reader.TokenType.Equals(JsonToken.PropertyName))
             {
@@ -100,19 +81,27 @@ namespace IntermediateGenerator.ParseFile
             }
             else
             {
-                if (currentListAttr.Count == 0)
-                {
-                    intermediate.Attributes.Add(FindAndCreateType(propName, reader));
-                    propName = null;
-                }
-                else
-                {
-                    ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(FindAndCreateType(propName, reader));
-                    propName = null;
-                }
+                GenerateAttribute(reader, intermediate, currentListAttr, propName);
+                propName = null;
             }
             _logger.LogInformation("Token: " + reader.TokenType + " Value: " + reader.Value);
             return propName;
+        }
+
+        private ObjectAttribute GenerateAttribute(JsonTextReader reader, IntermediateObject? intermediate, Stack<ListAttribute> currentListAttr, string? propName)
+        {
+            ObjectAttribute attr = FindAndCreateType(propName, reader);
+
+            if (currentListAttr.Count == 0)
+            {
+                intermediate.Attributes.Add(attr);
+            }
+            else
+            {
+                ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(attr);
+            }
+
+            return attr;
         }
 
         private ObjectAttribute FindAndCreateType(string propName, JsonTextReader reader)
@@ -133,8 +122,24 @@ namespace IntermediateGenerator.ParseFile
                     return new NullAttribute(propName);
                 case JsonToken.Date:
                     return new DateAttribute(propName, (DateTime)reader.Value);
+                case JsonToken.StartArray:
+                case JsonToken.StartObject:
+                    return CreateListType(propName, reader);
+
                 default:
                     throw new Exception("Json token did not match any supported type: the type was " + reader.TokenType);
+            }
+        }
+
+        private ListAttribute CreateListType(string propName, JsonTextReader reader)
+        {
+            if (propName != null)
+            {
+                return new ListAttribute(propName);
+            }
+            else
+            {
+                return new ListAttribute(reader.TokenType.ToString());
             }
         }
     }
