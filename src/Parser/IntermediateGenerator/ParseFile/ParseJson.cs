@@ -45,8 +45,9 @@ namespace IntermediateGenerator.ParseFile
                     }
                     else
                     {
-                        ListAttribute newListAttr = (ListAttribute)GenerateAttribute(reader, intermediate, currentListAttr, propName);                       
+                        ListAttribute newListAttr = (ListAttribute)GenerateAttribute(reader, intermediate, currentListAttr, propName);
                         currentListAttr.Push(newListAttr);
+                        propName = null;
                     }
                 }
                 else if (reader.TokenType.Equals(JsonToken.EndArray) || reader.TokenType.Equals(JsonToken.EndObject))
@@ -108,7 +109,14 @@ namespace IntermediateGenerator.ParseFile
         {
             if (propName == null)
             {
-                propName = reader.TokenType.ToString().Replace(" ", "") + "Value";
+                if (reader.TokenType.Equals(JsonToken.StartArray) || reader.TokenType.Equals(JsonToken.StartObject))
+                {
+                    propName = reader.TokenType.ToString();
+                }
+                else
+                {
+                    propName = reader.TokenType.ToString() + "Value";
+                }
             }
             switch (reader.TokenType)
             {             
