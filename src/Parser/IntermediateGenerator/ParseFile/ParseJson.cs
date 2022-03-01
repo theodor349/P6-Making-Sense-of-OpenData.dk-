@@ -42,10 +42,12 @@ namespace IntermediateGenerator.ParseFile
                         if (currentListAttr.Count == 0)
                         {
                             intermediate.Attributes.Add(FindAndCreateType(propName, reader));
+                            propName = null;
                         }
                         else
                         {
                             ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(FindAndCreateType(propName, reader));
+                            propName = null;
                         }
                     }
                     _logger.LogInformation("Token: " + reader.TokenType + " Value: " + reader.Value);
@@ -62,9 +64,10 @@ namespace IntermediateGenerator.ParseFile
                         else
                         {
                             ListAttribute newListAttr;
-                            if (reader.TokenType.Equals(JsonToken.StartObject))
+                            if (propName != null)
                             {
                                 newListAttr = new ListAttribute(propName);
+                                propName = null;
                             }
                             else
                             {
@@ -80,7 +83,6 @@ namespace IntermediateGenerator.ParseFile
                                 ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(newListAttr);
                             }
                             currentListAttr.Push(newListAttr);
-
                         }
                     }
                     else if (reader.TokenType.Equals(JsonToken.EndArray) || reader.TokenType.Equals(JsonToken.EndObject))
@@ -103,6 +105,10 @@ namespace IntermediateGenerator.ParseFile
 
         private ObjectAttribute FindAndCreateType(string propName, JsonTextReader reader)
         {
+            if (propName == null)
+            {
+                propName = reader.TokenType.ToString().Replace(" ", "");
+            }
             switch (reader.TokenType)
             {
                 case JsonToken.None:
