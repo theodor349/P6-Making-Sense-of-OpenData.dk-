@@ -39,6 +39,12 @@
         {
         }
     }
+    public class NullAttribute : ObjectAttribute
+    {
+        public NullAttribute(string name) : base(name, "null")
+        {
+        }
+    }
 
     public class ListAttribute : ObjectAttribute
     {

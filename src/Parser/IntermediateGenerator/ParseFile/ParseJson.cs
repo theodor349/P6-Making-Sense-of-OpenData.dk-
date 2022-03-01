@@ -137,6 +137,7 @@ namespace IntermediateGenerator.ParseFile
                 case JsonToken.Boolean:
                     break;
                 case JsonToken.Null:
+                    return new NullAttribute(propName);
                     break;
                 case JsonToken.Undefined:
                     break;
