@@ -19,9 +19,9 @@
         }
     }
 
-    public class DoubleAttribute : ObjectAttribute
+    public class FloatAttribute : ObjectAttribute
     {
-        public DoubleAttribute(string name, double value) : base(name, value)
+        public FloatAttribute(string name, float value) : base(name, value)
         {
         }
     }

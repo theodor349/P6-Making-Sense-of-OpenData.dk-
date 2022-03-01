@@ -108,14 +108,14 @@ namespace IntermediateGenerator.ParseFile
         {
             if (propName == null)
             {
-                propName = reader.TokenType.ToString().Replace(" ", "");
+                propName = reader.TokenType.ToString().Replace(" ", "") + "Value";
             }
             switch (reader.TokenType)
             {             
                 case JsonToken.Integer:
                     return new LongAttribute(propName, (long)reader.Value);
                 case JsonToken.Float:
-                    return new DoubleAttribute(propName, (double)reader.Value);
+                    return new FloatAttribute(propName, Convert.ToSingle(reader.Value));
                 case JsonToken.String:
                     return new TextAttribute(propName, (string)reader.Value);
                 case JsonToken.Null:

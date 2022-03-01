@@ -94,9 +94,9 @@ namespace IntermediateGenerator.Test.Json
             var objects = new List<IntermediateObject>();
             objects.Add(new IntermediateObject(new List<ObjectAttribute>()
             {
-                new DoubleAttribute("attr1", 1.1),
-                new DoubleAttribute("attr2", 2.2),
-                new DoubleAttribute("attr3", 3.3),
+                new FloatAttribute("attr1", 1.1f),
+                new FloatAttribute("attr2", 2.2f),
+                new FloatAttribute("attr3", 3.3f),
             }));
             var expected = new DatasetObject(fileExtension.ToLower(), fileName.ToLower(), objects);
 
