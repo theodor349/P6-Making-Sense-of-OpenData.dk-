@@ -77,7 +77,7 @@ namespace IntermediateGenerator.Test.Json
                                 new TextAttribute("BELAEGNING", "Asfalt"),
                                 new TextAttribute("AFMAERKNING", "Hvid"),
                                 new TextAttribute("ANTAL_LYSMASTER", "s20"),
-                                new TextAttribute("URL", "https,//gisext.rksk.dk/pdf/PPlads/RK_1_Torvegade_Enghavevej.pdf"),
+                                new TextAttribute("URL", "https://gisext.rksk.dk/pdf/PPlads/RK_1_Torvegade_Enghavevej.pdf"),
                                 new TextAttribute("BEMAERKNINGER", "kommunen holder_aftaler?"),
                                 new TextAttribute("GlobalID", "{A0864547-1F2E-43F4-87F5-34B5ECACEC1A}"),
                                 new NullAttribute("created_user"),
