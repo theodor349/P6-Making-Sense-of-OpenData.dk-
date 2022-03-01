@@ -58,16 +58,7 @@ namespace IntermediateGenerator.ParseFile
                 }
                 else if (reader.TokenType.Equals(JsonToken.Null))
                 {
-                    if (currentListAttr.Count == 0)
-                    {
-                        intermediate.Attributes.Add(FindAndCreateType(propName, reader));
-                        propName = null;
-                    }
-                    else
-                    {
-                        ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(FindAndCreateType(propName, reader));
-                        propName = null;
-                    }
+                    GenerateAttribute(reader, intermediate, currentListAttr, propName);
                 }
             }
             return Task.FromResult(datasetObj);
