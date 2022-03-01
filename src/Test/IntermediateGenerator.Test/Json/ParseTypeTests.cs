@@ -109,13 +109,13 @@ namespace IntermediateGenerator.Test.Json
         }
 
         [TestMethod]
-        [DataRow("2000-12-24T18:30:10")]
-        [DataRow("2000-24-12T18:30:10.420")]
-        public void Parse_DateTime_CorrectOutput(string dateString)
+        [DataRow("2000-12-24T18:30:10", "2000-12-24 18:30:10:000")]
+        [DataRow("2000-12-24T18:30:10.420", "2000-12-24 18:30:10:420")]
+        public void Parse_DateTime_CorrectOutput(string dateString, string expectedDateString)
         {
             string fileName = "fileName";
             string fileExtension = ".geojson";
-            DateTime expectedDate = DateTime.Parse(dateString);
+            DateTime expectedDate = DateTime.ParseExact(expectedDateString, "yyyy-MM-dd HH:mm:ss:fff", null);
             var jsonObj = new
             {
                 attr1 = dateString,
