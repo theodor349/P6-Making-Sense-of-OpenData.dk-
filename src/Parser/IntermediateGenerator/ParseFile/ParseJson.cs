@@ -33,24 +33,7 @@ namespace IntermediateGenerator.ParseFile
             {
                 if (reader.Value != null)
                 {
-                    if (reader.TokenType.Equals(JsonToken.PropertyName))
-                    {
-                        propName = reader.Value.ToString();
-                    }
-                    else
-                    {
-                        if (currentListAttr.Count == 0)
-                        {
-                            intermediate.Attributes.Add(FindAndCreateType(propName, reader));
-                            propName = null;
-                        }
-                        else
-                        {
-                            ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(FindAndCreateType(propName, reader));
-                            propName = null;
-                        }
-                    }
-                    _logger.LogInformation("Token: " + reader.TokenType + " Value: " + reader.Value);
+                    propName = HandleValueToken(reader, intermediate, currentListAttr, propName);
                 }
                 else
                 {
@@ -96,11 +79,31 @@ namespace IntermediateGenerator.ParseFile
                 }
 
             }
-
-
             //_logger.LogInformation();
-
             return Task.FromResult(datasetObj);
+        }
+
+        public string HandleValueToken(JsonTextReader reader, IntermediateObject? intermediate, Stack<ListAttribute> currentListAttr, string? propName)
+        {
+            if (reader.TokenType.Equals(JsonToken.PropertyName))
+            {
+                propName = reader.Value.ToString();
+            }
+            else
+            {
+                if (currentListAttr.Count == 0)
+                {
+                    intermediate.Attributes.Add(FindAndCreateType(propName, reader));
+                    propName = null;
+                }
+                else
+                {
+                    ((List<ObjectAttribute>)currentListAttr.Peek().Value).Add(FindAndCreateType(propName, reader));
+                    propName = null;
+                }
+            }
+            return propName;
+            _logger.LogInformation("Token: " + reader.TokenType + " Value: " + reader.Value);
         }
 
         private ObjectAttribute FindAndCreateType(string propName, JsonTextReader reader)
@@ -110,52 +113,20 @@ namespace IntermediateGenerator.ParseFile
                 propName = reader.TokenType.ToString().Replace(" ", "");
             }
             switch (reader.TokenType)
-            {
-                case JsonToken.None:
-                    break;
-                case JsonToken.StartObject:
-                    break;
-                case JsonToken.StartArray:
-                    break;
-                case JsonToken.StartConstructor:
-                    break;
-                case JsonToken.PropertyName:
-                    break;
-                case JsonToken.Comment:
-                    break;
-                case JsonToken.Raw:
-                    break;
+            {             
                 case JsonToken.Integer:
                     return new LongAttribute(propName, (long)reader.Value);
-                    break;
                 case JsonToken.Float:
                     return new DoubleAttribute(propName, (double)reader.Value);
-                    break;
                 case JsonToken.String:
                     return new TextAttribute(propName, (string)reader.Value);
-                    break;
-                case JsonToken.Boolean:
-                    break;
                 case JsonToken.Null:
                     return new NullAttribute(propName);
-                    break;
-                case JsonToken.Undefined:
-                    break;
-                case JsonToken.EndObject:
-                    break;
-                case JsonToken.EndArray:
-                    break;
-                case JsonToken.EndConstructor:
-                    break;
                 case JsonToken.Date:
                     return new DateAttribute(propName, (DateTime)reader.Value);
-                    break;
-                case JsonToken.Bytes:
-                    break;
                 default:
-                    break;
+                    throw new Exception("Json token did not match any supported type: the type was " + reader.TokenType);
             }
-            throw new Exception("Json token didnt match any possible token");
         }
     }
 }
