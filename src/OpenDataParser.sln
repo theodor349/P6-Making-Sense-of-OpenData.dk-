@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatasetParser", "Parser\Dat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{AF02912D-9C47-4138-85E8-86D6AAEE07FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntermediateGenerator.Test", "Test\IntermediateGenerator.Test\IntermediateGenerator.Test.csproj", "{C5CF78DC-2531-431E-80B4-2BB8E2161E29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntermediateGenerator.Test", "Test\IntermediateGenerator.Test\IntermediateGenerator.Test.csproj", "{C5CF78DC-2531-431E-80B4-2BB8E2161E29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabelRecognizer.Tests", "Test\LabelRecognizer.Tests\LabelRecognizer.Tests.csproj", "{891D75E3-2B89-4DB2-8477-7B7E004234E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{C5CF78DC-2531-431E-80B4-2BB8E2161E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5CF78DC-2531-431E-80B4-2BB8E2161E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5CF78DC-2531-431E-80B4-2BB8E2161E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{891D75E3-2B89-4DB2-8477-7B7E004234E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{891D75E3-2B89-4DB2-8477-7B7E004234E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{891D75E3-2B89-4DB2-8477-7B7E004234E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{891D75E3-2B89-4DB2-8477-7B7E004234E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{DD878511-ECA7-4EDF-BC7C-5FFB4A5EC128} = {41D878AE-62BE-42C4-99E8-EFF9493A02C0}
 		{6541F6CB-ED99-465F-A239-FDCE893E7600} = {41D878AE-62BE-42C4-99E8-EFF9493A02C0}
 		{C5CF78DC-2531-431E-80B4-2BB8E2161E29} = {AF02912D-9C47-4138-85E8-86D6AAEE07FF}
+		{891D75E3-2B89-4DB2-8477-7B7E004234E8} = {AF02912D-9C47-4138-85E8-86D6AAEE07FF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A553F2C4-4AA3-47A4-9FF5-C18E7C4E249F}
