@@ -34,7 +34,7 @@ namespace IntermediateGenerator.Models
                 case LongAttribute:
                     type = PatternType.@int;
                     break;
-                case FloatAttribute:
+                case DoubleAttribute:
                     type = PatternType.@double;
                     break;
                 case DateAttribute:
