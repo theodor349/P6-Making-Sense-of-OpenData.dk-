@@ -4,6 +4,6 @@ namespace IntermediateGenerator
 {
     public interface IIntermediateObjectSplitter
     {
-        DatasetObject SplitObject(DatasetObject dataset);
+        Task<DatasetObject> SplitObject(DatasetObject dataset);
     }
 }
