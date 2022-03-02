@@ -96,5 +96,15 @@ namespace IntermediateGenerator.Test.Utilities
         {
             return new IntermediateObject(objects);
         }
+
+        internal static List<ObjectAttribute> GetListOfObjectsAttributes(int amount)
+        {
+            var res = new List<ObjectAttribute>();
+            for (int i = 0; i < amount; i++)
+            {
+                res.Add(GetRingkøbingSkjernParking());
+            }
+            return res;
+        }
     }
 }

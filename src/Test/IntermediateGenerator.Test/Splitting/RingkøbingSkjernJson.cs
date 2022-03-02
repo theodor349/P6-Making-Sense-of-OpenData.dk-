@@ -19,20 +19,12 @@ namespace IntermediateGenerator.Test.Splitting
         [TestMethod]
         public void Split_Features_Fluent2(int amount)
         {
-            var featureItems = new List<ObjectAttribute>();
-            for (int i = 0; i < amount; i++)
-            {
-                featureItems.Add(ModelFactory.GetRingkøbingSkjernParking());
-            }
+            var featureItems = ModelFactory.GetListOfObjectsAttributes(amount);
             var features = new ListAttribute("features", featureItems);
             var intermediateObject = ModelFactory.GetIntermediateObject(features);
             var inputDataset = ModelFactory.GetDatasetObject(intermediateObject);
 
-            var parkingSpots = new List<ObjectAttribute>();
-            for (int i = 0; i < amount; i++)
-            {
-                parkingSpots.Add(ModelFactory.GetRingkøbingSkjernParking());
-            }
+            var parkingSpots = ModelFactory.GetListOfObjectsAttributes(amount);
             var expectedIntermediate = ModelFactory.GetIntermediateObject(parkingSpots);
             var expectedDataset = ModelFactory.GetDatasetObject(expectedIntermediate);
 
