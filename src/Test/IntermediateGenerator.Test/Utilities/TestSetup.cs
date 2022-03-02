@@ -21,5 +21,9 @@ namespace IntermediateGenerator.Test.Utilities
             ILogger<ParseJson> logger = Substitute.For<ILogger<ParseJson>>();
             return new ParseJson(logger);
         }
+        public IntermediateObjectSplitter IntermediateObjectSplitter()
+        {
+            return new IntermediateObjectSplitter();
+        }
     }
 }

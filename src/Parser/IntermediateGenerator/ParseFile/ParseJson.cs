@@ -114,7 +114,7 @@ namespace IntermediateGenerator.ParseFile
                 case JsonToken.Integer:
                     return new LongAttribute(propName, (long)reader.Value);
                 case JsonToken.Float:
-                    return new FloatAttribute(propName, Convert.ToSingle(reader.Value));
+                    return new DoubleAttribute(propName, (double)reader.Value);
                 case JsonToken.String:
                     return new TextAttribute(propName, (string)reader.Value);
                 case JsonToken.Null:
