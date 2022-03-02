@@ -97,12 +97,22 @@ namespace IntermediateGenerator.Test.Utilities
             return new IntermediateObject(objects);
         }
 
-        internal static List<ObjectAttribute> GetListOfObjectsAttributes(int amount)
+        internal static List<ObjectAttribute> GetListOfObjectsAttributes(int amount, Func<ObjectAttribute> getObjectAttribute)
         {
             var res = new List<ObjectAttribute>();
             for (int i = 0; i < amount; i++)
             {
-                res.Add(GetRingkøbingSkjernParking());
+                res.Add(getObjectAttribute());
+            }
+            return res;
+        }
+
+        internal static List<ObjectAttribute> GetListOfObjectsAttributes(int amount, Func<int, ObjectAttribute> getObjectAttribute)
+        {
+            var res = new List<ObjectAttribute>();
+            for (int i = 0; i < amount; i++)
+            {
+                res.Add(getObjectAttribute(i));
             }
             return res;
         }
