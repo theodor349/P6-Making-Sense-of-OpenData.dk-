@@ -4,11 +4,10 @@ namespace IntermediateGenerator
 {
     class IntermediateObjectSplitter : IIntermediateObjectSplitter
     {
-        public DatasetObject SplitObject()
+        public DatasetObject SplitObject(DatasetObject datasetObject)
         {
-            return null;
+            return datasetObject;
         }
-
     }
 }
 

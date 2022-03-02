@@ -10,10 +10,12 @@ namespace IntermediateGenerator
     public class IntermediateGenerator : IIntermediateGenerator
     {
         private readonly IParseJson _parseJson;
+        private readonly IIntermediateObjectSplitter _intermediate;
 
-        public IntermediateGenerator(IParseJson parseJson)
+        public IntermediateGenerator(IParseJson parseJson, IIntermediateObjectSplitter intermediate)
         {
             _parseJson = parseJson;
+            _intermediate = intermediate;
         }
         
         public async Task<DatasetObject> GenerateAsync(string filePath)

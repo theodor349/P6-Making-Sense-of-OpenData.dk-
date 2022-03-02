@@ -2,8 +2,8 @@
 
 namespace IntermediateGenerator
 {
-    internal interface IIntermediateObjectSplitter
+    public interface IIntermediateObjectSplitter
     {
-        DatasetObject SplitObject();
+        DatasetObject SplitObject(DatasetObject dataset);
     }
 }

@@ -10,6 +10,7 @@ namespace IntermediateGenerator
         {
             services.AddTransient<IIntermediateGenerator, IntermediateGenerator>();
             services.AddTransient<IParseJson, ParseJson>();
+            services.AddTransient<IIntermediateObjectSplitter, IntermediateObjectSplitter>();
         }
     }
 }
