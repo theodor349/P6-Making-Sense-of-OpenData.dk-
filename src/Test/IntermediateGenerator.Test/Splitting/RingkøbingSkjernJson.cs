@@ -14,17 +14,26 @@ namespace IntermediateGenerator.Test.Splitting
     [TestClass]
     public class RingkøbingSkjernJson
     {
+        [DataRow(1)]
+        [DataRow(2)]
         [TestMethod]
-        public void Split()
+        public void Split_Features_Fluent2(int amount)
         {
             var featureItems = new List<ObjectAttribute>();
-            featureItems.Add(ModelFactory.GetRingkøbingSkjernParking());
+            for (int i = 0; i < amount; i++)
+            {
+                featureItems.Add(ModelFactory.GetRingkøbingSkjernParking());
+            }
             var features = new ListAttribute("features", featureItems);
             var intermediateObject = ModelFactory.GetIntermediateObject(features);
             var inputDataset = ModelFactory.GetDatasetObject(intermediateObject);
 
-            var parkingSpot = ModelFactory.GetRingkøbingSkjernParking();
-            var expectedIntermediate = ModelFactory.GetIntermediateObject(parkingSpot);
+            var parkingSpots = new List<ObjectAttribute>();
+            for (int i = 0; i < amount; i++)
+            {
+                parkingSpots.Add(ModelFactory.GetRingkøbingSkjernParking());
+            }
+            var expectedIntermediate = ModelFactory.GetIntermediateObject(parkingSpots);
             var expectedDataset = ModelFactory.GetDatasetObject(expectedIntermediate);
 
             var setup = new TestSetup();

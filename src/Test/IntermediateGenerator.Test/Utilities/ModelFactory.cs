@@ -92,5 +92,9 @@ namespace IntermediateGenerator.Test.Utilities
             list.Add(features);
             return new IntermediateObject(list);
         }
+        internal static IntermediateObject GetIntermediateObject(List<ObjectAttribute> objects)
+        {
+            return new IntermediateObject(objects);
+        }
     }
 }
