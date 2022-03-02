@@ -16,16 +16,22 @@ namespace IntermediateGenerator
             _parseJson = parseJson;
         }
         
-        public Task<DatasetObject> GenerateAsync(string filePath)
+        public async Task<DatasetObject> GenerateAsync(string filePath)
         {
+            DatasetObject? datasetObject;
             var file = new FileInfo(filePath);
             switch (file.Extension.ToLower())
             {
                 case ".geojson":
                 case ".json":
-                    return _parseJson.Parse(File.ReadAllText(file.FullName), file.Extension, file.Name);
+                    datasetObject = await _parseJson.Parse(File.ReadAllText(file.FullName), file.Extension, file.Name);
+                    break;
+
+                default:
+                    throw new NotImplementedException("File extension `" + file.Extension + "` not found");
             }
-            throw new NotImplementedException("File extension `" + file.Extension + "` not found");
+
+            return datasetObject;
         }
     }
 }
