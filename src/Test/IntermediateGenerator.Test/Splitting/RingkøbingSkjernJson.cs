@@ -25,14 +25,15 @@ namespace IntermediateGenerator.Test.Splitting
             var inputDataset = ModelFactory.GetDatasetObject(intermediateObject);
 
             var parkingSpots = ModelFactory.GetListOfObjectsAttributes(amount, ModelFactory.GetRingkøbingSkjernParking);
-            var expectedIntermediate = ModelFactory.GetIntermediateObject(parkingSpots);
+            var expectedIntermediate = ModelFactory.ConvertListToIntermediateObject(parkingSpots);
             var expectedDataset = ModelFactory.GetDatasetObject(expectedIntermediate);
 
             var setup = new TestSetup();
             var splitter = setup.IntermediateObjectSplitter();
             var res = splitter.SplitObject(inputDataset);
+            res.Wait();
 
-            res.Should().BeEquivalentTo(expectedDataset);
+            res.Result.Should().BeEquivalentTo(expectedDataset);
         }
 
         [DataRow(2)]
@@ -58,14 +59,15 @@ namespace IntermediateGenerator.Test.Splitting
             var inputDataset = ModelFactory.GetDatasetObject(intermediateObject);
 
             var parkingSpots = ModelFactory.GetListOfObjectsAttributes(amount, ModelFactory.GetRingkøbingSkjernParking);
-            var expectedIntermediate = ModelFactory.GetIntermediateObject(parkingSpots);
+            var expectedIntermediate = ModelFactory.ConvertListToIntermediateObject(parkingSpots);
             var expectedDataset = ModelFactory.GetDatasetObject(expectedIntermediate);
 
             var setup = new TestSetup();
             var splitter = setup.IntermediateObjectSplitter();
             var res = splitter.SplitObject(inputDataset);
+            res.Wait();
 
-            res.Should().BeEquivalentTo(expectedDataset);
+            res.Result.Should().BeEquivalentTo(expectedDataset);
         }
 
         [DataRow(2)]
@@ -82,14 +84,15 @@ namespace IntermediateGenerator.Test.Splitting
             var inputDataset = ModelFactory.GetDatasetObject(intermediateObject);
 
             var parkingSpots = ModelFactory.GetListOfObjectsAttributes(amount, ModelFactory.GetRingkøbingSkjernParking);
-            var expectedIntermediate = ModelFactory.GetIntermediateObject(parkingSpots);
+            var expectedIntermediate = ModelFactory.ConvertListToIntermediateObject(parkingSpots);
             var expectedDataset = ModelFactory.GetDatasetObject(expectedIntermediate);
 
             var setup = new TestSetup();
             var splitter = setup.IntermediateObjectSplitter();
             var res = splitter.SplitObject(inputDataset);
+            res.Wait();
 
-            res.Should().BeEquivalentTo(expectedDataset);
+            res.Result.Should().BeEquivalentTo(expectedDataset);
         }
     }
 }

@@ -16,6 +16,12 @@ namespace IntermediateGenerator.Test.Utilities
             list.Add(intermediateObject);
             return new DatasetObject(".json", "filename", list);
         }
+
+        public static DatasetObject GetDatasetObject(List<IntermediateObject> list)
+        {
+            return new DatasetObject(".json", "filename", list);
+        }
+
         public static ListAttribute GetRingkøbingSkjernParking()
         {
             return new ListAttribute("StartObject", new List<ObjectAttribute>()
@@ -84,6 +90,14 @@ namespace IntermediateGenerator.Test.Utilities
                     }),
                 }),
             });
+        }
+
+        internal static List<IntermediateObject> ConvertListToIntermediateObject(List<ObjectAttribute> list)
+        {
+            var res = new List<IntermediateObject>();
+            foreach (var attribute in list)
+                res.Add(new IntermediateObject((List<ObjectAttribute>) attribute.Value));
+            return res;
         }
 
         internal static IntermediateObject GetIntermediateObject(ListAttribute features)
