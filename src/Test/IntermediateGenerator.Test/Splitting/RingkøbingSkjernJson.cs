@@ -95,6 +95,7 @@ namespace IntermediateGenerator.Test.Splitting
             res.Result.Should().BeEquivalentTo(expectedDataset);
         }
 
+        [DataRow(2,1,0)]
         [DataRow(2,2,3)]
         [DataRow(3,3,4)]
         [TestMethod]
