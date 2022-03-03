@@ -92,6 +92,49 @@ namespace IntermediateGenerator.Test.Utilities
             });
         }
 
+        public static ListAttribute GetObjectAttributes(int coordinateCount)
+        {
+            var coordinates = new List<ObjectAttribute>();
+            for (int i = 0; i < coordinateCount; i++)
+            {
+                coordinates.Add(new ListAttribute("StartArray", new List<ObjectAttribute>() { new DoubleAttribute("FloatValue", 8.240479957252727), new DoubleAttribute("FloatValue", 56.09079007170635), }));
+            }
+            var res = new ListAttribute("StartObject", new List<ObjectAttribute>()
+            {
+                new TextAttribute("type", "Feature"),
+                new ListAttribute("properties", new List<ObjectAttribute>()
+                {
+                    new LongAttribute("OBJECTID", 267),
+                    new TextAttribute("P_PLADS_NR", "RK 1"),
+                    new TextAttribute("INDKOERSEL_VEJ", "Torvegade_ Enghavevej"),
+                    new TextAttribute("UDKOERSEL_VEJ", "Enghavevej"),
+                    new TextAttribute("EJER", "Institution"),
+                    new TextAttribute("ANTAL_PLADSER", "92"),
+                    new TextAttribute("HANDICAP_PLADSER", "2"),
+                    new TextAttribute("TIDSZONE", "3 timer"),
+                    new TextAttribute("BELAEGNING", "Asfalt"),
+                    new TextAttribute("AFMAERKNING", "Hvid"),
+                    new TextAttribute("ANTAL_LYSMASTER", "s20"),
+                    new TextAttribute("URL", "https://gisext.rksk.dk/pdf/PPlads/RK_1_Torvegade_Enghavevej.pdf"),
+                    new TextAttribute("BEMAERKNINGER", "kommunen holder_aftaler?"),
+                    new TextAttribute("GlobalID", "{A0864547-1F2E-43F4-87F5-34B5ECACEC1A}"),
+                    new NullAttribute("created_user"),
+                    new NullAttribute("created_date"),
+                    new TextAttribute("last_edited_user", "RKSK"),
+                    new DateAttribute("last_edited_date", new DateTime(2019,12,17,7,23,46)),
+                    new NullAttribute("Brugernavn"),
+                    new DoubleAttribute("ShapeSTArea", 3950.336602756815),
+                    new DoubleAttribute("ShapeSTLength", 437.8971282813771),
+                }),
+                new ListAttribute("geometry", new List<ObjectAttribute>()
+                {
+                    new TextAttribute("type", "Polygon"),
+                    new ListAttribute("coordinates", coordinates),
+                }),
+            });
+            return res;
+        }
+
         internal static List<IntermediateObject> ConvertListToIntermediateObject(List<ObjectAttribute> list)
         {
             var res = new List<IntermediateObject>();

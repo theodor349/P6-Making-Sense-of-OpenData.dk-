@@ -94,5 +94,27 @@ namespace IntermediateGenerator.Test.Splitting
 
             res.Result.Should().BeEquivalentTo(expectedDataset);
         }
+
+        [DataRow(2,2,3)]
+        [DataRow(3,3,4)]
+        [TestMethod]
+        public void Split_Coordinates_Fluent(int amount, int startCount, int increment)
+        {
+            var featureItems = ModelFactory.GetListOfObjectsAttributes(amount, (n) => ModelFactory.GetObjectAttributes(startCount + increment * n));
+            var features = new ListAttribute("features", featureItems);
+            var intermediateObject = ModelFactory.GetIntermediateObject(features);
+            var inputDataset = ModelFactory.GetDatasetObject(intermediateObject);
+
+            var parkingSpots = ModelFactory.GetListOfObjectsAttributes(amount, (n) => ModelFactory.GetObjectAttributes(startCount + increment * n));
+            var expectedIntermediate = ModelFactory.ConvertListToIntermediateObject(parkingSpots);
+            var expectedDataset = ModelFactory.GetDatasetObject(expectedIntermediate);
+
+            var setup = new TestSetup();
+            var splitter = setup.IntermediateObjectSplitter();
+            var res = splitter.SplitObject(inputDataset);
+            res.Wait();
+
+            res.Result.Should().BeEquivalentTo(expectedDataset);
+        }
     }
 }
