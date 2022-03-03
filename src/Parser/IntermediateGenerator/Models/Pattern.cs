@@ -1,4 +1,5 @@
-﻿using Shared.Models.ObjectAttributes;
+﻿using Shared.Models;
+using Shared.Models.ObjectAttributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +8,24 @@ using System.Threading.Tasks;
 
 namespace IntermediateGenerator.Models
 {
-    internal class Pattern
+    internal class Pattern : IComparable<Pattern>
     {
         public int Depth { get; }
-        public int Count { get; set; }
+        public int Count { get; set; } = 1;
         public List<PatternItem> ThisPattern { get; } = new List<PatternItem>();
 
         public Pattern(ListAttribute list, int depth)
         {
             Depth = depth;
             foreach (ObjectAttribute item in (List<ObjectAttribute>)list.Value)
+            {
+                GeneratePatternItem(item);
+            }
+        }
+        public Pattern(IntermediateObject obj, int depth)
+        {
+            Depth = depth;
+            foreach (ObjectAttribute item in obj.Attributes)
             {
                 GeneratePatternItem(item);
             }
@@ -78,6 +87,19 @@ namespace IntermediateGenerator.Models
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public int CompareTo(Pattern? other)
+        {
+            if (other != null)
+            {
+                if (Depth == other.Depth)
+                    return 0;
+                else if (other.Depth < Depth)
+                    return 1;
+                else return -1;
+            }
+            throw new NullReferenceException();
         }
     }
 }

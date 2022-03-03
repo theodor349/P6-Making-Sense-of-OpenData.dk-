@@ -18,5 +18,12 @@ namespace Shared.Models
         public IntermediateObject()
         {
         }
+        public IntermediateObject(ListAttribute attributes)
+        {
+            foreach (ObjectAttribute attribute in (List<ObjectAttribute>)attributes.Value)
+            {
+                Attributes.Add(attribute);
+            }
+        }
     }
 }
