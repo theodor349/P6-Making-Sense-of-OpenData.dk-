@@ -72,6 +72,11 @@ namespace IntermediateGenerator.Models
         {
             if (pattern.Depth != Depth)
                 return false;
+
+            if (pattern.ThisPattern.Count != ThisPattern.Count) {
+                return false;
+            }
+            
             int counter = 0;
             foreach (PatternItem item in pattern.ThisPattern)
             {
