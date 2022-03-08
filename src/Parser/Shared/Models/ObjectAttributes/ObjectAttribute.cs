@@ -1,6 +1,6 @@
 ﻿namespace Shared.Models.ObjectAttributes
 {
-    public enum ObjectLabel { Text = 0, Long = 1, Double = 2, Date = 4, List = 8 }
+    public enum ObjectLabel { Text = 0, Long = 1, Double = 2, Date = 4, List = 8, Null = 16 }
     public class Label
     {
         public ObjectLabel Labels { get; set; }

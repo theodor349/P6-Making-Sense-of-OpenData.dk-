@@ -1,4 +1,5 @@
-﻿using Shared.ComponentInterfaces;
+﻿using LabelRecognizer.Helpers;
+using Shared.ComponentInterfaces;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,16 @@ namespace LabelRecognizer
 {
     public class LabelGenerator : ILabelGenerator
     {
-        public Task AddLabels(DatasetObject dataset)
+        private readonly ITypeLabeler _typeLabeler;
+
+        public LabelGenerator(ITypeLabeler typeLabeler)
         {
-            return Task.CompletedTask;
+            _typeLabeler = typeLabeler;
         }
 
+        public async Task AddLabels(DatasetObject dataset)
+        {
+            await _typeLabeler.AssignTypes(dataset);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LabelRecognizer.Helpers;
+using Microsoft.Extensions.DependencyInjection;
 using Shared.ComponentInterfaces;
 
 namespace LabelRecognizer
@@ -8,6 +9,7 @@ namespace LabelRecognizer
         public static void AddLabelRecognizer(this IServiceCollection services)
         {
             services.AddTransient<ILabelGenerator, LabelGenerator>();
+            services.AddTransient<ITypeLabeler, TypeLabeler>();
         }
     }
 }
