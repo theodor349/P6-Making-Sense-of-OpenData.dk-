@@ -1,11 +1,23 @@
 ﻿namespace Shared.Models.ObjectAttributes
 {
     public enum ObjectLabel { Text = 0, Long = 1, Double = 2, Date = 4, List = 8 }
+    public class Label
+    {
+        public ObjectLabel Labels { get; set; }
+        public float Probability { get; set; }
+
+        public Label(ObjectLabel label, float probability)
+        {
+            Labels = label;
+            Probability = probability;
+        }
+    }
+
     public abstract class ObjectAttribute
     {
         public string Name { get; }
         public object Value { get; }
-        public ObjectLabel Label { get; set; }
+        public Label Label { get; set; }
 
         public ObjectAttribute(string name, object value)
         {
