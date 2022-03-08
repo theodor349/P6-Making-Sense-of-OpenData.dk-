@@ -1,9 +1,11 @@
 ﻿namespace Shared.Models.ObjectAttributes
 {
+    public enum ObjectLabel { Text = 0, Long = 1, Double = 2, Date = 4, List = 8 }
     public abstract class ObjectAttribute
     {
         public string Name { get; }
         public object Value { get; }
+        public ObjectLabel Label { get; set; }
 
         public ObjectAttribute(string name, object value)
         {
