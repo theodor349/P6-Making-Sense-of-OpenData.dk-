@@ -39,8 +39,26 @@ namespace LabelRecognizer.Helpers
 
         private void SetType(ObjectAttribute attribute, TypeCounter typeCounter)
         {
+            AddLabel(attribute, typeCounter);
+            AddLabelsToChildren(attribute, typeCounter);
+        }
+
+        private void AddLabelsToChildren(ObjectAttribute attribute, TypeCounter typeCounter)
+        {
+            if (attribute.GetType() == typeof(ListAttribute))
+            {
+                var list = (List<ObjectAttribute>)attribute.Value;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    SetType(list[i], typeCounter.Types[i]);
+                }
+            }
+        }
+
+        private static void AddLabel(ObjectAttribute attribute, TypeCounter typeCounter)
+        {
             var totalLabelCount = typeCounter.Counter.Sum(x => x.Value);
-            if(typeCounter.ContainsOnlyDoubleAndLong())
+            if (typeCounter.ContainsOnlyDoubleAndLong())
                 attribute.Labels.Add(new LabelModel(ObjectLabel.Double, 1));
             else
             {

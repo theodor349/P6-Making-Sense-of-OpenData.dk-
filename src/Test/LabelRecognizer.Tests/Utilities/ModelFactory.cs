@@ -48,6 +48,8 @@ namespace LabelRecognizer.Tests.Utilities
         {
             switch (label)
             {
+                case ObjectLabel.Null:
+                    return new NullAttribute("name");
                 case ObjectLabel.Text:
                     return new TextAttribute("name","Text");
                 case ObjectLabel.Long:
@@ -59,8 +61,27 @@ namespace LabelRecognizer.Tests.Utilities
                 case ObjectLabel.List:
                     return new ListAttribute("name");
                 default:
-                    throw new Exception("Label was not found " + label);
+                    throw new Exception("Label was not found " + label.ToString());
             }
+        }
+
+        internal static IntermediateObject CreateNested(int nestings, ObjectLabel buttomObject)
+        {
+            var attr = GetNestedAttr(nestings, buttomObject);
+            return new IntermediateObject(new List<ObjectAttribute>() { attr });
+        }
+
+        private static ObjectAttribute GetNestedAttr(int nestings, ObjectLabel buttomObject)
+        {
+            if(nestings == 1)
+                return GetObjectAttr(buttomObject);
+            else
+            {
+                var list = new List<ObjectAttribute>();
+                list.Add(GetNestedAttr(--nestings, buttomObject));
+                return new ListAttribute("name", list);
+            } 
+
         }
     }
 }
