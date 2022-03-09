@@ -27,6 +27,30 @@ namespace LabelRecognizer.Tests.Utilities
             return res;
         }
 
+        internal static ObjectAttribute GetListAttribute(string name, List<ObjectAttribute> attributes)
+        {
+            return new ListAttribute(name, attributes);
+        }
+
+        internal static IntermediateObject GetIntermediateObject(List<ObjectAttribute> attributes)
+        {
+            return new IntermediateObject(attributes);
+        }
+        internal static IntermediateObject GetIntermediateObject(ObjectAttribute attribute)
+        {
+            return new IntermediateObject(new List<ObjectAttribute>() { attribute });
+        }
+
+        internal static List<ObjectAttribute> GetObjectAttrList(int num, Func<ObjectAttribute> getObjectAttribute)
+        {
+            var list = new List<ObjectAttribute>();
+            for (int i = 0; i < num; i++)
+            {
+                list.Add(getObjectAttribute());
+            }
+            return list;
+        }
+
         internal static IntermediateObject GetIntermediateObject(ObjectAttribute attr1, ObjectAttribute attr2)
         {
             var list = new List<ObjectAttribute>()

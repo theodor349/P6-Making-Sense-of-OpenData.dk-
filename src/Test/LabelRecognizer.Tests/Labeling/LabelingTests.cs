@@ -14,6 +14,26 @@ namespace LabelRecognizer.Tests.Labeling
     [TestClass]
     public class LabelingTests
     {
+        [DataRow(2)]
+        [DataRow(3)]
+        [TestMethod]
+        public void LabelGenerator_SameName_CorrectType(int num)
+        {
+            var expectedLabel = ObjectLabel.List;
+            var ios = new List<IntermediateObject>();
+            var attributes = ModelFactory.GetObjectAttrList(num, () => ModelFactory.GetObjectAttr("StartList", expectedLabel));
+            ios.Add(ModelFactory.GetIntermediateObject(ModelFactory.GetListAttribute("name", attributes)));
+            var inputDataset = ModelFactory.GetDatasetObject(ios);
+
+            var setup = new TestSetup();
+            var labelGenerator = setup.LabelGenerator();
+            labelGenerator.AddLabels(inputDataset).Wait();
+
+            foreach (var intermediateObj in inputDataset.Objects)
+                foreach (var objectAttr in intermediateObj.Attributes)
+                    foreach (var label in objectAttr.Labels)
+                        label.Label.Should().Be(expectedLabel);
+        }
 
         [DataRow(1)]
         [DataRow(2)]
