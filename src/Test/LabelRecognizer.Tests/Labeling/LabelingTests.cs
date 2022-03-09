@@ -14,6 +14,7 @@ namespace LabelRecognizer.Tests.Labeling
     [TestClass]
     public class LabelingTests
     {
+
         [DataRow(1)]
         [DataRow(2)]
         [TestMethod]

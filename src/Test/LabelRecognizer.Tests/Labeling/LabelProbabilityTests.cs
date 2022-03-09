@@ -14,6 +14,40 @@ namespace LabelRecognizer.Tests.Labeling
     [TestClass]
     public class LabelProbabilityTests
     {
+        [TestMethod]
+        public void LabelGenerator_DifferentTypes_LabelAndProbability()
+        {
+            var ios = new List<IntermediateObject>();
+            // Left IO
+            var lList = ModelFactory.GetListAttribute("n1", ModelFactory.GetObjectAttr("n1", ObjectLabel.Double));
+            var lAttr = ModelFactory.GetObjectAttr("n2", ObjectLabel.Date);
+            ios.Add(ModelFactory.GetIntermediateObject(lList, lAttr));
+            // Right IO
+            var rAttr = ModelFactory.GetObjectAttr("n1", ObjectLabel.Text);
+            var rList = ModelFactory.GetListAttribute("n2", ModelFactory.GetObjectAttr("n1", ObjectLabel.Long));
+            ios.Add(ModelFactory.GetIntermediateObject(rAttr, rList));
+
+            var inputDataset = ModelFactory.GetDatasetObject(ios);
+            var setup = new TestSetup();
+            var labelGenerator = setup.LabelGenerator();
+            labelGenerator.AddLabels(inputDataset).Wait();
+
+            // Left IO
+            var lIO = inputDataset.Objects[0].Attributes;
+            lIO[0].Labels.First(x => x.Label == ObjectLabel.List).Probability.Should().Be(0.5f);
+            lIO[0].Labels.First(x => x.Label == ObjectLabel.Text).Probability.Should().Be(0.5f);
+            ((List<ObjectAttribute>)lIO[0].Value).First().Labels.First(x => x.Label == ObjectLabel.Double).Probability.Should().Be(1f);
+            lIO[1].Labels.First(x => x.Label == ObjectLabel.Date).Probability.Should().Be(0.5f);
+            lIO[1].Labels.First(x => x.Label == ObjectLabel.List).Probability.Should().Be(0.5f);
+            // Right IO
+            var rIO = inputDataset.Objects[1].Attributes;
+            rIO[0].Labels.First(x => x.Label == ObjectLabel.List).Probability.Should().Be(0.5f);
+            rIO[0].Labels.First(x => x.Label == ObjectLabel.Text).Probability.Should().Be(0.5f);
+            ((List<ObjectAttribute>)rIO[1].Value).First().Labels.First(x => x.Label == ObjectLabel.Long).Probability.Should().Be(1f);
+            rIO[1].Labels.First(x => x.Label == ObjectLabel.Date).Probability.Should().Be(0.5f);
+            rIO[1].Labels.First(x => x.Label == ObjectLabel.List).Probability.Should().Be(0.5f);
+        }
+
         [DataRow(10, 11)]
         [TestMethod]
         public void LabelGenerator_LongDouble_Double100(int numLongs, int numDoubles)

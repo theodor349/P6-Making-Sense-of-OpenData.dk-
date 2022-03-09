@@ -26,6 +26,22 @@ namespace LabelRecognizer.Tests.Utilities
             }
             return res;
         }
+
+        internal static IntermediateObject GetIntermediateObject(ObjectAttribute attr1, ObjectAttribute attr2)
+        {
+            var list = new List<ObjectAttribute>()
+            {
+                attr1,
+                attr2,
+            };
+            return new IntermediateObject(list);
+        }
+
+        internal static ListAttribute GetListAttribute(string name, ObjectAttribute objectAttribute)
+        {
+            return new ListAttribute(name, new List<ObjectAttribute>() { objectAttribute });
+        }
+
         internal static List<IntermediateObject> GetIntermediateObjectList(int amount1, Func<ObjectAttribute> getObjectAttr1, int amount2, Func<ObjectAttribute> getObjectAttr2)
         {
             var res = new List<IntermediateObject>();
@@ -44,25 +60,30 @@ namespace LabelRecognizer.Tests.Utilities
             return res;
         }
 
-        internal static ObjectAttribute GetObjectAttr(ObjectLabel label)
+        internal static ObjectAttribute GetObjectAttr(string name, ObjectLabel label)
         {
             switch (label)
             {
                 case ObjectLabel.Null:
-                    return new NullAttribute("name");
+                    return new NullAttribute(name);
                 case ObjectLabel.Text:
-                    return new TextAttribute("name","Text");
+                    return new TextAttribute(name, "Text");
                 case ObjectLabel.Long:
-                    return new LongAttribute("name", 32);
+                    return new LongAttribute(name, 32);
                 case ObjectLabel.Double:
-                    return new DoubleAttribute("name", 69.420);
+                    return new DoubleAttribute(name, 69.420);
                 case ObjectLabel.Date:
-                    return new DateAttribute("name", DateTime.Now);
+                    return new DateAttribute(name, DateTime.Now);
                 case ObjectLabel.List:
-                    return new ListAttribute("name");
+                    return new ListAttribute(name);
                 default:
                     throw new Exception("Label was not found " + label.ToString());
             }
+        }
+
+        internal static ObjectAttribute GetObjectAttr(ObjectLabel label)
+        {
+            return GetObjectAttr("name", label);
         }
 
         internal static IntermediateObject CreateNested(int nestings, ObjectLabel buttomObject)
