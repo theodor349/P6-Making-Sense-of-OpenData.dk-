@@ -26,8 +26,10 @@ namespace LabelRecognizer.Models
         {
             var res = Types.FirstOrDefault(x => x.AttrName == attrName);
             if (res == null)
+            {
                 res = new TypeCounter(attrName);
-            Types.Add(res);
+                Types.Add(res);
+            }
             return res;
         }
     }

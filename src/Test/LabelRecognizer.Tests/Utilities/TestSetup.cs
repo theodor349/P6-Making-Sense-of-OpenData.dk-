@@ -17,7 +17,7 @@ namespace LabelRecognizer.Tests.Utilities
         }
         public LabelGenerator LabelGenerator()
         {
-            ITypeLabeler typeLabeler = Substitute.For<ITypeLabeler>();
+            ITypeLabeler typeLabeler = new TypeLabeler();
             return new LabelGenerator(typeLabeler);
         }
     }

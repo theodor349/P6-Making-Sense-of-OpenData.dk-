@@ -14,7 +14,7 @@ namespace LabelRecognizer.Helpers
         Task AssignTypes(DatasetObject dataset);
     }
 
-    internal class TypeLabeler : ITypeLabeler
+    public class TypeLabeler : ITypeLabeler
     {
         public Task AssignTypes(DatasetObject dataset)
         {
@@ -42,7 +42,10 @@ namespace LabelRecognizer.Helpers
         {
             foreach (var intermediateObject in dataset.Objects)
                 foreach (var attr in intermediateObject.Attributes)
-                    Increment(attr, typeCounter);
+                {
+                    var counter = typeCounter.Get(attr.Name);
+                    Increment(attr, counter);
+                }
         }
 
         private void Increment(ObjectAttribute attribute, TypeCounter typeCounter)
