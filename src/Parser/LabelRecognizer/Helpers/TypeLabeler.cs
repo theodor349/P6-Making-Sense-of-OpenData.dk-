@@ -50,7 +50,7 @@ namespace LabelRecognizer.Helpers
                 var list = (List<ObjectAttribute>)attribute.Value;
                 for (int i = 0; i < list.Count; i++)
                 {
-                    SetType(list[i], typeCounter.Types[i]);
+                    SetType(list[i], typeCounter.Get(list[i].Name));
                 }
             }
         }

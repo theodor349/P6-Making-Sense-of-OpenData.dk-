@@ -34,7 +34,7 @@ namespace IntermediateGenerator.ParseFile
                 if (reader.Value != null)
                 {
                     propName = HandleValueToken(reader, intermediate, currentListAttr, propName);
-                    _logger.LogInformation("Token: " + reader.TokenType);
+                    //_logger.LogInformation("Token: " + reader.TokenType);
                 }
                 else if (reader.TokenType.Equals(JsonToken.StartArray) || reader.TokenType.Equals(JsonToken.StartObject))
                 {
@@ -76,7 +76,7 @@ namespace IntermediateGenerator.ParseFile
                 GenerateAttribute(reader, intermediate, currentListAttr, propName);
                 propName = null;
             }
-            _logger.LogInformation("Token: " + reader.TokenType + " Value: " + reader.Value);
+            //_logger.LogInformation("Token: " + reader.TokenType + " Value: " + reader.Value);
             return propName;
         }
 
