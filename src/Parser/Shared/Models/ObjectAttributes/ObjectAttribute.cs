@@ -1,14 +1,14 @@
 ﻿namespace Shared.Models.ObjectAttributes
 {
     public enum ObjectLabel { Text = 0, Long = 1, Double = 2, Date = 4, List = 8, Null = 16 }
-    public class Label
+    public class LabelModel
     {
-        public ObjectLabel Labels { get; set; }
+        public ObjectLabel Label { get; set; }
         public float Probability { get; set; }
 
-        public Label(ObjectLabel label, float probability)
+        public LabelModel(ObjectLabel label, float probability)
         {
-            Labels = label;
+            Label = label;
             Probability = probability;
         }
     }
@@ -17,7 +17,7 @@
     {
         public string Name { get; }
         public object Value { get; }
-        public Label Label { get; set; }
+        public List<LabelModel> Labels { get; set; } = new List<LabelModel>();
 
         public ObjectAttribute(string name, object value)
         {

@@ -18,9 +18,10 @@ namespace LabelRecognizer
             _typeLabeler = typeLabeler;
         }
 
-        public async Task AddLabels(DatasetObject dataset)
+        public Task AddLabels(DatasetObject dataset)
         {
-            await _typeLabeler.AssignTypes(dataset);
+            return Task.CompletedTask;
+            //await _typeLabeler.AssignTypes(dataset);
         }
     }
 }
