@@ -28,24 +28,39 @@ namespace LabelRecognizer.Helpers
         private void SetTypes(DatasetObject dataset, TypeCounter typeCounter)
         {
             foreach (var intermediateObject in dataset.Objects)
+            {
                 foreach (var attr in intermediateObject.Attributes)
-                    SetType(attr, typeCounter);
+                {
+                    var counter = typeCounter.Get(attr.Name);
+                    SetType(attr, counter);
+                }
+            }
         }
 
         private void SetType(ObjectAttribute attribute, TypeCounter typeCounter)
         {
-            //if(attribute.GetType() == typeof(ListAttribute))
-
+            var totalLabelCount = typeCounter.Counter.Sum(x => x.Value);
+            if(typeCounter.ContainsOnlyDoubleAndLong())
+                attribute.Labels.Add(new LabelModel(ObjectLabel.Double, 1));
+            else
+            {
+                foreach (var label in typeCounter.Counter)
+                {
+                    attribute.Labels.Add(new LabelModel(label.Key, ((float)label.Value) / totalLabelCount));
+                }
+            }
         }
 
         private void IncrementTypes(DatasetObject dataset, TypeCounter typeCounter)
         {
             foreach (var intermediateObject in dataset.Objects)
+            {
                 foreach (var attr in intermediateObject.Attributes)
                 {
                     var counter = typeCounter.Get(attr.Name);
                     Increment(attr, counter);
                 }
+            }
         }
 
         private void Increment(ObjectAttribute attribute, TypeCounter typeCounter)
