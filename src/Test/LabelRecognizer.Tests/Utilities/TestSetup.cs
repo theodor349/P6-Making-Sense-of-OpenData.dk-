@@ -18,7 +18,8 @@ namespace LabelRecognizer.Tests.Utilities
         public LabelGenerator LabelGenerator()
         {
             ITypeLabeler typeLabeler = new TypeLabeler();
-            return new LabelGenerator(typeLabeler);
+            IGeoLabeler geoLabeler = new GeoLabeler();
+            return new LabelGenerator(typeLabeler, geoLabeler);
         }
     }
 }
