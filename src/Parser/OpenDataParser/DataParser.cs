@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace OpenDataParser
@@ -51,6 +52,9 @@ namespace OpenDataParser
             await _labelGenerator.AddLabels(dataset);
             await _datasetClassifier.Classify(dataset);
             await _datasetParser.Parse(dataset);
+
+            var json = JsonSerializer.Serialize(dataset);
+            File.WriteAllText(_configuration["Output:JsonText"], json);
         }
     }
     
