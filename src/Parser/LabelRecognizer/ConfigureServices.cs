@@ -10,6 +10,7 @@ namespace LabelRecognizer
         {
             services.AddTransient<ILabelGenerator, LabelGenerator>();
             services.AddTransient<ITypeLabeler, TypeLabeler>();
+            services.AddTransient<IGeoLabeler, GeoLabeler>();
         }
     }
 }
