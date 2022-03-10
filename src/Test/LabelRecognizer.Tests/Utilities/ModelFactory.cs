@@ -14,6 +14,7 @@ namespace LabelRecognizer.Tests.Utilities
         {
             return new DatasetObject(".json", "filename", list);
         }
+
         internal static List<IntermediateObject> GetIntermediateObjectList(int amount, Func<ObjectAttribute> getObjectAttr)
         {
             var res = new List<IntermediateObject>();
@@ -25,6 +26,17 @@ namespace LabelRecognizer.Tests.Utilities
                 res.Add(intermediate);
             }
             return res;
+        }
+
+        internal static DoubleAttribute GetObjectAttr(string name, double value)
+        {
+            return new DoubleAttribute(name, value);            
+        }
+
+        internal static ListAttribute GetListAttribute(string name, ObjectAttribute obj1, ObjectAttribute obj2)
+        {
+            var list = new List<ObjectAttribute> { obj1, obj2 };
+            return new ListAttribute(name, list);
         }
 
         internal static ObjectAttribute GetListAttribute(string name, List<ObjectAttribute> attributes)

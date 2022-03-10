@@ -42,10 +42,19 @@ namespace LabelRecognizer.Tests.Labeling
         {
             var res = new Dictionary<ObjectLabel, long>();
             var ios = new List<IntermediateObject>();
-            foreach (var t in Enum.GetValues(typeof(ObjectLabel)))
+            var typeList = new List<ObjectLabel>()
             {
-                ios.AddRange(ModelFactory.GetIntermediateObjectList(num, () => ModelFactory.GetObjectAttr((ObjectLabel)t)));
-                res.Add((ObjectLabel)t, 0);
+                ObjectLabel.Long,
+                ObjectLabel.Double,
+                ObjectLabel.List,
+                ObjectLabel.Null,
+                ObjectLabel.Date,
+                ObjectLabel.Text,
+            };
+            foreach (var t in typeList)
+            {
+                ios.AddRange(ModelFactory.GetIntermediateObjectList(num, () => ModelFactory.GetObjectAttr(t)));
+                res.Add(t, 0);
             }
             var expected = num * res.Count();
             var inputDataset = ModelFactory.GetDatasetObject(ios);
