@@ -113,7 +113,7 @@ namespace LabelRecognizer.Tests.Labeling
 
         [DataRow(10, 11)]
         [TestMethod]
-        public void LabelGenerator_LongDouble_LabelDoulbeOnly(int numLongs, int numDoubles)
+        public void LabelGenerator_LongDouble_LabelDoubleOnly(int numLongs, int numDoubles)
         {
             var ios = new List<IntermediateObject>();
             ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(ObjectLabel.Long)));

@@ -24,6 +24,20 @@
             Name = name;
             Value = value;
         }
+
+        public void AddLabel(ObjectLabel label, float probability)
+        {
+            Labels.Add(new LabelModel(label, probability));
+        }
+
+        public bool HasLabel(ObjectLabel label)
+        {
+           return GetLabel(label) != null;
+        }
+        public LabelModel? GetLabel(ObjectLabel label)
+        {
+            return Labels.FirstOrDefault(x => x.Label == label);
+        }
     }
 
     public class LongAttribute : ObjectAttribute

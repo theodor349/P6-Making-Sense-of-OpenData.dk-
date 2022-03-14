@@ -39,7 +39,7 @@ namespace LabelRecognizer.Helpers
 
         private void SetType(ObjectAttribute attribute, TypeCounter typeCounter)
         {
-            AddLabel(attribute, typeCounter);
+            AddLabels(attribute, typeCounter);
             AddLabelsToChildren(attribute, typeCounter);
         }
 
@@ -55,16 +55,16 @@ namespace LabelRecognizer.Helpers
             }
         }
 
-        private static void AddLabel(ObjectAttribute attribute, TypeCounter typeCounter)
+        private static void AddLabels(ObjectAttribute attribute, TypeCounter typeCounter)
         {
             var totalLabelCount = typeCounter.Counter.Sum(x => x.Value);
             if (typeCounter.ContainsOnlyDoubleAndLong())
-                attribute.Labels.Add(new LabelModel(ObjectLabel.Double, 1));
+                attribute.AddLabel(ObjectLabel.Double, 1);
             else
             {
                 foreach (var label in typeCounter.Counter)
                 {
-                    attribute.Labels.Add(new LabelModel(label.Key, ((float)label.Value) / totalLabelCount));
+                    attribute.AddLabel(label.Key, ((float)label.Value) / totalLabelCount);
                 }
             }
         }

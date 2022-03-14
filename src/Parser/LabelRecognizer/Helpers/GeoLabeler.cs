@@ -48,24 +48,24 @@ namespace LabelRecognizer.Helpers
             int points = 0;
             foreach (var child in children)
             {
-                if(child.Labels.FirstOrDefault(x => x.Label == ObjectLabel.Coordinate) == null)
+                if(child.Labels.FirstOrDefault(x => x.Label == ObjectLabel.Coordinate) != null)
                     points++;
             }
             if (points > 1)
-                attr.Labels.Add(new LabelModel(ObjectLabel.Polygon, 1));
+                attr.AddLabel(ObjectLabel.Polygon, 1);
         }
 
         private void AddCoordinateLabel(ObjectAttribute attr, List<ObjectAttribute> children)
         {
             if (children.Count != 2)
                 return;
-            var left = children[0].Labels.FirstOrDefault(x => x.Label == ObjectLabel.Double);
+            var left = children[0].GetLabel(ObjectLabel.Double);
             if (left == null)
                 return;
-            var right = children[1].Labels.FirstOrDefault(x => x.Label == ObjectLabel.Double);
+            var right = children[1].GetLabel(ObjectLabel.Double);
             if (right == null)
                 return;
-            attr.Labels.Add(new LabelModel(ObjectLabel.Coordinate, left.Probability * right.Probability));
+            attr.AddLabel(ObjectLabel.Coordinate, left.Probability * right.Probability);
         }
     }
 }
