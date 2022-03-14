@@ -140,5 +140,26 @@ namespace LabelRecognizer.Tests.Utilities
             } 
 
         }
+
+        internal static ListAttribute GetPolygonAttr(int amountPoints)
+        {
+            var res = new ListAttribute("Polygon");
+            var list = (List<ObjectAttribute>)res.Value;
+            for (int i = 0; i < amountPoints; i++)
+            {
+                list.Add(GetCoordinateAttr(i));
+            }
+            return res;
+        }
+
+        internal static ListAttribute GetCoordinateAttr(int seed)
+        {
+            var rnd = new Random(seed);
+            var latitude = GetObjectAttr("FloatValue", rnd.NextDouble());
+            var longitude = GetObjectAttr("FloatValue", rnd.NextDouble());
+            var res = GetListAttribute("coordinates", latitude, longitude);
+
+            return res;
+        }
     }
 }

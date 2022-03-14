@@ -18,16 +18,14 @@ using Shared.Models;
 namespace LabelRecognizer.Tests.Labeling.GeoTests
 {
     [TestClass]
-    public class GeoTests
+    public class Coordinates
     {
         [TestMethod]
         public void LabelGenerator_Coordinate_Correct()
         {
             var ios = new List<IntermediateObject>();
-            var latitude = ModelFactory.GetObjectAttr("FloatValue", 8.241631367419494d);
-            var longitude = ModelFactory.GetObjectAttr("FloatValue", 56.090578540697706d);
-            var list = ModelFactory.GetListAttribute("coordinates", latitude, longitude);
-            ios.Add(ModelFactory.GetIntermediateObject(list));
+            var coordinate = ModelFactory.GetCoordinateAttr(349);
+            ios.Add(ModelFactory.GetIntermediateObject(coordinate));
             var inputDataset = ModelFactory.GetDatasetObject(ios);
 
             var setup = new TestSetup();
