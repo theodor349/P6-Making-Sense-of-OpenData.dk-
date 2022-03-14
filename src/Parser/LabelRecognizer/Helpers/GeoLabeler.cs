@@ -40,6 +40,19 @@ namespace LabelRecognizer.Helpers
 
             // Logic
             AddCoordinateLabel(attr, children);
+            AddPolygon(attr, children);
+        }
+
+        private void AddPolygon(ObjectAttribute attr, List<ObjectAttribute> children)
+        {
+            int points = 0;
+            foreach (var child in children)
+            {
+                if(child.Labels.FirstOrDefault(x => x.Label == ObjectLabel.Coordinate) == null)
+                    points++;
+            }
+            if (points > 1)
+                attr.Labels.Add(new LabelModel(ObjectLabel.Polygon, 1));
         }
 
         private void AddCoordinateLabel(ObjectAttribute attr, List<ObjectAttribute> children)
