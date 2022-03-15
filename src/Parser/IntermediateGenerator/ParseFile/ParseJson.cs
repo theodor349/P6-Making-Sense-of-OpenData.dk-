@@ -104,6 +104,10 @@ namespace IntermediateGenerator.ParseFile
                 {
                     propName = reader.TokenType.ToString();
                 }
+                else if (reader.TokenType.Equals(JsonToken.Float))
+                {
+                    propName =  "DoubleValue";
+                }
                 else
                 {
                     propName = reader.TokenType.ToString() + "Value";
