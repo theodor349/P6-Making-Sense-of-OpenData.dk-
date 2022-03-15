@@ -51,7 +51,7 @@ namespace LabelRecognizer.Helpers
                 if(child.Labels.FirstOrDefault(x => x.Label == ObjectLabel.Coordinate) != null)
                     points++;
             }
-            if (points > 1)
+            if (points > 3)
                 attr.AddLabel(ObjectLabel.Polygon, 1);
         }
 
