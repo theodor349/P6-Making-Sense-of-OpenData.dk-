@@ -189,5 +189,41 @@ namespace LabelRecognizer.Tests.Labeling
             longCount.Should().Be(numText + numLongs + numDoubles);
             doubleCount.Should().Be(numText + numLongs + numDoubles);
         }
+        [DataRow(5, 7)]
+        [DataRow(69, 1)]
+        [TestMethod]
+        public void LabelGenerator_LongNull_LabelLongOnly(int numLongs, int numNulls)
+        {
+            var ios = new List<IntermediateObject>();
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(ObjectLabel.Long)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numNulls, () => ModelFactory.GetObjectAttr(ObjectLabel.Null)));
+            var inputDataset = ModelFactory.GetDatasetObject(ios);
+
+            var setup = new TestSetup();
+            var labelGenerator = setup.LabelGenerator();
+            var res = labelGenerator.AddLabels(inputDataset);
+            res.Wait();
+
+            int longCount = 0;
+            int nullCount = 0;
+
+            foreach (var intermediateObj in inputDataset.Objects)
+            {
+                foreach (var objectAttr in intermediateObj.Attributes)
+                {
+                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Long) == 1)
+                    {
+                        longCount++;
+                    }
+                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Null) == 1)
+                    {
+                        nullCount++;
+                    }
+                }
+            }
+
+            nullCount.Should().Be(0);
+            longCount.Should().Be(numLongs + numNulls);
+        }
     }
 }

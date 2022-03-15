@@ -60,6 +60,8 @@ namespace LabelRecognizer.Helpers
             var totalLabelCount = typeCounter.Counter.Sum(x => x.Value);
             if (typeCounter.ContainsOnlyDoubleAndLong())
                 attribute.AddLabel(ObjectLabel.Double, 1);
+            else if (typeCounter.ContainsNullAndOtherType())
+                attribute.AddLabel(typeCounter.GetOtherType(), 1);
             else
             {
                 foreach (var label in typeCounter.Counter)
