@@ -27,12 +27,45 @@ namespace LabelRecognizer.Helpers
 
         private void SetTypes(DatasetObject dataset, TypeCounter typeCounter)
         {
+            CheckStringDatas(dataset, typeCounter);
+
             foreach (var intermediateObject in dataset.Objects)
             {
                 foreach (var attr in intermediateObject.Attributes)
                 {
                     var counter = typeCounter.Get(attr.Name);
                     SetType(attr, counter);
+                }
+            }
+        }
+
+        private void CheckStringDatas(DatasetObject dataset, TypeCounter typeCounter)
+        {
+            foreach (var intermediateObject in dataset.Objects)
+            {
+                foreach (var attr in intermediateObject.Attributes)
+                {
+                    var counter = typeCounter.Get(attr.Name);
+                    CheckStringType(attr, counter);
+                }
+            }
+        }
+
+        private void CheckStringType(ObjectAttribute attribute, TypeCounter typeCounter)
+        {
+            typeCounter.CheckStringParse(attribute);
+            CheckStringTypeChildren(attribute, typeCounter);
+        }
+
+
+        private void CheckStringTypeChildren(ObjectAttribute attribute, TypeCounter typeCounter)
+        {
+            if (attribute.GetType() == typeof(ListAttribute))
+            {
+                var list = (List<ObjectAttribute>)attribute.Value;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    CheckStringType(list[i], typeCounter.Get(list[i].Name));
                 }
             }
         }
@@ -61,7 +94,9 @@ namespace LabelRecognizer.Helpers
             if (typeCounter.ContainsOnlyDoubleAndLong())
                 attribute.AddLabel(ObjectLabel.Double, 1);
             else if (typeCounter.ContainsNullAndOtherType())
-                attribute.AddLabel(typeCounter.GetOtherType(), 1);
+                attribute.AddLabel(typeCounter.GetNotNullType(), 1);
+            else if (typeCounter.CanParseStringAsOtherType())
+                attribute.AddLabel(typeCounter.GetNotTextType(), 1);
             else
             {
                 foreach (var label in typeCounter.Counter)
