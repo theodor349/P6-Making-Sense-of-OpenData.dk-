@@ -225,5 +225,77 @@ namespace LabelRecognizer.Tests.Labeling
             nullCount.Should().Be(0);
             longCount.Should().Be(numLongs + numNulls);
         }
+
+        [DataRow(17, 5)]
+        [DataRow(1, 10)]
+        [TestMethod]
+        public void LabelGenerator_LongText_CantParseTextAsLongLabelTextOnly(int numLongs, int numText)
+        {
+            var ios = new List<IntermediateObject>();
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(ObjectLabel.Long)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numText, () => ModelFactory.GetObjectAttr(ObjectLabel.Text)));
+            var inputDataset = ModelFactory.GetDatasetObject(ios);
+
+            var setup = new TestSetup();
+            var labelGenerator = setup.LabelGenerator();
+            var res = labelGenerator.AddLabels(inputDataset);
+            res.Wait();
+
+            int longCount = 0;
+            int textCount = 0;
+
+            foreach (var intermediateObj in inputDataset.Objects)
+            {
+                foreach (var objectAttr in intermediateObj.Attributes)
+                {
+                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Long) == 1)
+                    {
+                        longCount++;
+                    }
+                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Text) == 1)
+                    {
+                        textCount++;
+                    }
+                }
+            }
+
+            longCount.Should().Be(0);
+            textCount.Should().Be(numLongs + numText);
+        }
+
+        [TestMethod]
+        public void LabelGenerator_LongText_CanParseTextAsLongLabelLongOnly()
+        {
+            var ios = new List<IntermediateObject>();
+            ios.Add(new IntermediateObject(new List<ObjectAttribute> { new TextAttribute("lars", "17892")}));
+            ios.Add(new IntermediateObject(new List<ObjectAttribute> { new LongAttribute("larsen", 819103) }));
+            var inputDataset = ModelFactory.GetDatasetObject(ios);
+
+            var setup = new TestSetup();
+            var labelGenerator = setup.LabelGenerator();
+            var res = labelGenerator.AddLabels(inputDataset);
+            res.Wait();
+
+            int longCount = 0;
+            int textCount = 0;
+
+            foreach (var intermediateObj in inputDataset.Objects)
+            {
+                foreach (var objectAttr in intermediateObj.Attributes)
+                {
+                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Long) == 1)
+                    {
+                        longCount++;
+                    }
+                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Text) == 1)
+                    {
+                        textCount++;
+                    }
+                }
+            }
+
+            textCount.Should().Be(0);
+            longCount.Should().Be(2);
+        }
     }
 }
