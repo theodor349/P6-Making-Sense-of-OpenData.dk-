@@ -259,8 +259,8 @@ namespace LabelRecognizer.Tests.Labeling
                 }
             }
 
-            longCount.Should().Be(0);
             textCount.Should().Be(numLongs + numText);
+            longCount.Should().Be(0); //wat
         }
 
         [TestMethod]
@@ -268,7 +268,7 @@ namespace LabelRecognizer.Tests.Labeling
         {
             var ios = new List<IntermediateObject>();
             ios.Add(new IntermediateObject(new List<ObjectAttribute> { new TextAttribute("lars", "17892")}));
-            ios.Add(new IntermediateObject(new List<ObjectAttribute> { new LongAttribute("larsen", 819103) }));
+            ios.Add(new IntermediateObject(new List<ObjectAttribute> { new LongAttribute("lars", 819103) }));
             var inputDataset = ModelFactory.GetDatasetObject(ios);
 
             var setup = new TestSetup();
