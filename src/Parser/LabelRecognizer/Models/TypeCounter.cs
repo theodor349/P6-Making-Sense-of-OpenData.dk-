@@ -9,13 +9,13 @@ namespace LabelRecognizer.Models
         public Dictionary<ObjectLabel, long> Counter { get; } = new Dictionary<ObjectLabel, long>();
 
         private int parsableStrings = 0;
-        public bool CanParseStringAsOtherType () => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Text) && parsableStrings == Counter[ObjectLabel.Text];
+        public bool CanParseTextAsOtherType () => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Text) && parsableStrings == Counter[ObjectLabel.Text];
   
         public bool ContainsOnlyDoubleAndLong() => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Long) && Counter.ContainsKey(ObjectLabel.Double);
 
         public bool ContainsNullAndOtherType() => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Null);
 
-        private bool ContainsStringAndOtherType() => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Null);
+        public bool ContainsTextAndOtherType() => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Text);
 
         public TypeCounter(string attrName)
         {

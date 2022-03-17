@@ -95,8 +95,10 @@ namespace LabelRecognizer.Helpers
                 attribute.AddLabel(ObjectLabel.Double, 1);
             else if (typeCounter.ContainsNullAndOtherType())
                 attribute.AddLabel(typeCounter.GetNotNullType(), 1);
-            else if (typeCounter.CanParseStringAsOtherType())
+            else if (typeCounter.CanParseTextAsOtherType())
                 attribute.AddLabel(typeCounter.GetNotTextType(), 1);
+            else if (typeCounter.ContainsTextAndOtherType)
+                attribute.AddLabel(ObjectLabel.Text, 1);
             else
             {
                 foreach (var label in typeCounter.Counter)
