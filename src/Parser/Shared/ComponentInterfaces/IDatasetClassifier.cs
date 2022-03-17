@@ -4,6 +4,6 @@ namespace Shared.ComponentInterfaces
 {
     public interface IDatasetClassifier
     {
-        Task Classify(DatasetObject dataset);
+        DatasetType Classify(DatasetObject dataset);
     }
 }

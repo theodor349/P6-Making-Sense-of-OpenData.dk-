@@ -10,9 +10,9 @@ namespace DatasetDecider
 {
     public class DatasetClassifier : IDatasetClassifier
     {
-        public Task Classify(DatasetObject dataset)
+        public DatasetType Classify(DatasetObject dataset)
         {
-            return Task.CompletedTask;
+            return DatasetType.Parking;
         }
 
     }
