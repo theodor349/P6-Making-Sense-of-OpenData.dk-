@@ -15,7 +15,7 @@ namespace LabelRecognizer.Models
 
         public bool ContainsNullAndOtherType() => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Null);
 
-        public bool ContainsTextAndOtherType() => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Text);
+        public bool ContainsTextAndOtherPrimitiveType() => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Text) && !Counter.ContainsKey(ObjectLabel.List);
 
         public TypeCounter(string attrName)
         {
