@@ -10,7 +10,7 @@ namespace DatasetParser
 {
     public class DatasetParser : IDatasetParser
     {
-        public Task Parse(DatasetObject dataset)
+        public Task Parse(DatasetObject dataset, DatasetType datasetType)
         {
             return Task.CompletedTask;
         }

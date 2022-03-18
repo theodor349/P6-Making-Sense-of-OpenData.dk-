@@ -10,9 +10,9 @@ namespace DatasetDecider
 {
     public class DatasetClassifier : IDatasetClassifier
     {
-        public DatasetType Classify(DatasetObject dataset)
+        public async Task<DatasetType> Classify(DatasetObject dataset)
         {
-            return DatasetType.Parking;
+            return await Task.Run(() => { return DatasetType.Parking; });
         }
 
     }
