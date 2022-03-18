@@ -10,8 +10,25 @@ namespace DatasetParser
 {
     public class DatasetParser : IDatasetParser
     {
+        private readonly IParseToJson _parseToJson;
+
+        public DatasetParser(IParseToJson parseToJson)
+        {
+            _parseToJson = parseToJson;
+        }
+
         public Task Parse(DatasetObject dataset, DatasetType datasetType)
         {
+
+            switch (datasetType)
+            {
+                case DatasetType.Parking:
+                    _parseToJson.ParseIntermediateToJson(dataset);
+                    break;
+            }
+
+
+
             return Task.CompletedTask;
         }
     }

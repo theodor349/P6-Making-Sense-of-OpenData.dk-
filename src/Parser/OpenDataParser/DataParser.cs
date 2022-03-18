@@ -51,9 +51,6 @@ namespace OpenDataParser
             var dataset = await _intermediateGenerator.GenerateAsync(file);
             await _labelGenerator.AddLabels(dataset);
             await _datasetParser.Parse(dataset, await _datasetClassifier.Classify(dataset));
-
-            var json = JsonSerializer.Serialize(dataset);
-            File.WriteAllText(_configuration["Output:JsonText"], json);
         }
     }
     
