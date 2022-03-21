@@ -71,15 +71,33 @@ namespace DatasetParser
             }
             else if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
             {
-                polygons.Add(GetCoordinates(objAttr));
+                polygons.Add(GetPolygon(objAttr));
             }
 
             return polygons;
         }
 
+        private JArray GetPolygon(ObjectAttribute objAttr)
+        {
+            return new JArray(GetCoordinates(objAttr));
+        }
+
         private JArray GetCoordinates(ObjectAttribute objAttr)
         {
-            throw new NotImplementedException();
+            JArray coordinates = new JArray();
+            foreach(ObjectAttribute coord in (List<ObjectAttribute>)objAttr.Value)
+            {
+                GetCoordinate(coord, coordinates);
+            }
+
+            return coordinates;
+        }
+
+        private void GetCoordinate(ObjectAttribute coord, JArray coordinates)
+        {
+            var coord1 = (ListAttribute)coord;
+            var coordValues = (List<ObjectAttribute>)coord.Value;
+            coordinates.Add(new JArray(coordValues[0], coordValues[1]));
         }
     }
 }
