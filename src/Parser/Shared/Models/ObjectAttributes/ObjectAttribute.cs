@@ -11,8 +11,33 @@
             Label = label;
             Probability = probability;
         }
-    }
 
+        public LabelModel(ObjectLabel label)
+        {
+            Label = label;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null) return false;
+
+            LabelModel? label = obj as LabelModel;
+
+            if (label != null)
+                return Equals(label);
+            else return false;
+        }
+        private bool Equals(LabelModel label)
+        {
+            return Label == label.Label;
+        }
+
+        public override int GetHashCode()
+        {
+            return Label.GetHashCode();
+        }
+    }
+    
     public abstract class ObjectAttribute
     {
         public string Name { get; }

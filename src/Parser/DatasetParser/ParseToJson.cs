@@ -45,22 +45,27 @@ namespace DatasetParser
             List<JArray> polygons = new List<JArray>();
             foreach(IntermediateObject obj in dataset.Objects)
             {
-                CheckObjectForCoordsPolygons(obj, polygons);
+                polygons.Add(CheckObjectForCoordsPolygons(obj, polygons));
             }
                 
             return polygons;  
         }
 
-        private void CheckObjectForCoordsPolygons(IntermediateObject obj, List<JArray> polygons)
+        private J CheckObjectForCoordsPolygons(IntermediateObject obj, List<JArray> polygons)
         {
-            throw new NotImplementedException();
             foreach(ObjectAttribute attr in obj.Attributes)
             {
-                if (attr.Labels.Count(x => x.Label == ObjectLabel.Polygon) == 1)
+                if (attr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
                 {
-
+                    polygons.Add(new JArray("coordinates", GetPolygon(attr)));
                 }
             }
+        }
+
+        private JArray GetPolygon(ObjectAttribute attr)
+        {
+            JArray polygon = new JArray(GetCoordinates(attr));
+            return polygon;
         }
     }
 }
