@@ -45,27 +45,41 @@ namespace DatasetParser
             List<JArray> polygons = new List<JArray>();
             foreach(IntermediateObject obj in dataset.Objects)
             {
-                polygons.Add(CheckObjectForCoordsPolygons(obj, polygons));
+                foreach (ObjectAttribute objAttr in obj.Attributes)
+                {
+                    List<JArray> newPolygons = CheckObjAttrForPolygons(objAttr);
+                    if(newPolygons != null)
+                    {
+                        polygons.AddRange(newPolygons);
+                    }
+                }
             }
                 
             return polygons;  
         }
 
-        private J CheckObjectForCoordsPolygons(IntermediateObject obj, List<JArray> polygons)
+        private List<JArray> CheckObjAttrForPolygons(ObjectAttribute objAttr)
         {
-            foreach(ObjectAttribute attr in obj.Attributes)
+            List<JArray> polygons = new List<JArray>();
+            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.List)))
             {
-                if (attr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
+                List<JArray> newPolygons = CheckObjAttrForPolygons((ObjectAttribute)objAttr.Value);
+                if (newPolygons != null)
                 {
-                    polygons.Add(new JArray("coordinates", GetPolygon(attr)));
+                    polygons.AddRange(newPolygons);
                 }
             }
+            else if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
+            {
+                polygons.Add(GetCoordinates(objAttr));
+            }
+
+            return polygons;
         }
 
-        private JArray GetPolygon(ObjectAttribute attr)
+        private JArray GetCoordinates(ObjectAttribute objAttr)
         {
-            JArray polygon = new JArray(GetCoordinates(attr));
-            return polygon;
+            throw new NotImplementedException();
         }
     }
 }
