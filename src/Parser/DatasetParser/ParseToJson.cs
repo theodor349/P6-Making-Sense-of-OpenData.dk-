@@ -29,7 +29,7 @@ namespace DatasetParser
             // parse data
             //var json = JsonSerializer.Serialize(dataset);
             var GeoJson = new JObject(
-                new JProperty("type", "Multipolygon"),
+                new JProperty("type", "MultiPolygon"),
                 new JProperty("coordinates", new JArray(FindPolygonsInDataset(dataset)))
                 //new JArray("coordinates", 
                 //    FindPolygonsInDataset(dataset)
@@ -112,20 +112,24 @@ namespace DatasetParser
 
         private JArray GetCoordinates(ObjectAttribute objAttr)
         {
+            JArray jArray = new JArray();
             JArray coordinates = new JArray();
             foreach(ObjectAttribute coord in (List<ObjectAttribute>)objAttr.Value)
             {
                 GetCoordinate(coord, coordinates);
             }
-
-            return coordinates;
+            jArray.Add(coordinates);
+            return jArray;
         }
 
         private void GetCoordinate(ObjectAttribute coord, JArray coordinates)
         {
-            var coord1 = (ListAttribute)coord;
             var coordValues = (List<ObjectAttribute>)coord.Value;
-            coordinates.Add(new JArray(coordValues[0], coordValues[1]));
+
+            float coord1 = Convert.ToSingle(coordValues[0].Value);
+            float coord2 = Convert.ToSingle(coordValues[1].Value);
+
+            coordinates.Add(new JArray(coord1, coord2));
         }
     }
 }
