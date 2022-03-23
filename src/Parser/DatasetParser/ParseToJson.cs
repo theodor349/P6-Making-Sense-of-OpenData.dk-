@@ -30,9 +30,10 @@ namespace DatasetParser
             //var json = JsonSerializer.Serialize(dataset);
             var GeoJson = new JObject(
                 new JProperty("type", "Multipolygon"),
-                new JArray("coordinates", 
-                    FindPolygonsInDataset(dataset)
-                    )
+                new JProperty("coordinates", FindPolygonsInDataset(dataset))
+                //new JArray("coordinates", 
+                //    FindPolygonsInDataset(dataset)
+                //    )
                 );
 
 
