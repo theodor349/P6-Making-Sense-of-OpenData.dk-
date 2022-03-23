@@ -8,6 +8,7 @@ namespace DatasetParser
         public static void AddDatasetParser(this IServiceCollection services)
         {
             services.AddTransient<IDatasetParser, DatasetParser>();
+            services.AddTransient<IParseToJson, ParseToJson>();
         }
     }
 }
