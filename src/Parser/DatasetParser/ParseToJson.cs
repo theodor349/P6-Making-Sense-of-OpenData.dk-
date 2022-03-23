@@ -30,7 +30,7 @@ namespace DatasetParser
             //var json = JsonSerializer.Serialize(dataset);
             var GeoJson = new JObject(
                 new JProperty("type", "Multipolygon"),
-                new JProperty("coordinates", FindPolygonsInDataset(dataset))
+                new JProperty("coordinates", new JArray(FindPolygonsInDataset(dataset)))
                 //new JArray("coordinates", 
                 //    FindPolygonsInDataset(dataset)
                 //    )
@@ -61,7 +61,13 @@ namespace DatasetParser
         private List<JArray> CheckObjAttrForPolygons(ObjectAttribute objAttr)
         {
             List<JArray> polygons = new List<JArray>();
-            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.List)))
+
+            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
+            {
+                polygons.Add(GetPolygon(objAttr));
+            }
+
+            else if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.List)))
             {
                 List<JArray> newPolygons = CheckObjAttrForPolygons((List<ObjectAttribute>)objAttr.Value);
                 if (newPolygons != null)
@@ -69,10 +75,7 @@ namespace DatasetParser
                     polygons.AddRange(newPolygons);
                 }
             }
-            else if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
-            {
-                polygons.Add(GetPolygon(objAttr));
-            }
+
 
             return polygons;
         }
@@ -82,7 +85,13 @@ namespace DatasetParser
             List<JArray> polygons = new List<JArray>();
             foreach (ObjectAttribute obj in objAttr)
             {
-                if (obj.Labels.Contains(new LabelModel(ObjectLabel.List)))
+
+                if (obj.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
+                {
+                    polygons.Add(GetPolygon(obj));
+                }
+
+                else if (obj.Labels.Contains(new LabelModel(ObjectLabel.List)))
                 {
                     List<JArray> newPolygons = CheckObjAttrForPolygons((List<ObjectAttribute>)obj.Value);
                     if (newPolygons != null)
@@ -90,10 +99,7 @@ namespace DatasetParser
                         polygons.AddRange(newPolygons);
                     }
                 }
-                else if (obj.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
-                {
-                    polygons.Add(GetPolygon(obj));
-                }
+
             }
             return polygons;
         }
