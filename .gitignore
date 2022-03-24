@@ -351,5 +351,5 @@ MigrationBackup/
 /Datasets
 /src/Parser/OpenDataParser/appsettings.Production.json
 
-
+git update-index --assume-unchanged src/Parser/OpenDataParser/appsettings.json
 
