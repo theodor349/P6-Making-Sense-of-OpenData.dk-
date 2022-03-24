@@ -351,3 +351,7 @@ MigrationBackup/
 /Datasets
 /src/Parser/OpenDataParser/appsettings.Production.json
 /src/Parser/OpenDataParser/appsettings.json
+/src/Parser/OpenDataParser/appsettings.*
+
+
+
