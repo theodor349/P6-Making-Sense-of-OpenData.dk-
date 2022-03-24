@@ -29,25 +29,23 @@ namespace DatasetParser
             // parse data
             //var json = JsonSerializer.Serialize(dataset);
             var GeoJson = new JObject(
-                new JProperty("type", "MultiPolygon"),
-                new JProperty("coordinates", new JArray(FindPolygonsInDataset(dataset)))
-                //new JArray("coordinates", 
-                //    FindPolygonsInDataset(dataset)
-                //    )
+                new JProperty("type", "FeatureCollection"),
+                new JProperty("features", new JArray(
+                    FindPolygonsInDataset(dataset)
+                    ))
                 );
 
-
             File.WriteAllText(_configuration["Output:JsonText"], GeoJson.ToString());
-
         }
-        private List<JArray> FindPolygonsInDataset(DatasetObject dataset)
+
+        private List<JObject> FindPolygonsInDataset(DatasetObject dataset)
         {
-            List<JArray> polygons = new List<JArray>();
+            List<JObject> polygons = new List<JObject>();
             foreach(IntermediateObject obj in dataset.Objects)
             {
                 foreach (ObjectAttribute objAttr in obj.Attributes)
                 {
-                    List<JArray> newPolygons = CheckObjAttrForPolygons(objAttr);
+                    List<JObject> newPolygons = CheckObjAttrForPolygons(objAttr);
                     if(newPolygons != null)
                     {
                         polygons.AddRange(newPolygons);
@@ -58,9 +56,9 @@ namespace DatasetParser
             return polygons;  
         }
 
-        private List<JArray> CheckObjAttrForPolygons(ObjectAttribute objAttr)
+        private List<JObject> CheckObjAttrForPolygons(ObjectAttribute objAttr)
         {
-            List<JArray> polygons = new List<JArray>();
+            List<JObject> polygons = new List<JObject>();
 
             if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
             {
@@ -69,7 +67,7 @@ namespace DatasetParser
 
             else if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.List)))
             {
-                List<JArray> newPolygons = CheckObjAttrForPolygons((List<ObjectAttribute>)objAttr.Value);
+                List<JObject> newPolygons = CheckObjAttrForPolygons((List<ObjectAttribute>)objAttr.Value);
                 if (newPolygons != null)
                 {
                     polygons.AddRange(newPolygons);
@@ -80,9 +78,9 @@ namespace DatasetParser
             return polygons;
         }
 
-        private List<JArray> CheckObjAttrForPolygons(List<ObjectAttribute> objAttr)
+        private List<JObject> CheckObjAttrForPolygons(List<ObjectAttribute> objAttr)
         {
-            List<JArray> polygons = new List<JArray>();
+            List<JObject> polygons = new List<JObject>();
             foreach (ObjectAttribute obj in objAttr)
             {
 
@@ -93,7 +91,7 @@ namespace DatasetParser
 
                 else if (obj.Labels.Contains(new LabelModel(ObjectLabel.List)))
                 {
-                    List<JArray> newPolygons = CheckObjAttrForPolygons((List<ObjectAttribute>)obj.Value);
+                    List<JObject> newPolygons = CheckObjAttrForPolygons((List<ObjectAttribute>)obj.Value);
                     if (newPolygons != null)
                     {
                         polygons.AddRange(newPolygons);
@@ -105,9 +103,17 @@ namespace DatasetParser
         }
 
 
-        private JArray GetPolygon(ObjectAttribute objAttr)
+        private JObject GetPolygon(ObjectAttribute objAttr)
         {
-            return new JArray(GetCoordinates(objAttr));
+
+            return new JObject(
+                       new JProperty("type", "Feature"),
+                       new JProperty("geometry", new JObject(
+                                new JProperty("type", "Polygon"),
+                                new JProperty("coordinates", GetCoordinates(objAttr)))
+                           ),
+                       new JProperty("properties", new JObject())
+                   );
         }
 
         private JArray GetCoordinates(ObjectAttribute objAttr)
