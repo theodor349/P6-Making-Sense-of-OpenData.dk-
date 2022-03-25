@@ -51,8 +51,11 @@ namespace OpenDataParser
         private async Task ParseDataset(string file, int iteration)
         {
             var dataset = await _intermediateGenerator.GenerateAsync(file);
-            await _labelGenerator.AddLabels(dataset);
-            await _datasetParser.Parse(dataset, await _datasetClassifier.Classify(dataset), iteration);
+            if(dataset != null)
+            {
+                await _labelGenerator.AddLabels(dataset);
+                await _datasetParser.Parse(dataset, await _datasetClassifier.Classify(dataset), iteration);
+            }
         }
     }
 }

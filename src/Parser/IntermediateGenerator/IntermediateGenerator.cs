@@ -20,7 +20,7 @@ namespace IntermediateGenerator
         
         public async Task<DatasetObject> GenerateAsync(string filePath)
         {
-            DatasetObject? datasetObject;
+            DatasetObject? datasetObject = null;
             var file = new FileInfo(filePath);
             switch (file.Extension.ToLower())
             {
