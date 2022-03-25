@@ -150,8 +150,8 @@ namespace DatasetParser
         private Coordinate GetCoordinate(ObjectAttribute coord)
         {
             var coordValues = (List<ObjectAttribute>)coord.Value;
-            double coord1 = (double)coordValues[0].Value;
-            double coord2 = (double)coordValues[1].Value;
+            double coord1 = Convert.ToDouble(coordValues[0].Value);
+            double coord2 = Convert.ToDouble(coordValues[1].Value);
 
             return new Coordinate{ lattitude = coord1, longitude = coord2};
         }
