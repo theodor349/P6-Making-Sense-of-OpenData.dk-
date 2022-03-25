@@ -29,9 +29,6 @@ namespace IntermediateGenerator
                     datasetObject = await _parseJson.Parse(File.ReadAllText(file.FullName), file.Extension, file.Name);
                     datasetObject = await _intermediateSplitter.SplitObject(datasetObject);
                     break;
-
-                default:
-                    throw new NotImplementedException("File extension `" + file.Extension + "` not found");
             }
 
             return datasetObject;

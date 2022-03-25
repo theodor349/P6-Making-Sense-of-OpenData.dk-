@@ -16,8 +16,8 @@ namespace DatasetParser
 
     public struct Coordinate
     {
-        public float lattitude;
-        public float longitude;
+        public double lattitude;
+        public double longitude;
     }
 
 
@@ -150,8 +150,8 @@ namespace DatasetParser
         private Coordinate GetCoordinate(ObjectAttribute coord)
         {
             var coordValues = (List<ObjectAttribute>)coord.Value;
-            float coord1 = Convert.ToSingle(coordValues[0].Value);
-            float coord2 = Convert.ToSingle(coordValues[1].Value);
+            double coord1 = (double)coordValues[0].Value;
+            double coord2 = (double)coordValues[1].Value;
 
             return new Coordinate{ lattitude = coord1, longitude = coord2};
         }
@@ -167,7 +167,7 @@ namespace DatasetParser
             // lattitude = y
             int firstCoordinateIndex = 0;
             firstCoordinate = coords[0];
-            float lowestLattitude = float.PositiveInfinity;
+            double lowestLattitude = double.PositiveInfinity;
 
             int currentIndex = 0;
             foreach (Coordinate item in coords)
@@ -224,7 +224,7 @@ namespace DatasetParser
             }
 
             // compute the cross product of vectors (center -> a) x (center -> b)
-            float det = (a.longitude - firstCoordinate.longitude) * (b.lattitude - firstCoordinate.lattitude) - (b.longitude - firstCoordinate.longitude) * (a.lattitude - firstCoordinate.lattitude);
+            double det = (a.longitude - firstCoordinate.longitude) * (b.lattitude - firstCoordinate.lattitude) - (b.longitude - firstCoordinate.longitude) * (a.lattitude - firstCoordinate.lattitude);
             if (det > 0)
                 return 1;
             if (det < 0)
@@ -232,8 +232,8 @@ namespace DatasetParser
 
             // points a and b are on the same line from the center
             // check which point is closer to the center
-            float d1 = (a.longitude - firstCoordinate.longitude) * (a.longitude - firstCoordinate.longitude) + (a.lattitude - firstCoordinate.lattitude) * (a.lattitude - firstCoordinate.lattitude);
-            float d2 = (b.longitude - firstCoordinate.longitude) * (b.longitude - firstCoordinate.longitude) + (b.lattitude - firstCoordinate.lattitude) * (b.lattitude - firstCoordinate.lattitude);
+            double d1 = (a.longitude - firstCoordinate.longitude) * (a.longitude - firstCoordinate.longitude) + (a.lattitude - firstCoordinate.lattitude) * (a.lattitude - firstCoordinate.lattitude);
+            double d2 = (b.longitude - firstCoordinate.longitude) * (b.longitude - firstCoordinate.longitude) + (b.lattitude - firstCoordinate.lattitude) * (b.lattitude - firstCoordinate.lattitude);
             if (d1 > d2)
             {
                 return 1;
