@@ -14,6 +14,12 @@ namespace DatasetParser
         void ParseIntermediateToJson(DatasetObject datasetObject, int iteration);
     }
 
+    public struct Coordinate
+    {
+        public float lattitude;
+        public float longitude;
+    }
+
     public class ParseToJson : IParseToJson
     {
         private readonly IConfiguration _configuration;
@@ -120,23 +126,38 @@ namespace DatasetParser
         {
             JArray jArray = new JArray();
             JArray coordinates = new JArray();
-            foreach(ObjectAttribute coord in (List<ObjectAttribute>)objAttr.Value)
+            List<Coordinate> coords = new List<Coordinate>();
+
+            foreach (var coord in (List<ObjectAttribute>) objAttr.Value)
             {
-                GetCoordinate(coord, coordinates);
+                coords.Add(GetCoordinate(coord));
             }
+            SortAccordingToRightHandRule(coords);
+
+            foreach(Coordinate coord in coords)
+            {
+                coordinates.Add(new JArray(coord.lattitude, coord.longitude));
+            }
+
             jArray.Add(coordinates);
             return jArray;
         }
 
-        private void GetCoordinate(ObjectAttribute coord, JArray coordinates)
+        private Coordinate GetCoordinate(ObjectAttribute coord)
         {
             var coordValues = (List<ObjectAttribute>)coord.Value;
-
             float coord1 = Convert.ToSingle(coordValues[0].Value);
             float coord2 = Convert.ToSingle(coordValues[1].Value);
 
-            coordinates.Add(new JArray(coord1, coord2));
+            return new Coordinate{ lattitude = coord1, longitude = coord2};
         }
+
+        private void SortAccordingToRightHandRule(List<Coordinate> coords)
+        {
+
+        }
+
+
     }
 }
 
