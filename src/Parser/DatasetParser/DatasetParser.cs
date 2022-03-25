@@ -17,13 +17,13 @@ namespace DatasetParser
             _parseToJson = parseToJson;
         }
 
-        public Task Parse(DatasetObject dataset, DatasetType datasetType)
+        public Task Parse(DatasetObject dataset, DatasetType datasetType, int iteration)
         {
 
             switch (datasetType)
             {
                 case DatasetType.Parking:
-                    _parseToJson.ParseIntermediateToJson(dataset);
+                    _parseToJson.ParseIntermediateToJson(dataset, iteration);
                     break;
             }
 

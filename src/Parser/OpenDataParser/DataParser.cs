@@ -40,18 +40,19 @@ namespace OpenDataParser
             _logger.LogInformation("Hello World");
             _logger.LogInformation(_configuration["HelloWorldString"]);
             var datasetList = Directory.GetFiles(_configuration["Input:FolderPath"]);
+            int iteration = 0;
             foreach (var dataset in datasetList)
             {
-                await ParseDataset(dataset);
+                iteration++;
+                await ParseDataset(dataset, iteration);
             }
         }
 
-        private async Task ParseDataset(string file)
+        private async Task ParseDataset(string file, int iteration)
         {
             var dataset = await _intermediateGenerator.GenerateAsync(file);
             await _labelGenerator.AddLabels(dataset);
-            await _datasetParser.Parse(dataset, await _datasetClassifier.Classify(dataset));
+            await _datasetParser.Parse(dataset, await _datasetClassifier.Classify(dataset), iteration);
         }
     }
-    
 }
