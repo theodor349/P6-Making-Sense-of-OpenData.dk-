@@ -110,4 +110,10 @@
         }
     }
 
+    public class BoolAttribute : ObjectAttribute
+    {
+        public BoolAttribute(string name, bool value) : base(name, value)
+        {
+        }
+    }
 }

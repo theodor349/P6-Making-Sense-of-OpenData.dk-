@@ -128,6 +128,8 @@ namespace IntermediateGenerator.ParseFile
                 case JsonToken.StartArray:
                 case JsonToken.StartObject:
                     return CreateListType(propName, reader);
+                case JsonToken.Boolean:
+                    return new BoolAttribute(propName, (bool)reader.Value);
 
                 default:
                     throw new Exception("Json token did not match any supported type: the type was " + reader.TokenType);
