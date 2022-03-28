@@ -142,10 +142,18 @@ namespace LabelRecognizer.Helpers
                 case TextAttribute a:
                     IncrementText(a, typeCounter);
                     break;
+                case BoolAttribute a:
+                    IncrementBool(a, typeCounter);
+                    break;
 
                 default:
                     throw new NotImplementedException("Type not handled: " + attribute.GetType());
             }
+        }
+
+        private void IncrementBool(BoolAttribute a, TypeCounter typeCounter)
+        {
+            typeCounter.Increment(ObjectLabel.Bool);
         }
 
         private void IncrementList(ListAttribute attribute, TypeCounter typeCounter)
