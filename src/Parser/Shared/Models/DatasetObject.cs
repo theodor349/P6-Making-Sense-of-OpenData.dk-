@@ -10,6 +10,12 @@ namespace Shared.Models
     {
         public string originalExtensionName { get; }
         public string originalName { get; }
+
+        public List<IntermediateObject> Objects { get; set; } = new List<IntermediateObject>();
+        public IntermediateObject? ObjectSchema { get; set; }
+        public List<DatasetSetProperty> Properties { get; set; } = new List<DatasetSetProperty>();
+
+
         public DatasetObject(string originalExtensionName, string originalName)
         {
             this.originalExtensionName = originalExtensionName;
@@ -22,7 +28,5 @@ namespace Shared.Models
             Objects = objects;
         }
 
-        public List<IntermediateObject> Objects { get; set; } = new List<IntermediateObject>();
-        public IntermediateObject? ObjectSchema { get; set; }
     }
 }
