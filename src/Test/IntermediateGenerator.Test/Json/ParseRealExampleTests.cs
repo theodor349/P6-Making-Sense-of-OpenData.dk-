@@ -28,14 +28,6 @@ namespace IntermediateGenerator.Test.Json
                 {
                     new TextAttribute("type", "FeatureCollection"),
                     new TextAttribute("name", "34.20.12_Parkeringsarealer"),
-                    new ListAttribute("crs", new List<ObjectAttribute>()
-                    {
-                        new TextAttribute("type", "name"),
-                        new ListAttribute("properties", new List<ObjectAttribute>()
-                        {
-                            new TextAttribute("name", "urn:ogc:def:crs:OGC:1.3:CRS84"),
-                        }),
-                    })
                 })
             });
 
