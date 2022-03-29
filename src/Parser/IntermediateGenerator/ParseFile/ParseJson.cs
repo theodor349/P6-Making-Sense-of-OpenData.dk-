@@ -73,13 +73,12 @@ namespace IntermediateGenerator.ParseFile
 
         private void GetCrs(JsonTextReader reader, DatasetObject datasetObj)
         {
-            int depth = 1;
+            int depth = 0;
             bool propertiesFound = false;
             string? propName = null;
 
-            while (reader.Read() && depth != 0)
+            do
             {
-
                 if (reader.TokenType.Equals(JsonToken.PropertyName))
                 {
                     propName = reader.Value.ToString();
@@ -121,6 +120,7 @@ namespace IntermediateGenerator.ParseFile
                     }
                 }
             }
+            while (reader.Read() && depth != 0);
         }
 
         private string GetGeographicFormat(string? data)

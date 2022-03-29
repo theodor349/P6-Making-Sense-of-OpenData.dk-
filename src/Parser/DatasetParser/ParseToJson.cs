@@ -6,6 +6,7 @@ using Newtonsoft;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using Shared.Models.ObjectAttributes;
+using CoordinateSharp;
 
 namespace DatasetParser
 {
@@ -27,6 +28,8 @@ namespace DatasetParser
 
         private Coordinate firstCoordinate;
 
+        private string geographicFormat = null;
+        private string utmZone = null;
 
         public ParseToJson(IConfiguration configuration)
         {
@@ -37,6 +40,19 @@ namespace DatasetParser
         {
             // parse data
             //var json = JsonSerializer.Serialize(dataset);
+            foreach (var prop in dataset.Properties)
+            {
+                if (prop.name == "geographicFormat")
+                {
+                    geographicFormat = prop.value;
+                    
+                }
+                else if (prop.name == "utmZone")
+                {
+                    utmZone = prop.value;
+                }
+            }
+            
             var GeoJson = new JObject(
                 new JProperty("type", "FeatureCollection"),
                 new JProperty("features", new JArray(
@@ -64,9 +80,10 @@ namespace DatasetParser
                 
             return polygons;  
         }
-
+        
         private List<JObject> CheckObjAttrForPolygons(ObjectAttribute objAttr)
         {
+            
             List<JObject> polygons = new List<JObject>();
 
             if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
@@ -152,6 +169,15 @@ namespace DatasetParser
             var coordValues = (List<ObjectAttribute>)coord.Value;
             double coord1 = Convert.ToDouble(coordValues[0].Value);
             double coord2 = Convert.ToDouble(coordValues[1].Value);
+
+            if (geographicFormat == "utm" && utmZone != null)
+            {
+                UniversalTransverseMercator utm = new UniversalTransverseMercator("N", 32, coord1, coord2);
+                var latlongformat = UniversalTransverseMercator.ConvertUTMtoLatLong(utm);
+
+                coord2 = latlongformat.Latitude.ToDouble();
+                coord1 = latlongformat.Longitude.ToDouble();
+            }
 
             return new Coordinate{ lattitude = coord1, longitude = coord2};
         }
