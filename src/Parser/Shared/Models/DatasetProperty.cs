@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Shared.Models
 {
-	public struct DatasetSetProperty
+	public struct DatasetProperty
 	{
 		public string name;
 		public string value;

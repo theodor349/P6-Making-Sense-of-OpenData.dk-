@@ -106,14 +106,14 @@ namespace IntermediateGenerator.ParseFile
                     if (geoFormat == "utm")
                     {
                         datasetObj.Properties.Add(
-                        new DatasetSetProperty
+                        new DatasetProperty
                         {
                             name = "geographicFormat",
                             value = geoFormat
                         });
 
                         datasetObj.Properties.Add(
-                        new DatasetSetProperty
+                        new DatasetProperty
                         {
                             name = "utmZone",
                             value = GetUTMZone(reader.Value.ToString())
@@ -152,6 +152,10 @@ namespace IntermediateGenerator.ParseFile
                 if (data.Contains("25832"))
                 {
                     return "32N";
+                }
+                else if (data.Contains("25833"))
+                {
+                    return "33N";
                 }
                 else
                 {

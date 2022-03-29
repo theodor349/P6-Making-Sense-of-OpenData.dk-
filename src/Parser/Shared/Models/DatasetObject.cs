@@ -13,7 +13,7 @@ namespace Shared.Models
 
         public List<IntermediateObject> Objects { get; set; } = new List<IntermediateObject>();
         public IntermediateObject? ObjectSchema { get; set; }
-        public List<DatasetSetProperty> Properties { get; set; } = new List<DatasetSetProperty>();
+        public List<DatasetProperty> Properties { get; set; } = new List<DatasetProperty>();
 
 
         public DatasetObject(string originalExtensionName, string originalName)
