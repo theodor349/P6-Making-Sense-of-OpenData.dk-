@@ -38,7 +38,13 @@ namespace IntermediateGenerator.ParseFile
                 }
                 else if (reader.TokenType.Equals(JsonToken.StartArray) || reader.TokenType.Equals(JsonToken.StartObject))
                 {
-                    if (intermediate == null)
+
+                    if (propName == "crs")
+                    {
+                        GetCrs(reader, datasetObj);             
+                    }
+
+                    else if (intermediate == null)
                     {
                         intermediate = new IntermediateObject();
                         datasetObj.Objects.Add(intermediate);
@@ -63,6 +69,101 @@ namespace IntermediateGenerator.ParseFile
                 }
             }
             return Task.FromResult(datasetObj);
+        }
+
+        private void GetCrs(JsonTextReader reader, DatasetObject datasetObj)
+        {
+            int depth = 1;
+            bool propertiesFound = false;
+            string? propName = null;
+
+            while (reader.Read() && depth != 0)
+            {
+
+                if (reader.TokenType.Equals(JsonToken.PropertyName))
+                {
+                    propName = reader.Value.ToString();
+                }
+
+                if (reader.TokenType.Equals(JsonToken.StartObject))
+                {
+                    depth++;
+                }
+
+                else if (reader.TokenType.Equals(JsonToken.EndObject))
+                {
+                    depth--;
+                }
+
+                if (reader.Value != null && reader.Value.ToString() == "properties")
+                {
+                    propertiesFound = true;
+                }
+                if (propertiesFound && propName == "name" && reader.TokenType.Equals(JsonToken.String) && reader.Value != null)
+                {
+                    string geoFormat = GetGeographicFormat(reader.Value.ToString());
+
+                    if (geoFormat == "utm")
+                    {
+                        datasetObj.Properties.Add(
+                        new DatasetSetProperty
+                        {
+                            name = "geographicFormat",
+                            value = geoFormat
+                        });
+
+                        datasetObj.Properties.Add(
+                        new DatasetSetProperty
+                        {
+                            name = "utmZone",
+                            value = GetUTMZone(reader.Value.ToString())
+                        });
+                    }
+                }
+            }
+        }
+
+        private string GetGeographicFormat(string? data)
+        {
+
+            if(data != null)
+            {
+                if (data.Contains("EPSG"))
+                {
+                    return "utm";
+                }
+
+                else
+                {
+                    return "undefined";
+                }
+            }
+            else
+            {
+                return "undefined";
+            }
+        }
+
+        private string GetUTMZone(string? data)
+        {
+
+            if (data != null)
+            {
+                if (data.Contains("25832"))
+                {
+                    return "32N";
+                }
+                else
+                {
+                    return "undefined";
+                }
+            }
+            else
+            {
+                return "undefined";
+            }
+
+
         }
 
         private string HandleValueToken(JsonTextReader reader, IntermediateObject? intermediate, Stack<ListAttribute> currentListAttr, string? propName)
@@ -135,6 +236,7 @@ namespace IntermediateGenerator.ParseFile
                     throw new Exception("Json token did not match any supported type: the type was " + reader.TokenType);
             }
         }
+
 
         private ListAttribute CreateListType(string propName, JsonTextReader reader)
         {
