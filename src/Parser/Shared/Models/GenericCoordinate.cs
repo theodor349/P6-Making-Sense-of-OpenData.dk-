@@ -26,16 +26,16 @@ namespace Shared.Models
         public GenericCoordinate(ObjectAttribute objectAttribute, string geographicFormat, string utmZoneLetter, int utmZoneNumber)
         {
             var coordValues = (List<ObjectAttribute>)objectAttribute.Value;
+
             double coord1 = Convert.ToDouble(coordValues[0].Value);
             double coord2 = Convert.ToDouble(coordValues[1].Value);
 
-            if (geographicFormat == "utm" && utmZoneLetter != null)
-            {
-                UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZoneLetter, utmZoneNumber, coord1, coord2);
-                var latlongformat = UniversalTransverseMercator.ConvertUTMtoLatLong(utm);
+            var latlongformat = ConvertFromFormat(new GenericCoordinate(coord1, coord2), geographicFormat, utmZoneLetter, utmZoneNumber);
 
-                longitude = latlongformat.Latitude.ToDouble();
-                lattitude = latlongformat.Longitude.ToDouble();
+            if (latlongformat.Item2)
+            {
+                longitude = latlongformat.Item1.longitude;
+                lattitude = latlongformat.Item1.lattitude;
             }
             else
             {
@@ -43,7 +43,7 @@ namespace Shared.Models
             }
         }
 
-        public GenericCoordinate ConvertFromFormat (GenericCoordinate coord, string geographicFormat, string utmZoneLetter, int utmZoneNumber)
+        public static Tuple<GenericCoordinate, bool> ConvertFromFormat (GenericCoordinate coord, string geographicFormat, string utmZoneLetter, int utmZoneNumber)
         {
 
             if (geographicFormat == "utm" && utmZoneLetter != null)
@@ -53,11 +53,11 @@ namespace Shared.Models
 
                 coord.longitude = latlongformat.Latitude.ToDouble();
                 coord.lattitude = latlongformat.Longitude.ToDouble();
-                return coord;
+                return new Tuple<GenericCoordinate, bool>(coord, true);
             }
             else
             {
-                throw new NullReferenceException();
+                return new Tuple<GenericCoordinate, bool>(coord, false);
             }
         }
 
