@@ -15,21 +15,15 @@ namespace DatasetParser
         void ParseIntermediateToJson(DatasetObject datasetObject, int iteration);
     }
 
-    public struct Coordinate
-    {
-        public double lattitude;
-        public double longitude;
-    }
-
 
     public class ParseToJson : IParseToJson
     {
         private readonly IConfiguration _configuration;
 
-        private Coordinate firstCoordinate;
+        private Shared.Models.GenericCoordinate firstCoordinate;
 
         private string geographicFormat = null;
-        private string utmZone = null;
+        private string utmZoneLetter = null;
         private int utmZoneNumber = int.MaxValue;
 
         public ParseToJson(IConfiguration configuration)
@@ -50,7 +44,7 @@ namespace DatasetParser
                 }
                 else if (prop.name == "utmZoneLetter")
                 {
-                    utmZone = prop.value;
+                    utmZoneLetter = prop.value;
                 }
                 else if (prop.name == "utmZoneNumber")
                 {
@@ -151,7 +145,7 @@ namespace DatasetParser
         {
             JArray jArray = new JArray();
             JArray coordinates = new JArray();
-            List<Coordinate> coords = new List<Coordinate>();
+            List<GenericCoordinate> coords = new List<GenericCoordinate>();
 
             foreach (var coord in (List<ObjectAttribute>) objAttr.Value)
             {
@@ -160,7 +154,7 @@ namespace DatasetParser
             //  under construction
             coords = SortAccordingToRightHandRule(coords);
 
-            foreach(Coordinate coord in coords)
+            foreach(GenericCoordinate coord in coords)
             {
                 coordinates.Add(new JArray(coord.lattitude, coord.longitude));
             }
@@ -169,25 +163,21 @@ namespace DatasetParser
             return jArray;
         }
 
-        private Coordinate GetCoordinate(ObjectAttribute coord)
+        private GenericCoordinate GetCoordinate(ObjectAttribute coord)
         {
-            var coordValues = (List<ObjectAttribute>)coord.Value;
-            double coord1 = Convert.ToDouble(coordValues[0].Value);
-            double coord2 = Convert.ToDouble(coordValues[1].Value);
-
-            if (geographicFormat == "utm" && utmZone != null)
+            GenericCoordinate genericCoord;
+            if (geographicFormat == "utm" && utmZoneLetter != null)
             {
-                UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZone, utmZoneNumber, coord1, coord2);
-                var latlongformat = UniversalTransverseMercator.ConvertUTMtoLatLong(utm);
-
-                coord2 = latlongformat.Latitude.ToDouble();
-                coord1 = latlongformat.Longitude.ToDouble();
+                genericCoord = new GenericCoordinate(coord, geographicFormat, utmZoneLetter, utmZoneNumber);
             }
-
-            return new Coordinate{ lattitude = coord1, longitude = coord2};
+            else
+            {
+                 genericCoord = new GenericCoordinate(coord);
+            }
+            return genericCoord;
         }
 
-        private List<Coordinate> SortAccordingToRightHandRule(List<Coordinate> coords)
+        private List<GenericCoordinate> SortAccordingToRightHandRule(List<GenericCoordinate> coords)
         {
             // A linear ring MUST follow the right-hand rule with respect to the area it bounds, i.e.,
             // exterior rings are counterclockwise, and holes are clockwise.
@@ -201,7 +191,7 @@ namespace DatasetParser
             double lowestLattitude = double.PositiveInfinity;
 
             int currentIndex = 0;
-            foreach (Coordinate item in coords)
+            foreach (GenericCoordinate item in coords)
             {
                 if(item.lattitude < lowestLattitude || item.lattitude == lowestLattitude && item.longitude < firstCoordinate.longitude)
                 {
@@ -225,7 +215,7 @@ namespace DatasetParser
             return coords;
         }
 
-        private int Less(Coordinate a, Coordinate b)
+        private int Less(GenericCoordinate a, GenericCoordinate b)
         {
             if (a.longitude - firstCoordinate.longitude >= 0 && b.longitude - firstCoordinate.longitude < 0)
                 return 1;
