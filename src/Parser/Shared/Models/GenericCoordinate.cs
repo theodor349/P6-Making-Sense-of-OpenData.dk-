@@ -43,6 +43,24 @@ namespace Shared.Models
             }
         }
 
+        public GenericCoordinate ConvertFromFormat (GenericCoordinate coord, string geographicFormat, string utmZoneLetter, int utmZoneNumber)
+        {
+
+            if (geographicFormat == "utm" && utmZoneLetter != null)
+            {
+                UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZoneLetter, utmZoneNumber, coord.lattitude, coord.longitude);
+                var latlongformat = UniversalTransverseMercator.ConvertUTMtoLatLong(utm);
+
+                coord.longitude = latlongformat.Latitude.ToDouble();
+                coord.lattitude = latlongformat.Longitude.ToDouble();
+                return coord;
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
+        }
+
     }
 }
 
