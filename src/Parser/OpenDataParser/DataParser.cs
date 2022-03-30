@@ -1,5 +1,6 @@
 ﻿using IntermediateGenerator;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Shared.ComponentInterfaces;
 using System;
@@ -18,21 +19,15 @@ namespace OpenDataParser
 
     internal class DataParser : IDataParser
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly IConfiguration _configuration;
         private readonly ILogger<DataParser> _logger;
-        private readonly IIntermediateGenerator _intermediateGenerator;
-        private readonly ILabelGenerator _labelGenerator;
-        private readonly IDatasetClassifier _datasetClassifier;
-        private readonly IDatasetParser _datasetParser;
 
-        public DataParser(IConfiguration configuration, ILogger<DataParser> logger, IIntermediateGenerator intermediateGenerator, ILabelGenerator labelGenerator, IDatasetClassifier datasetClassifier, IDatasetParser datasetParser)
+        public DataParser(IServiceProvider serviceProvider, IConfiguration configuration, ILogger<DataParser> logger)
         {
+            _serviceProvider = serviceProvider;
             _configuration = configuration;
             _logger = logger;
-            _intermediateGenerator = intermediateGenerator;
-            _labelGenerator = labelGenerator;
-            _datasetClassifier = datasetClassifier;
-            _datasetParser = datasetParser;
         }
 
         public async Task Run()
@@ -50,11 +45,16 @@ namespace OpenDataParser
 
         private async Task ParseDataset(string file, int iteration)
         {
-            var dataset = await _intermediateGenerator.GenerateAsync(file);
+            var intermediateGenerator = _serviceProvider.GetService<IIntermediateGenerator>();
+            var labelGenerator = _serviceProvider.GetService<ILabelGenerator>();
+            var datasetParser = _serviceProvider.GetService<IDatasetParser>();
+            var datasetClassifier = _serviceProvider.GetService<IDatasetClassifier>();
+
+            var dataset = await intermediateGenerator.GenerateAsync(file);
             if(dataset != null)
             {
-                await _labelGenerator.AddLabels(dataset);
-                await _datasetParser.Parse(dataset, await _datasetClassifier.Classify(dataset), iteration);
+                await labelGenerator.AddLabels(dataset);
+                await datasetParser.Parse(dataset, await datasetClassifier.Classify(dataset), iteration);
             }
         }
     }
