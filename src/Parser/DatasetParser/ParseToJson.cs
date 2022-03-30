@@ -30,6 +30,7 @@ namespace DatasetParser
 
         private string geographicFormat = null;
         private string utmZone = null;
+        private int utmZoneNumber = int.MaxValue;
 
         public ParseToJson(IConfiguration configuration)
         {
@@ -47,9 +48,13 @@ namespace DatasetParser
                     geographicFormat = prop.value;
                     
                 }
-                else if (prop.name == "utmZone")
+                else if (prop.name == "utmZoneLetter")
                 {
                     utmZone = prop.value;
+                }
+                else if (prop.name == "utmZoneNumber")
+                {
+                    utmZoneNumber = int.Parse(prop.value);
                 }
             }
             
@@ -172,7 +177,7 @@ namespace DatasetParser
 
             if (geographicFormat == "utm" && utmZone != null)
             {
-                UniversalTransverseMercator utm = new UniversalTransverseMercator("N", 32, coord1, coord2);
+                UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZone, utmZoneNumber, coord1, coord2);
                 var latlongformat = UniversalTransverseMercator.ConvertUTMtoLatLong(utm);
 
                 coord2 = latlongformat.Latitude.ToDouble();

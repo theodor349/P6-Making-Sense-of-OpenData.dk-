@@ -114,8 +114,15 @@ namespace IntermediateGenerator.ParseFile
                         datasetObj.Properties.Add(
                         new DatasetProperty
                         {
-                            name = "utmZone",
-                            value = GetUTMZone(reader.Value.ToString())
+                            name = "utmZoneLetter",
+                            value = GetUTMZoneLetter(reader.Value.ToString())
+                        });
+
+                        datasetObj.Properties.Add(
+                        new DatasetProperty
+                        {
+                            name = "utmZoneNumber",
+                            value = GetUTMZoneNumber(reader.Value.ToString())
                         });
                     }
                 }
@@ -144,18 +151,17 @@ namespace IntermediateGenerator.ParseFile
             }
         }
 
-        private string GetUTMZone(string? data)
+        private string GetUTMZoneNumber(string? data)
         {
-
             if (data != null)
             {
                 if (data.Contains("25832"))
                 {
-                    return "32N";
+                    return "32";
                 }
                 else if (data.Contains("25833"))
                 {
-                    return "33N";
+                    return "33";
                 }
                 else
                 {
@@ -166,8 +172,25 @@ namespace IntermediateGenerator.ParseFile
             {
                 return "undefined";
             }
+        }
 
-
+        private string GetUTMZoneLetter(string? data)
+        {
+            if (data != null)
+            {
+                if (data.Contains("25832") || data.Contains("25833"))
+                {
+                    return "N";
+                }
+                else
+                {
+                    return "undefined";
+                }
+            }
+            else
+            {
+                return "undefined";
+            }
         }
 
         private string HandleValueToken(JsonTextReader reader, IntermediateObject? intermediate, Stack<ListAttribute> currentListAttr, string? propName)
