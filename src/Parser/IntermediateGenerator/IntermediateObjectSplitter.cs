@@ -41,7 +41,7 @@ namespace IntermediateGenerator
         private DatasetObject GenerateDatasetObject(Pattern item, DatasetObject datasetObject)
         {
             depth = 1;
-            DatasetObject newDatasetObject = new DatasetObject(datasetObject.originalExtensionName, datasetObject.originalName);
+            DatasetObject newDatasetObject = new DatasetObject(datasetObject);
             foreach (IntermediateObject intermediateObject in datasetObject.Objects)
             {
                 CheckPatternAndDepth(item, intermediateObject, newDatasetObject);
