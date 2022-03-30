@@ -31,19 +31,12 @@ namespace Shared.Models
             double coord2 = Convert.ToDouble(coordValues[1].Value);
 
             var latlongformat = ConvertFromFormat(new GenericCoordinate(coord1, coord2), geographicFormat, utmZoneLetter, utmZoneNumber);
-
-            if (latlongformat.Item2)
-            {
-                longitude = latlongformat.Item1.longitude;
-                lattitude = latlongformat.Item1.lattitude;
-            }
-            else
-            {
-                throw new NullReferenceException();
-            }
+            longitude = latlongformat.longitude;
+            lattitude = latlongformat.lattitude;
+     
         }
 
-        public static Tuple<GenericCoordinate, bool> ConvertFromFormat (GenericCoordinate coord, string geographicFormat, string utmZoneLetter, int utmZoneNumber)
+        public static GenericCoordinate ConvertFromFormat(GenericCoordinate coord, string geographicFormat, string utmZoneLetter, int utmZoneNumber)
         {
 
             if (geographicFormat == "utm" && utmZoneLetter != null)
@@ -53,11 +46,11 @@ namespace Shared.Models
 
                 coord.longitude = latlongformat.Latitude.ToDouble();
                 coord.lattitude = latlongformat.Longitude.ToDouble();
-                return new Tuple<GenericCoordinate, bool>(coord, true);
+                return coord;
             }
             else
             {
-                return new Tuple<GenericCoordinate, bool>(coord, false);
+                throw new FormatException();
             }
         }
 
