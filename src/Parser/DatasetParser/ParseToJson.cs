@@ -155,7 +155,7 @@ namespace DatasetParser
 
             foreach(GenericCoordinate coord in coords)
             {
-                coordinates.Add(new JArray(coord.lattitude, coord.longitude));
+                coordinates.Add(new JArray(coord.latitude, coord.longitude));
             }
 
             jArray.Add(coordinates);
@@ -192,9 +192,9 @@ namespace DatasetParser
             int currentIndex = 0;
             foreach (GenericCoordinate item in coords)
             {
-                if(item.lattitude < lowestLattitude || item.lattitude == lowestLattitude && item.longitude < firstCoordinate.longitude)
+                if(item.latitude < lowestLattitude || item.latitude == lowestLattitude && item.longitude < firstCoordinate.longitude)
                 {
-                    lowestLattitude = item.lattitude;
+                    lowestLattitude = item.latitude;
                     firstCoordinate = item;
                     firstCoordinateIndex = currentIndex;
                 }
@@ -222,9 +222,9 @@ namespace DatasetParser
                 return -1;
             if (a.longitude - firstCoordinate.longitude == 0 && b.longitude - firstCoordinate.longitude == 0)
             {
-                if (a.lattitude - firstCoordinate.lattitude >= 0 || b.lattitude - firstCoordinate.lattitude >= 0)
+                if (a.latitude - firstCoordinate.latitude >= 0 || b.latitude - firstCoordinate.latitude >= 0)
                 {
-                    if (a.lattitude > b.lattitude)
+                    if (a.latitude > b.latitude)
                     {
                         return -1;
                     }
@@ -233,7 +233,7 @@ namespace DatasetParser
                         return 1;
                     }
                 }
-                if (b.lattitude > a.lattitude)
+                if (b.latitude > a.latitude)
                 {
                     return -1;
                 }
@@ -244,7 +244,7 @@ namespace DatasetParser
             }
 
             // compute the cross product of vectors (center -> a) x (center -> b)
-            double det = (a.longitude - firstCoordinate.longitude) * (b.lattitude - firstCoordinate.lattitude) - (b.longitude - firstCoordinate.longitude) * (a.lattitude - firstCoordinate.lattitude);
+            double det = (a.longitude - firstCoordinate.longitude) * (b.latitude - firstCoordinate.latitude) - (b.longitude - firstCoordinate.longitude) * (a.latitude - firstCoordinate.latitude);
             if (det > 0)
                 return 1;
             if (det < 0)
@@ -252,8 +252,8 @@ namespace DatasetParser
 
             // points a and b are on the same line from the center
             // check which point is closer to the center
-            double d1 = (a.longitude - firstCoordinate.longitude) * (a.longitude - firstCoordinate.longitude) + (a.lattitude - firstCoordinate.lattitude) * (a.lattitude - firstCoordinate.lattitude);
-            double d2 = (b.longitude - firstCoordinate.longitude) * (b.longitude - firstCoordinate.longitude) + (b.lattitude - firstCoordinate.lattitude) * (b.lattitude - firstCoordinate.lattitude);
+            double d1 = (a.longitude - firstCoordinate.longitude) * (a.longitude - firstCoordinate.longitude) + (a.latitude - firstCoordinate.latitude) * (a.latitude - firstCoordinate.latitude);
+            double d2 = (b.longitude - firstCoordinate.longitude) * (b.longitude - firstCoordinate.longitude) + (b.latitude - firstCoordinate.latitude) * (b.latitude - firstCoordinate.latitude);
             if (d1 > d2)
             {
                 return 1;

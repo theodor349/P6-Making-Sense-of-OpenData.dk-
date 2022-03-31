@@ -18,7 +18,8 @@ namespace DatasetParser.Test
         [TestMethod]
         public void Test_ParseToJson_Correct()
         {
-            //var expected;
+            var expected = new JObject(
+                );
         }
     }
 }
