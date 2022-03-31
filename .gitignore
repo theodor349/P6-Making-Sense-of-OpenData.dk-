@@ -349,7 +349,6 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /Datasets
-/src/Parser/OpenDataParser/appsettings.Production.json
 
-git update-index --assume-unchanged src/Parser/OpenDataParser/appsettings.json
 
+git update-index --assume-unchanged /src/Parser/OpenDataParser/appsettings.Production.json
