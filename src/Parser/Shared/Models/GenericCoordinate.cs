@@ -7,19 +7,19 @@ namespace Shared.Models
 
     public struct GenericCoordinate
     {
-        public double lattitude;
+        public double latitude;
         public double longitude;
 
         public GenericCoordinate(double lattitude, double longitude)
         {
-            this.lattitude = lattitude;
+            this.latitude = lattitude;
             this.longitude = longitude;
         }
 
         public GenericCoordinate(ObjectAttribute objectAttribute)
         {
             var coordValues = (List<ObjectAttribute>)objectAttribute.Value;
-            lattitude = Convert.ToDouble(coordValues[0].Value);
+            latitude = Convert.ToDouble(coordValues[0].Value);
             longitude = Convert.ToDouble(coordValues[1].Value);
         }
 
@@ -32,7 +32,7 @@ namespace Shared.Models
 
             var latlongformat = ConvertFromFormat(new GenericCoordinate(coord1, coord2), geographicFormat, utmZoneLetter, utmZoneNumber);
             longitude = latlongformat.longitude;
-            lattitude = latlongformat.lattitude;
+            latitude = latlongformat.latitude;
      
         }
 
@@ -41,11 +41,11 @@ namespace Shared.Models
 
             if (geographicFormat == "utm" && utmZoneLetter != null)
             {
-                UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZoneLetter, utmZoneNumber, coord.lattitude, coord.longitude);
+                UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZoneLetter, utmZoneNumber, coord.latitude, coord.longitude);
                 var latlongformat = UniversalTransverseMercator.ConvertUTMtoLatLong(utm);
 
                 coord.longitude = latlongformat.Latitude.ToDouble();
-                coord.lattitude = latlongformat.Longitude.ToDouble();
+                coord.latitude = latlongformat.Longitude.ToDouble();
                 return coord;
             }
             else
