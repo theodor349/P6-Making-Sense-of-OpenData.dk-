@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Shared.ComponentInterfaces;
+using Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,30 +33,52 @@ namespace OpenDataParser
 
         public async Task Run()
         {
-            _logger.LogInformation("Hello World");
-            _logger.LogInformation(_configuration["HelloWorldString"]);
             var datasetList = Directory.GetFiles(_configuration["Input:FolderPath"]);
             int iteration = 0;
+
+            var tasks = new List<Task>();
             foreach (var dataset in datasetList)
             {
                 iteration++;
-                await ParseDataset(dataset, iteration);
+                var task = ParseDataset(dataset, iteration);
+                if (bool.Parse(_configuration["RuntimeConfig:ParseFilesInSync"]))
+                    await task;
+                tasks.Add(task);
             }
+            Task.WaitAll(tasks.ToArray());
         }
 
         private async Task ParseDataset(string file, int iteration)
         {
             var intermediateGenerator = _serviceProvider.GetService<IIntermediateGenerator>();
-            var labelGenerator = _serviceProvider.GetService<ILabelGenerator>();
             var datasetParser = _serviceProvider.GetService<IDatasetParser>();
-            var datasetClassifier = _serviceProvider.GetService<IDatasetClassifier>();
 
             var dataset = await intermediateGenerator.GenerateAsync(file);
             if(dataset != null)
             {
-                await labelGenerator.AddLabels(dataset);
-                await datasetParser.Parse(dataset, await datasetClassifier.Classify(dataset), iteration);
+                await AddLabels(dataset);
+                var datasetType = await GetClassification(dataset);
+                string stringOutput = await datasetParser.Parse(dataset, datasetType, iteration);
+                PrintToFile(iteration, stringOutput);
             }
+        }
+
+        private void PrintToFile(int iteration, string stringOutput)
+        {
+            string output = _configuration["Output:JsonText"] + iteration.ToString() + ".geojson";
+            File.WriteAllText(output, stringOutput.ToString());
+        }
+
+        private async Task<DatasetType> GetClassification(DatasetObject dataset)
+        {
+            var datasetClassifier = _serviceProvider.GetService<IDatasetClassifier>();
+            return await datasetClassifier.Classify(dataset);
+        }
+
+        private async Task AddLabels(DatasetObject dataset)
+        {
+            var labelGenerator = _serviceProvider.GetService<ILabelGenerator>();
+            await labelGenerator.AddLabels(dataset);
         }
     }
 }

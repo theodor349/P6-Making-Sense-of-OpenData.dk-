@@ -17,19 +17,16 @@ namespace DatasetParser
             _parseToJson = parseToJson;
         }
 
-        public Task Parse(DatasetObject dataset, DatasetType datasetType, int iteration)
+        public Task<string> Parse(DatasetObject dataset, DatasetType datasetType, int iteration)
         {
-
+            string res = "";
             switch (datasetType)
             {
                 case DatasetType.Parking:
-                    _parseToJson.ParseIntermediateToJson(dataset, iteration);
+                    res = _parseToJson.ParseIntermediateToJson(dataset, iteration);
                     break;
             }
-
-
-
-            return Task.CompletedTask;
+            return Task.FromResult(res);
         }
     }
 }

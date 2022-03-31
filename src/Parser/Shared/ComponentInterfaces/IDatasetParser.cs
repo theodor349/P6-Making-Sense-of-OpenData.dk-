@@ -4,6 +4,6 @@ namespace Shared.ComponentInterfaces
 {
     public interface IDatasetParser
     {
-        Task Parse(DatasetObject dataset, DatasetType datasetType, int iteration);
+        Task<string> Parse(DatasetObject dataset, DatasetType datasetType, int iteration);
     }
 }
