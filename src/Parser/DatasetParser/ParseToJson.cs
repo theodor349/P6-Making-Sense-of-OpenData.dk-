@@ -150,8 +150,8 @@ namespace DatasetParser
             {
                 coords.Add(GetCoordinate(coord));
             }
-            //  under construction
-            coords = SortAccordingToRightHandRule(coords);
+            //  !(under construction)
+            coords = GenericCoordinate.SortAccordingToRightHandRule(coords);
 
             foreach(GenericCoordinate coord in coords)
             {
@@ -174,94 +174,6 @@ namespace DatasetParser
                  genericCoord = new GenericCoordinate(coord);
             }
             return genericCoord;
-        }
-
-        private List<GenericCoordinate> SortAccordingToRightHandRule(List<GenericCoordinate> coords)
-        {
-            // A linear ring MUST follow the right-hand rule with respect to the area it bounds, i.e.,
-            // exterior rings are counterclockwise, and holes are clockwise.
-
-            // all elements must be ubique for Sorting scan, therefore remove the duplicate required by geoJson
-            coords.RemoveAt(coords.Count -1);
-
-            // lattitude = y
-            int firstCoordinateIndex = 0;
-            firstCoordinate = coords[0];
-            double lowestLattitude = double.PositiveInfinity;
-
-            int currentIndex = 0;
-            foreach (GenericCoordinate item in coords)
-            {
-                if(item.latitude < lowestLattitude || item.latitude == lowestLattitude && item.longitude < firstCoordinate.longitude)
-                {
-                    lowestLattitude = item.latitude;
-                    firstCoordinate = item;
-                    firstCoordinateIndex = currentIndex;
-                }
-                currentIndex++;
-            }
-
-            // remove first coord from list and reinsert at index 0
-            coords.RemoveAt(firstCoordinateIndex);
-            coords.Sort((coord1, coord2) =>
-           {
-               return Less(coord1, coord2);
-           });
-
-            // innsert first and last duplicate point
-            coords.Insert(0, firstCoordinate);
-            coords.Add(firstCoordinate);
-            return coords;
-        }
-
-        private int Less(GenericCoordinate a, GenericCoordinate b)
-        {
-            if (a.longitude - firstCoordinate.longitude >= 0 && b.longitude - firstCoordinate.longitude < 0)
-                return 1;
-            if (a.longitude - firstCoordinate.longitude < 0 && b.longitude - firstCoordinate.longitude >= 0)
-                return -1;
-            if (a.longitude - firstCoordinate.longitude == 0 && b.longitude - firstCoordinate.longitude == 0)
-            {
-                if (a.latitude - firstCoordinate.latitude >= 0 || b.latitude - firstCoordinate.latitude >= 0)
-                {
-                    if (a.latitude > b.latitude)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-                if (b.latitude > a.latitude)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return 1;
-                }
-            }
-
-            // compute the cross product of vectors (center -> a) x (center -> b)
-            double det = (a.longitude - firstCoordinate.longitude) * (b.latitude - firstCoordinate.latitude) - (b.longitude - firstCoordinate.longitude) * (a.latitude - firstCoordinate.latitude);
-            if (det > 0)
-                return 1;
-            if (det < 0)
-                return -1;
-
-            // points a and b are on the same line from the center
-            // check which point is closer to the center
-            double d1 = (a.longitude - firstCoordinate.longitude) * (a.longitude - firstCoordinate.longitude) + (a.latitude - firstCoordinate.latitude) * (a.latitude - firstCoordinate.latitude);
-            double d2 = (b.longitude - firstCoordinate.longitude) * (b.longitude - firstCoordinate.longitude) + (b.latitude - firstCoordinate.latitude) * (b.latitude - firstCoordinate.latitude);
-            if (d1 > d2)
-            {
-                return 1;
-            }
-            else
-            {
-                return 0;
-            }
         }
     }
 }
