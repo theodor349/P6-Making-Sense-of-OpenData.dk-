@@ -1,4 +1,5 @@
-﻿using Shared.ComponentInterfaces;
+﻿using Newtonsoft.Json.Linq;
+using Shared.ComponentInterfaces;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ namespace DatasetParser
             _parseToJson = parseToJson;
         }
 
-        public Task<string> Parse(DatasetObject dataset, DatasetType datasetType, int iteration)
+        public Task<JObject> Parse(DatasetObject dataset, DatasetType datasetType, int iteration)
         {
-            string res = "";
+            JObject? res = null;
             switch (datasetType)
             {
                 case DatasetType.Parking:

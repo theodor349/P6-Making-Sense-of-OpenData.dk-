@@ -12,7 +12,7 @@ namespace DatasetParser
 {
     public interface IParseToJson
     {
-        string ParseIntermediateToJson(DatasetObject datasetObject, int iteration);
+        JObject ParseIntermediateToJson(DatasetObject datasetObject, int iteration);
     }
 
 
@@ -31,7 +31,7 @@ namespace DatasetParser
             _configuration = configuration;
         }
 
-        public string ParseIntermediateToJson(DatasetObject dataset, int iteration)
+        public JObject ParseIntermediateToJson(DatasetObject dataset, int iteration)
         {
             // parse data
             //var json = JsonSerializer.Serialize(dataset);
@@ -58,7 +58,7 @@ namespace DatasetParser
                     FindPolygonsInDataset(dataset)
                     ))
                 );
-            return GeoJson.ToString();
+            return GeoJson;
         }
 
         private List<JObject> FindPolygonsInDataset(DatasetObject dataset)

@@ -1,9 +1,10 @@
-﻿using Shared.Models;
+﻿using Newtonsoft.Json.Linq;
+using Shared.Models;
 
 namespace Shared.ComponentInterfaces
 {
     public interface IDatasetParser
     {
-        Task<string> Parse(DatasetObject dataset, DatasetType datasetType, int iteration);
+        Task<JObject> Parse(DatasetObject dataset, DatasetType datasetType, int iteration);
     }
 }

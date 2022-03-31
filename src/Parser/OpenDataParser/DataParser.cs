@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using Shared.ComponentInterfaces;
 using Shared.Models;
 using System;
@@ -58,15 +59,16 @@ namespace OpenDataParser
             {
                 await AddLabels(dataset);
                 var datasetType = await GetClassification(dataset);
-                string stringOutput = await datasetParser.Parse(dataset, datasetType, iteration);
-                PrintToFile(iteration, stringOutput);
+                var output = await datasetParser.Parse(dataset, datasetType, iteration);
+                PrintToFile(iteration, output, dataset);
             }
         }
 
-        private void PrintToFile(int iteration, string stringOutput)
+        private void PrintToFile(int iteration, JObject output, DatasetObject dataset)
         {
-            string output = _configuration["Output:JsonText"] + iteration.ToString() + ".geojson";
-            File.WriteAllText(output, stringOutput.ToString());
+            string outputPath = _configuration["Output:JsonText"] + dataset.originalName  + "-" + iteration.ToString() + ".geojson";
+            File.Delete(outputPath);
+            File.WriteAllText(outputPath, output.ToString());
         }
 
         private async Task<DatasetType> GetClassification(DatasetObject dataset)
