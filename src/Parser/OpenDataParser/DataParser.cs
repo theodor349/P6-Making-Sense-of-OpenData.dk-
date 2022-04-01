@@ -66,7 +66,9 @@ namespace OpenDataParser
 
         private void PrintToFile(int iteration, JObject output, DatasetObject dataset)
         {
-            string outputPath = _configuration["Output:JsonText"] + dataset.originalName  + "-" + iteration.ToString() + ".geojson";
+            var splits = dataset.originalName.Split('.');
+            string fileName = splits.Count() == 1 ? splits.First() : splits.Take(splits.Count() - 1).Aggregate((x, y) => x += y);
+            string outputPath = Path.Combine(_configuration["Output:JsonText"], fileName + "-" + iteration.ToString() + ".geojson");
             File.Delete(outputPath);
             File.WriteAllText(outputPath, output.ToString());
         }
