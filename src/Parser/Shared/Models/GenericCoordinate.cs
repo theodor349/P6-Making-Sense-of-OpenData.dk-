@@ -74,7 +74,7 @@ namespace Shared.Models
             GenericCoordinate b;
 
             if (lowestCoordinateIndex != coords.Count() - 1)
-                b = coords[lowestCoordinateIndex];
+                b = coords[lowestCoordinateIndex + 1];
             else
                 b = coords[0];
 
