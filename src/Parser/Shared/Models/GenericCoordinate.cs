@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using CoordinateSharp;
 using Shared.Models.ObjectAttributes;
 
 namespace Shared.Models
 {
 
-    public struct GenericCoordinate
+    public struct GenericCoordinate 
     {
         public double latitude;
         public double longitude;
@@ -54,6 +55,22 @@ namespace Shared.Models
             }
         }
 
+        public override bool Equals([NotNullWhen(true)] object? obj)
+        {
+            try
+            {
+                var other = (GenericCoordinate)obj;
+                if (other.longitude == longitude && other.latitude == latitude)
+                    return true;
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static List<GenericCoordinate> SortAccordingToRightHandRule(List<GenericCoordinate> coords)
         {
             coords.RemoveAt(coords.Count - 1);
@@ -82,6 +99,16 @@ namespace Shared.Models
                 a = coords[lowestCoordinateIndex - 1];
             else
                 a = coords.LastOrDefault();
+
+            int i = 0;
+            while(a.Equals(b) && i < coords.Count)
+            {
+                int index = lowestCoordinateIndex + 1 + i;
+                if (index >= coords.Count)
+                    index -= coords.Count;
+                b = coords[index];
+                i++;
+            }
 
 
             if (a.longitude - firstCoordinate.longitude >= 0 && b.longitude - firstCoordinate.longitude < 0)
