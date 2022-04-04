@@ -51,6 +51,8 @@ namespace OpenDataParser
 
         private async Task ParseDataset(string file, int iteration)
         {
+            _logger.LogInformation("Iteration: {i}, File: {file}", new object[] { iteration, new FileInfo(file).Name });
+
             var intermediateGenerator = _serviceProvider.GetService<IIntermediateGenerator>();
             var datasetParser = _serviceProvider.GetService<IDatasetParser>();
 

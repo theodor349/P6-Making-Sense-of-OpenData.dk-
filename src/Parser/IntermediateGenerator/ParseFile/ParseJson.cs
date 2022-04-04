@@ -135,7 +135,7 @@ namespace IntermediateGenerator.ParseFile
 
             if(data != null)
             {
-                if (data.Contains("EPSG"))
+                if (data.Contains("EPSG") && !data.Contains("4326"))
                 {
                     return "utm";
                 }
