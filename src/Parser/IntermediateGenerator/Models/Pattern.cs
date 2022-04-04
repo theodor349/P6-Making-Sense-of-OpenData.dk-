@@ -12,7 +12,7 @@ namespace IntermediateGenerator.Models
     {
         public int Depth { get; }
         public int Count { get; set; } = 1;
-        public List<PatternItem> ThisPattern { get; } = new List<PatternItem>();
+        public List<PatternItem> Signature { get; } = new List<PatternItem>();
 
         public Pattern(ListAttribute list, int depth)
         {
@@ -56,7 +56,7 @@ namespace IntermediateGenerator.Models
                     type = PatternType.@list;
                     break;
             }
-            ThisPattern.Add(new PatternItem() { Name = name, Type = type});
+            Signature.Add(new PatternItem() { Name = name, Type = type});
         }
         public override bool Equals(object? obj)
         {
@@ -73,14 +73,14 @@ namespace IntermediateGenerator.Models
             if (pattern.Depth != Depth)
                 return false;
 
-            if (pattern.ThisPattern.Count != ThisPattern.Count) {
+            if (pattern.Signature.Count != Signature.Count) {
                 return false;
             }
             
             int counter = 0;
-            foreach (PatternItem item in pattern.ThisPattern)
+            foreach (PatternItem item in pattern.Signature)
             {
-                if (item.Name != ThisPattern[counter].Name || item.Type != ThisPattern[counter].Type)
+                if (item.Name != Signature[counter].Name || item.Type != Signature[counter].Type)
                 {
                     return false;
                 }
