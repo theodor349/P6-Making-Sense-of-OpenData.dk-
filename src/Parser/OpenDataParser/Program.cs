@@ -1,6 +1,6 @@
 ﻿using DatasetDecider;
 using DatasetParser;
-using IntermediateGenerator;
+using DatasetGenerator;
 using LabelRecognizer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

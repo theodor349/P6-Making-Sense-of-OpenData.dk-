@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DatasetDecider\DatasetDecider.csproj" />
     <ProjectReference Include="..\DatasetParser\DatasetParser.csproj" />
     <ProjectReference Include="..\IntermediateGenerator\IntermediateGenerator.csproj" />
     <ProjectReference Include="..\LabelRecognizer\LabelRecognizer.csproj" />

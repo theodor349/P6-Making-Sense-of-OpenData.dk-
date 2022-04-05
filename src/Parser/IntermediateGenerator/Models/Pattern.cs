@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntermediateGenerator.Models
+namespace DatasetGenerator.Models
 {
     internal class Pattern : IComparable<Pattern>
     {

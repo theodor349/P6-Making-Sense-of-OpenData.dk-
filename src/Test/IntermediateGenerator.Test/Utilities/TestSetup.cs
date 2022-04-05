@@ -1,4 +1,4 @@
-﻿using IntermediateGenerator.ParseFile;
+﻿using DatasetGenerator.ParseFile;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntermediateGenerator.Test.Utilities
+namespace DatasetGenerator.Test.Utilities
 {
     internal class TestSetup
     {
@@ -21,9 +21,9 @@ namespace IntermediateGenerator.Test.Utilities
             ILogger<ParseJson> logger = Substitute.For<ILogger<ParseJson>>();
             return new ParseJson(logger);
         }
-        public IntermediateObjectSplitter IntermediateObjectSplitter()
+        public DatasetObjectSplitter IntermediateObjectSplitter()
         {
-            return new IntermediateObjectSplitter();
+            return new DatasetObjectSplitter();
         }
     }
 }

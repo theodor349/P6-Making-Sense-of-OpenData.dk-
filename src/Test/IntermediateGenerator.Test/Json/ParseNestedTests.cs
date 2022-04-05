@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using IntermediateGenerator.Test.Utilities;
+using DatasetGenerator.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Shared.Models;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntermediateGenerator.Test.Json
+namespace DatasetGenerator.Test.Json
 {
     [TestClass]
     public class ParseNestedTests

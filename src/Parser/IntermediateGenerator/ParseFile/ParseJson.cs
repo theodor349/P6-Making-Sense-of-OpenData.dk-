@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Shared.Models.ObjectAttributes;
 
-namespace IntermediateGenerator.ParseFile
+namespace DatasetGenerator.ParseFile
 {
     public class ParseJson : IParseJson
     {
