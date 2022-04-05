@@ -52,6 +52,20 @@ namespace LabelRecognizer.Helpers
             bool sameStartAndEnd = IsSameCoordinate(children.First(), children.Last());
             if(IsPolygone(numCoordinates, sameStartAndEnd))
                 attr.AddLabel(ObjectLabel.Polygon, 1);
+            if (IsLine(numCoordinates, sameStartAndEnd))
+                attr.AddLabel(ObjectLabel.Line, 1);
+            if (IsListOfPoints(numCoordinates, sameStartAndEnd))
+                attr.AddLabel(ObjectLabel.ListOfPoint, 1);
+        }
+
+        private bool IsListOfPoints(int numCoordinates, bool sameStartAndEnd)
+        {
+            return numCoordinates > 0 && !sameStartAndEnd;
+        }
+
+        private bool IsLine(int numCoordinates, bool sameStartAndEnd)
+        {
+            return numCoordinates > 0 && !sameStartAndEnd;
         }
 
         private bool IsPolygone(int numCoordinates, bool sameStartAndEnd)
