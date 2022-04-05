@@ -137,8 +137,19 @@ namespace LabelRecognizer.Tests.Utilities
                 var list = new List<ObjectAttribute>();
                 list.Add(GetNestedAttr(--nestings, buttomObject));
                 return new ListAttribute("name", list);
-            } 
+            }
 
+        }
+
+        internal static ObjectAttribute GetListOfPointsAttr(int amountPoints)
+        {
+            var res = new ListAttribute("listOfPoints");
+            var list = (List<ObjectAttribute>)res.Value;
+            for (int i = 0; i < amountPoints; i++)
+            {
+                list.Add(GetCoordinateAttr(i + 0.1234d, i * 2 + 0.1234d));
+            }
+            return res;
         }
 
         internal static ListAttribute GetPolygonAttr(int amountPoints)
@@ -149,16 +160,21 @@ namespace LabelRecognizer.Tests.Utilities
             {
                 list.Add(GetCoordinateAttr(i));
             }
+            list[list.Count - 1] = list.First();
             return res;
         }
 
         internal static ListAttribute GetCoordinateAttr(int seed)
         {
             var rnd = new Random(seed);
-            var latitude = GetObjectAttr("FloatValue", rnd.NextDouble());
-            var longitude = GetObjectAttr("FloatValue", rnd.NextDouble());
-            var res = GetListAttribute("coordinates", latitude, longitude);
+            return GetCoordinateAttr(rnd.NextDouble(), rnd.NextDouble());
+        }
 
+        internal static ListAttribute GetCoordinateAttr(double latitude, double longitude)
+        {
+            var latitudeO = GetObjectAttr("FloatValue", latitude);
+            var longitudeO = GetObjectAttr("FloatValue", longitude);
+            var res = GetListAttribute("coordinates", latitudeO, longitudeO);
             return res;
         }
     }

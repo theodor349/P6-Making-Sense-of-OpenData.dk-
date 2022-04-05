@@ -29,8 +29,27 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             labelGenerator.AddLabels(inputDataset).Wait();
 
             // Assert 
-            var res = inputDataset.Objects[0].Attributes[0].Labels.FirstOrDefault(x => x.Label == ObjectLabel.Polygon);
-            res.Should().NotBeNull();
+            var res = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Polygon);
+            res.Should().BeTrue();
+        }
+
+        [DataRow(4)]
+        [DataRow(5)]
+        [TestMethod]
+        public void LabelGenerator_ListOfPoints_NotBeLabeled(int amountPoints)
+        {
+            var ios = new List<IntermediateObject>();
+            var polygon = ModelFactory.GetListOfPointsAttr(amountPoints);
+            ios.Add(ModelFactory.GetIntermediateObject(polygon));
+            var inputDataset = ModelFactory.GetDatasetObject(ios);
+
+            var setup = new TestSetup();
+            var labelGenerator = setup.LabelGenerator();
+            labelGenerator.AddLabels(inputDataset).Wait();
+
+            // Assert 
+            var res = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Polygon);
+            res.Should().BeFalse();
         }
 
         [DataRow(2)]
@@ -48,8 +67,8 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             labelGenerator.AddLabels(inputDataset).Wait();
 
             // Assert 
-            var res = inputDataset.Objects[0].Attributes[0].Labels.FirstOrDefault(x => x.Label == ObjectLabel.Polygon);
-            res.Should().BeNull();
+            var res = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Polygon);
+            res.Should().BeFalse();
         }
     }
 }
