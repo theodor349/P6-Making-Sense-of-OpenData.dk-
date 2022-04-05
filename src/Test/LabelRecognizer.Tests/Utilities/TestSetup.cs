@@ -19,7 +19,8 @@ namespace LabelRecognizer.Tests.Utilities
         {
             ITypeLabeler typeLabeler = new TypeLabeler();
             IGeoLabeler geoLabeler = new GeoLabeler();
-            return new LabelGenerator(typeLabeler, geoLabeler);
+            ILabelNameLookupTable labelLookupTable = Substitute.For<ILabelNameLookupTable>();
+            return new LabelGenerator(typeLabeler, geoLabeler, labelLookupTable);
         }
     }
 }
