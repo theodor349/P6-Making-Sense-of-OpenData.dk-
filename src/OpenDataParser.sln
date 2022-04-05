@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Parser\Shared\Sha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LabelRecognizer", "Parser\LabelRecognizer\LabelRecognizer.csproj", "{60476DDD-B4DF-4D69-A8F8-7633CF05FF7B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntermediateGenerator", "Parser\IntermediateGenerator\IntermediateGenerator.csproj", "{D92F5152-6619-466A-B311-F16ECE884BCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatasetGenerator", "Parser\IntermediateGenerator\DatasetGenerator.csproj", "{D92F5152-6619-466A-B311-F16ECE884BCE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatasetDecider", "Parser\DatasetDecider\DatasetDecider.csproj", "{DD878511-ECA7-4EDF-BC7C-5FFB4A5EC128}"
 EndProject
@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntermediateGenerator.Test"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LabelRecognizer.Tests", "Test\LabelRecognizer.Tests\LabelRecognizer.Tests.csproj", "{891D75E3-2B89-4DB2-8477-7B7E004234E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatasetParser.Test", "DatasetParser.Test\DatasetParser.Test.csproj", "{F97DD281-D7EB-42DE-80F5-728D2BA01BE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatasetParser.Test", "DatasetParser.Test\DatasetParser.Test.csproj", "{F97DD281-D7EB-42DE-80F5-728D2BA01BE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
