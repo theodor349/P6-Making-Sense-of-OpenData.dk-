@@ -16,10 +16,27 @@ namespace DatasetParser.Test
     public class JsonTests
     {
         [TestMethod]
-        public void Test_ParseToJson_Correct()
+        public void Test_ParseToGeojsonPolygon_Correct()
         {
             var expected = new JObject(
-                );
+                 new JProperty("type", "FeatureCollection"),
+                 new JProperty("features", 
+                    new JArray(
+                        new JObject(
+                            new JProperty("type", "Feature"),
+                            new JProperty("geometry", 
+                                new JObject(
+                                    new JProperty("type", "Polygon"),
+                                    new JProperty("coordinates", new JArray(
+                                        new JArray(
+                                            new JArray(1.1, 1.2),
+                                            new JArray(1.3, 1.4),
+                                            new JArray(1.5, 1.6),
+                                            new JArray(1.1, 1.2)
+                                            ))))),
+                            new JProperty("properties", new JObject())))));
+
+
         }
     }
 }
