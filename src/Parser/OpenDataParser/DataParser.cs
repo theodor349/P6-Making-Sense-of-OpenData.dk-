@@ -53,10 +53,10 @@ namespace OpenDataParser
         {
             _logger.LogInformation("Iteration: {i}, File: {file}", new object[] { iteration, new FileInfo(file).Name });
 
-            var intermediateGenerator = _serviceProvider.GetService<IDatasetGenerator>();
+            var datasetGenerator = _serviceProvider.GetService<IDatasetGenerator>();
             var datasetParser = _serviceProvider.GetService<IDatasetParser>();
 
-            var dataset = await intermediateGenerator.GenerateAsync(file);
+            var dataset = await datasetGenerator.GenerateAsync(file);
             if(dataset != null)
             {
                 await AddLabels(dataset);
