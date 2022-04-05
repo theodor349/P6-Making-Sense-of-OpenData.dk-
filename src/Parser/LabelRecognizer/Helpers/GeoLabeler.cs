@@ -55,7 +55,7 @@ namespace LabelRecognizer.Helpers
             if (IsLine(numCoordinates, sameStartAndEnd))
                 attr.AddLabel(ObjectLabel.Line, 1);
             if (IsListOfPoints(numCoordinates, sameStartAndEnd))
-                attr.AddLabel(ObjectLabel.ListOfPoint, 1);
+                attr.AddLabel(ObjectLabel.ListOfPoints, 1);
         }
 
         private bool IsListOfPoints(int numCoordinates, bool sameStartAndEnd)
