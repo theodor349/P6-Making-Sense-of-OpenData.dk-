@@ -1,18 +1,18 @@
-﻿using IntermediateGenerator.ParseFile;
+﻿using DatasetGenerator.ParseFile;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using Shared.ComponentInterfaces;
 using Shared.Models;
 using System.IO;
 
-namespace IntermediateGenerator
+namespace DatasetGenerator
 {
-    public class IntermediateGenerator : IIntermediateGenerator
+    public class DatasetGenerator : IDatasetGenerator
     {
         private readonly IParseJson _parseJson;
-        private readonly IIntermediateObjectSplitter _intermediateSplitter;
+        private readonly IDatasetObjectSplitter _intermediateSplitter;
 
-        public IntermediateGenerator(IParseJson parseJson, IIntermediateObjectSplitter intermediate)
+        public DatasetGenerator(IParseJson parseJson, IDatasetObjectSplitter intermediate)
         {
             _parseJson = parseJson;
             _intermediateSplitter = intermediate;

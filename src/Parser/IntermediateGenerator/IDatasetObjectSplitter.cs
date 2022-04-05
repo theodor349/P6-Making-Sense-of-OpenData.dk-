@@ -1,8 +1,8 @@
 ﻿using Shared.Models;
 
-namespace IntermediateGenerator
+namespace DatasetGenerator
 {
-    public interface IIntermediateObjectSplitter
+    public interface IDatasetObjectSplitter
     {
         Task<DatasetObject> SplitObject(DatasetObject dataset);
     }

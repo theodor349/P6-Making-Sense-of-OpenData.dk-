@@ -1,4 +1,4 @@
-﻿using IntermediateGenerator;
+﻿using DatasetGenerator;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -51,7 +51,9 @@ namespace OpenDataParser
 
         private async Task ParseDataset(string file, int iteration)
         {
-            var intermediateGenerator = _serviceProvider.GetService<IIntermediateGenerator>();
+            _logger.LogInformation("Iteration: {i}, File: {file}", new object[] { iteration, new FileInfo(file).Name });
+
+            var intermediateGenerator = _serviceProvider.GetService<IDatasetGenerator>();
             var datasetParser = _serviceProvider.GetService<IDatasetParser>();
 
             var dataset = await intermediateGenerator.GenerateAsync(file);

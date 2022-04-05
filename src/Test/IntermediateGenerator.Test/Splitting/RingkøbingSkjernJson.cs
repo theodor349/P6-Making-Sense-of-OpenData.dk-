@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using IntermediateGenerator.Test.Utilities;
+using DatasetGenerator.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shared.Models;
 using Shared.Models.ObjectAttributes;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntermediateGenerator.Test.Splitting
+namespace DatasetGenerator.Test.Splitting
 {
     [TestClass]
     public class RingkøbingSkjernJson

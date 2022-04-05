@@ -1,16 +1,16 @@
-﻿using IntermediateGenerator.ParseFile;
+﻿using DatasetGenerator.ParseFile;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.ComponentInterfaces;
 
-namespace IntermediateGenerator
+namespace DatasetGenerator
 {
     public static class ConfigureServices 
     {
         public static void AddIntermediateGenerator(this IServiceCollection services)
         {
-            services.AddTransient<IIntermediateGenerator, IntermediateGenerator>();
+            services.AddTransient<IDatasetGenerator, DatasetGenerator>();
             services.AddTransient<IParseJson, ParseJson>();
-            services.AddTransient<IIntermediateObjectSplitter, IntermediateObjectSplitter>();
+            services.AddTransient<IDatasetObjectSplitter, DatasetObjectSplitter>();
         }
     }
 }

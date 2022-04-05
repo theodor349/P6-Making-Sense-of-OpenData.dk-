@@ -40,19 +40,76 @@ namespace LabelRecognizer.Helpers
 
             // Logic
             AddCoordinateLabel(attr, children);
-            AddPolygon(attr, children);
+            AddGeographicStructure(attr, children);
         }
 
-        private void AddPolygon(ObjectAttribute attr, List<ObjectAttribute> children)
+        private void AddGeographicStructure(ObjectAttribute attr, List<ObjectAttribute> children)
         {
-            int points = 0;
+            int numCoordinates = GetCordinateCount(children);
+            if (children.Count == 0 || numCoordinates != children.Count)
+                return;
+
+            bool sameStartAndEnd = IsSameCoordinate(children.First(), children.Last());
+            if(IsPolygone(numCoordinates, sameStartAndEnd))
+                attr.AddLabel(ObjectLabel.Polygon, 1);
+            if (IsLine(numCoordinates, sameStartAndEnd))
+                attr.AddLabel(ObjectLabel.Line, 1);
+            if (IsListOfPoints(numCoordinates, sameStartAndEnd))
+                attr.AddLabel(ObjectLabel.ListOfPoints, 1);
+        }
+
+        private bool IsListOfPoints(int numCoordinates, bool sameStartAndEnd)
+        {
+            return numCoordinates > 0 && !sameStartAndEnd;
+        }
+
+        private bool IsLine(int numCoordinates, bool sameStartAndEnd)
+        {
+            return numCoordinates > 0 && !sameStartAndEnd;
+        }
+
+        private bool IsPolygone(int numCoordinates, bool sameStartAndEnd)
+        {
+            return numCoordinates > 3 && sameStartAndEnd;
+        }
+
+        private bool IsSameCoordinate(ObjectAttribute first, ObjectAttribute last)
+        {
+            if (!first.HasLabel(ObjectLabel.Coordinate) || !last.HasLabel(ObjectLabel.Coordinate))
+                return false;
+
+            var lat1 = GetLatitue((ListAttribute)first);
+            var lat2 = GetLatitue((ListAttribute)last);
+            if (lat1 != lat2)
+                return false;
+
+            var long1 = GetLongitude((ListAttribute)first);
+            var long2 = GetLongitude((ListAttribute)first);
+            return long1 == long2;
+        }
+
+        private double GetLongitude(ListAttribute obj)
+        {
+            var attr = (DoubleAttribute)((List<ObjectAttribute>)obj.Value).Last();
+            return (double)attr.Value;
+        }
+
+        private double GetLatitue(ListAttribute obj)
+        {
+            var attr = (DoubleAttribute)((List<ObjectAttribute>)obj.Value).First();
+            return (double)attr.Value;
+        }
+
+        private static int GetCordinateCount(List<ObjectAttribute> children)
+        {
+            int coordinates = 0;
             foreach (var child in children)
             {
-                if(child.Labels.FirstOrDefault(x => x.Label == ObjectLabel.Coordinate) != null)
-                    points++;
+                if (child.HasLabel(ObjectLabel.Coordinate))
+                    coordinates++;
             }
-            if (points > 3)
-                attr.AddLabel(ObjectLabel.Polygon, 1);
+
+            return coordinates;
         }
 
         private void AddCoordinateLabel(ObjectAttribute attr, List<ObjectAttribute> children)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shared.ComponentInterfaces
 {
-    public interface IIntermediateGenerator
+    public interface IDatasetGenerator
     {
         Task<DatasetObject> GenerateAsync(string filePath);
     }

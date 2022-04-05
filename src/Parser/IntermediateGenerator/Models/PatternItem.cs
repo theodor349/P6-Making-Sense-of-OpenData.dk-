@@ -1,4 +1,4 @@
-﻿namespace IntermediateGenerator.Models
+﻿namespace DatasetGenerator.Models
 {
     struct PatternItem
     {

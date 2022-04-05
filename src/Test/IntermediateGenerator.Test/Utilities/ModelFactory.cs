@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntermediateGenerator.Test.Utilities
+namespace DatasetGenerator.Test.Utilities
 {
     internal static class ModelFactory
     {

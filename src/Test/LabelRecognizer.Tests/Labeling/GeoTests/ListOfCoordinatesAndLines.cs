@@ -12,31 +12,12 @@ using System.Threading.Tasks;
 namespace LabelRecognizer.Tests.Labeling.GeoTests
 {
     [TestClass]
-    public class Polygons
+    public class ListOfCoordinatesAndLines
     {
         [DataRow(4)]
         [DataRow(5)]
         [TestMethod]
-        public void LabelGenerator_Polygon_Correct(int amountPoints)
-        {
-            var ios = new List<IntermediateObject>();
-            var polygon = ModelFactory.GetPolygonAttr(amountPoints);
-            ios.Add(ModelFactory.GetIntermediateObject(polygon));
-            var inputDataset = ModelFactory.GetDatasetObject(ios);
-
-            var setup = new TestSetup();
-            var labelGenerator = setup.LabelGenerator();
-            labelGenerator.AddLabels(inputDataset).Wait();
-
-            // Assert 
-            var res = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Polygon);
-            res.Should().BeTrue();
-        }
-
-        [DataRow(4)]
-        [DataRow(5)]
-        [TestMethod]
-        public void LabelGenerator_ListOfPoints_NotBeLabeled(int amountPoints)
+        public void LabelGenerator_ListAndLine_Correct(int amountPoints)
         {
             var ios = new List<IntermediateObject>();
             var polygon = ModelFactory.GetListOfPointsAttr(amountPoints);
@@ -48,14 +29,16 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             labelGenerator.AddLabels(inputDataset).Wait();
 
             // Assert 
-            var res = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Polygon);
-            res.Should().BeFalse();
+            var isLine = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Line);
+            var isListOfPoints = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.ListOfPoints);
+            isLine.Should().BeTrue();
+            isListOfPoints.Should().BeTrue();
         }
 
-        [DataRow(2)]
-        [DataRow(3)]
+        [DataRow(4)]
+        [DataRow(5)]
         [TestMethod]
-        public void LabelGenerator_Polygon_LessThan4CoordsShouldBeNull(int amountPoints)
+        public void LabelGenerator_Polygon_NotLabeled(int amountPoints)
         {
             var ios = new List<IntermediateObject>();
             var polygon = ModelFactory.GetPolygonAttr(amountPoints);
@@ -67,8 +50,10 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             labelGenerator.AddLabels(inputDataset).Wait();
 
             // Assert 
-            var res = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Polygon);
-            res.Should().BeFalse();
+            var isLine = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Line);
+            var isListOfPoints = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.ListOfPoints);
+            isLine.Should().BeFalse();
+            isListOfPoints.Should().BeFalse();
         }
     }
 }

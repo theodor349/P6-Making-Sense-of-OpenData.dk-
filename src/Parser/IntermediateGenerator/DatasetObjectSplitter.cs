@@ -1,10 +1,10 @@
 ﻿using Shared.Models;
 using Shared.Models.ObjectAttributes;
-using IntermediateGenerator.Models;
+using DatasetGenerator.Models;
 
-namespace IntermediateGenerator
+namespace DatasetGenerator
 {
-    public class IntermediateObjectSplitter : IIntermediateObjectSplitter
+    public class DatasetObjectSplitter : IDatasetObjectSplitter
     {
         List<Pattern> patternList = new List<Pattern>();
 
