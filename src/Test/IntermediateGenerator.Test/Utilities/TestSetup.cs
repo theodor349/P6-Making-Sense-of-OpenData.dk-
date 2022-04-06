@@ -16,10 +16,10 @@ namespace DatasetGenerator.Test.Utilities
         {
 
         }
-        public ParseJson GetParseJson()
+        public JsonParser GetParseJson()
         {
-            ILogger<ParseJson> logger = Substitute.For<ILogger<ParseJson>>();
-            return new ParseJson(logger);
+            ILogger<JsonParser> logger = Substitute.For<ILogger<JsonParser>>();
+            return new JsonParser(logger);
         }
         public DatasetObjectSplitter IntermediateObjectSplitter()
         {
