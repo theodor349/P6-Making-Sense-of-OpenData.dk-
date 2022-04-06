@@ -53,9 +53,9 @@ namespace LabelRecognizer.Helpers
             if(IsPolygone(numCoordinates, sameStartAndEnd))
                 attr.AddLabel(ObjectLabel.Polygon, 1);
             if (IsLine(numCoordinates, sameStartAndEnd))
-                attr.AddLabel(ObjectLabel.Line, 1);
+                attr.AddLabel(ObjectLabel.LineString, 1);
             if (IsListOfPoints(numCoordinates, sameStartAndEnd))
-                attr.AddLabel(ObjectLabel.ListOfPoints, 1);
+                attr.AddLabel(ObjectLabel.MultiPoint, 1);
         }
 
         private bool IsListOfPoints(int numCoordinates, bool sameStartAndEnd)

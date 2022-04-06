@@ -29,8 +29,8 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             labelGenerator.AddLabels(inputDataset).Wait();
 
             // Assert 
-            var isLine = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Line);
-            var isListOfPoints = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.ListOfPoints);
+            var isLine = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.LineString);
+            var isListOfPoints = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.MultiPoint);
             isLine.Should().BeTrue();
             isListOfPoints.Should().BeTrue();
         }
@@ -50,8 +50,8 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             labelGenerator.AddLabels(inputDataset).Wait();
 
             // Assert 
-            var isLine = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Line);
-            var isListOfPoints = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.ListOfPoints);
+            var isLine = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.LineString);
+            var isListOfPoints = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.MultiPoint);
             isLine.Should().BeFalse();
             isListOfPoints.Should().BeFalse();
         }

@@ -53,16 +53,21 @@ namespace OpenDataParser
         {
             _logger.LogInformation("Iteration: {i}, File: {file}", new object[] { iteration, new FileInfo(file).Name });
 
-            var intermediateGenerator = _serviceProvider.GetService<IDatasetGenerator>();
+            var datasetGenerator = _serviceProvider.GetService<IDatasetGenerator>();
             var datasetParser = _serviceProvider.GetService<IDatasetParser>();
 
-            var dataset = await intermediateGenerator.GenerateAsync(file);
+            var dataset = await datasetGenerator.GenerateAsync(file);
+            _logger.LogInformation("Dataset generated");
             if(dataset != null)
             {
                 await AddLabels(dataset);
+                _logger.LogInformation("Labels added");
                 var datasetType = await GetClassification(dataset);
+                _logger.LogInformation("Dataset classified");
                 var output = await datasetParser.Parse(dataset, datasetType, iteration);
+                _logger.LogInformation("Output generated");
                 PrintToFile(iteration, output, dataset);
+                _logger.LogInformation("Output printed to file");
             }
         }
 
