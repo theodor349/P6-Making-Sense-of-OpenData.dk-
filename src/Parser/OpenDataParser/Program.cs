@@ -9,7 +9,6 @@ using OpenDataParser;
 using Serilog;
 
 var builder = new ConfigurationBuilder();
-builder.AddJsonFile("lookup.json");
 
 Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Build())

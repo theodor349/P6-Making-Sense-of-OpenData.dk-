@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 namespace LabelRecognizer
 {
@@ -7,18 +8,19 @@ namespace LabelRecognizer
 
     class LabelNameLookupTable : ILabelNameLookupTable
     {
-        private Dictionary<TargetKey, LookupValue> _dic = new();
+        private Dictionary<TargetKey, LookupValue>? _dic = new();
         private readonly IConfiguration _configuration;
 
         public LabelNameLookupTable(IConfiguration configuration)
         {
             _configuration = configuration;
-            GenerateLookuptable(configuration.GetSection("LabelNameLookupTable").ToString());
+            GenerateLookuptable(configuration["Input:LabelNameLookupTablePath"]);
         }
 
-        private void GenerateLookuptable(string configurationSection)
+        private void GenerateLookuptable(string lookupTablePath)
         {
-            Console.WriteLine(configurationSection);
+            var json = File.ReadAllText(lookupTablePath);
+            LookupTable table = JsonSerializer.Deserialize<LookupTable>(json);
         }
 
         public bool IncludesTarget(TargetKey target, string name, LookupLanguages language)
