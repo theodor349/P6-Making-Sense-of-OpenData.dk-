@@ -27,6 +27,7 @@ namespace LabelRecognizer
         {
             await _typeLabeler.AssignTypes(dataset);
             await _geoLabeler.AssignLabels(dataset);
+            await _labelNameLookupTable.AssignLabels(dataset);
         }
     }
 }

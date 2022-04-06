@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Shared.Models;
+using Shared.Models.ObjectAttributes;
 using System.Text.Json;
 
 namespace LabelRecognizer
@@ -16,11 +18,39 @@ namespace LabelRecognizer
             _configuration = configuration;
             GenerateLookuptable(configuration["Input:LabelNameLookupTablePath"]);
         }
+        public Task AssignLabels(DatasetObject dataset)
+        {
+            foreach (var obj in dataset.Objects)
+            {
+                foreach (var attr in obj.Attributes)
+                {
+                    SetLabels(attr);
+                }
+            }
+            return Task.CompletedTask;
+        }
+
+        private void SetLabels(ObjectAttribute attr)
+        {
+            //  ASSIGN Actual labels
+            AssignLabelFromLookup();
+            if (attr.GetType() == typeof(ListAttribute))
+            {
+               // Get children
+               //    for each child
+               //    SetLabels
+            }
+        }
+
+        private void AssignLabelFromLookup()
+        {
+            throw new NotImplementedException();
+        }
 
         private void GenerateLookuptable(string lookupTablePath)
         {
             var json = File.ReadAllText(lookupTablePath);
-            LookupTable table = JsonSerializer.Deserialize<LookupTable>(json);
+            LookupTable? table = JsonSerializer.Deserialize<LookupTable>(json);
         }
 
         public bool IncludesTarget(TargetKey target, string name, LookupLanguages language)
@@ -38,4 +68,5 @@ namespace LabelRecognizer
             return LangaugeValues[language].Contains(name) ? true : false;
         }
     }
+    
 }

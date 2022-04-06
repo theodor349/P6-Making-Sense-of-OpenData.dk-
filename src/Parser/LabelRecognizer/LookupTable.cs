@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Models.ObjectAttributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,6 @@ namespace LabelRecognizer
     internal class LookupTable
     {
         public List<LookupTarget>? LookupTargets { get; set; }
-       
     }
 
     public class LookupTarget
