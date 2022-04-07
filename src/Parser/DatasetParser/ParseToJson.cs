@@ -142,6 +142,10 @@ namespace DatasetParser
             {
                 return GetObjectWithCoordinates(objAttr, ObjectLabel.MultiPoint.ToString());
             }
+            if (objAttr.HasLabel(ObjectLabel.Point))
+            {
+                return GetObjectWithCoordinates(objAttr, ObjectLabel.Point.ToString());
+            }
             else return null;
         }
 
@@ -164,6 +168,19 @@ namespace DatasetParser
             if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
             {
                 return new JProperty("coordinates", GetCoordinates(objAttr));
+            }
+            else if (objAttr.HasLabel(ObjectLabel.Point))
+            {
+                JArray jArray = new JArray();
+                List<GenericCoordinate> coords = new List<GenericCoordinate>();
+
+                coords.Add(new GenericCoordinate(objAttr, geographicFormat, utmZoneLetter, utmZoneNumber));
+                coords = GenericCoordinate.SortAccordingToRightHandRule(coords);
+                foreach (var gCoord in coords)
+                {
+                    jArray.Add(new JArray(gCoord.latitude, gCoord.longitude));
+                }
+                return new JProperty("coordinates", jArray);
             }
             else
             {

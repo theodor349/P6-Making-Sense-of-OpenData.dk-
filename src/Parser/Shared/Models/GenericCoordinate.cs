@@ -120,7 +120,7 @@ namespace Shared.Models
 
         public static bool IsSameCoordinate(ObjectAttribute first, ObjectAttribute last)
         {
-            if (!first.HasLabel(ObjectLabel.Coordinate) || !last.HasLabel(ObjectLabel.Coordinate))
+            if (!first.HasLabel(ObjectLabel.Point) || !last.HasLabel(ObjectLabel.Point))
                 return false;
 
             var lat1 = GetLatitue((ListAttribute)first);

@@ -80,7 +80,7 @@ namespace LabelRecognizer.Helpers
             int coordinates = 0;
             foreach (var child in children)
             {
-                if (child.HasLabel(ObjectLabel.Coordinate))
+                if (child.HasLabel(ObjectLabel.Point))
                     coordinates++;
             }
 
@@ -97,7 +97,7 @@ namespace LabelRecognizer.Helpers
             var right = children[1].GetLabel(ObjectLabel.Double);
             if (right == null)
                 return;
-            attr.AddLabel(ObjectLabel.Coordinate, left.Probability * right.Probability);
+            attr.AddLabel(ObjectLabel.Point, left.Probability * right.Probability);
         }
     }
 }

@@ -34,8 +34,6 @@ namespace DatasetGenerator
                 case ".csv":
                     datasetObject = await _csvParser.Parse(File.ReadAllText(file.FullName), file.Extension, file.Name);
                     break;
-                default:
-                    throw new NotImplementedException(file.Extension + " is not supported by the Dataset Generator");
             }
 
             return datasetObject;
