@@ -44,7 +44,7 @@ namespace LabelRecognizer
 
         private void AssignLabelFromLookup()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void GenerateLookuptable(string lookupTablePath)
