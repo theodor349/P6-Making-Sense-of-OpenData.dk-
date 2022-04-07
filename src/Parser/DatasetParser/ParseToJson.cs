@@ -12,7 +12,7 @@ namespace DatasetParser
 {
     public interface IParseToJson
     {
-        JObject ParseIntermediateToJson(DatasetObject datasetObject, int iteration);
+        JObject ParseDatasetObjectToJson(DatasetObject datasetObject, int iteration);
     }
 
 
@@ -25,16 +25,16 @@ namespace DatasetParser
         private string geographicFormat = null;
         private string utmZoneLetter = null;
         private int utmZoneNumber = int.MaxValue;
+        private DatasetType datasetType;
 
         public ParseToJson(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public JObject ParseIntermediateToJson(DatasetObject dataset, int iteration)
+        public JObject ParseDatasetObjectToJson(DatasetObject dataset, int iteration)
         {
-            // parse data
-            //var json = JsonSerializer.Serialize(dataset);
+            datasetType = dataset.DatasetType;
             foreach (var prop in dataset.Properties)
             {
                 if (prop.name == "geographicFormat")
@@ -130,10 +130,46 @@ namespace DatasetParser
 
         private JObject? CheckObjAttrForTags(ObjectAttribute objAttr)
         {
+            switch (datasetType)
+            {
+                case DatasetType.Parking:
+                    return ParkingAttrTagOrder(objAttr);
+                case DatasetType.Routes:
+                    return RoutesAttrTagOrder(objAttr);
+            }
+            throw new NullReferenceException();
+        }
+
+        private JObject? ParkingAttrTagOrder(ObjectAttribute objAttr)
+        {
             if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
             {
                 return GetObjectWithCoordinates(objAttr, ObjectLabel.Polygon.ToString());
             }
+            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.LineString)))
+            {
+                return GetObjectWithCoordinates(objAttr, ObjectLabel.LineString.ToString());
+            }
+            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.MultiPoint)))
+            {
+                return GetObjectWithCoordinates(objAttr, ObjectLabel.MultiPoint.ToString());
+            }
+            if (objAttr.HasLabel(ObjectLabel.Point))
+            {
+                return GetObjectWithCoordinates(objAttr, ObjectLabel.Point.ToString());
+            }
+            else return null;
+        }
+
+        private JObject? RoutesAttrTagOrder(ObjectAttribute objAttr)
+        {
+
+            if (objAttr.HasLabel(ObjectLabel.Polygon))
+            {
+                objAttr.Labels.Remove(new LabelModel(ObjectLabel.Polygon));
+                objAttr.AddLabel(ObjectLabel.LineString, 1);
+            }
+
             if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.LineString)))
             {
                 return GetObjectWithCoordinates(objAttr, ObjectLabel.LineString.ToString());

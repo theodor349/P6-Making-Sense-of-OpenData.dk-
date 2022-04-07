@@ -62,10 +62,13 @@ namespace OpenDataParser
             {
                 await AddLabels(dataset);
                 _logger.LogInformation("Labels added");
-                var datasetType = await GetClassification(dataset);
+
+                await GetClassification(dataset);
                 _logger.LogInformation("Dataset classified");
-                var output = await datasetParser.Parse(dataset, datasetType, iteration);
+
+                var output = await datasetParser.Parse(dataset, iteration);
                 _logger.LogInformation("Output generated");
+
                 PrintToFile(iteration, output, dataset);
                 _logger.LogInformation("Output printed to file");
             }
@@ -80,10 +83,10 @@ namespace OpenDataParser
             File.WriteAllText(outputPath, output.ToString());
         }
 
-        private async Task<DatasetType> GetClassification(DatasetObject dataset)
+        private async Task GetClassification(DatasetObject dataset)
         {
             var datasetClassifier = _serviceProvider.GetService<IDatasetClassifier>();
-            return await datasetClassifier.Classify(dataset);
+            await datasetClassifier.Classify(dataset);
         }
 
         private async Task AddLabels(DatasetObject dataset)

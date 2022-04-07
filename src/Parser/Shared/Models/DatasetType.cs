@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Shared.Models
 {
-    public enum DatasetType { Parking }
+    public enum DatasetType { Parking, Routes }
 }

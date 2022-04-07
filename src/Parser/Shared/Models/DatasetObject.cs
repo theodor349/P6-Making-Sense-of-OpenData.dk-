@@ -10,6 +10,7 @@ namespace Shared.Models
     {
         public string originalExtensionName { get; }
         public string originalName { get; }
+        public DatasetType DatasetType { get; set; }
 
         public List<IntermediateObject> Objects { get; set; } = new List<IntermediateObject>();
         public IntermediateObject? ObjectSchema { get; set; }
