@@ -45,20 +45,22 @@ namespace LabelRecognizer.Helpers
 
         private void AddGeographicStructure(ObjectAttribute attr, List<ObjectAttribute> children)
         {
+            int childLength = children.Count;
+            GenericCoordinate.FixSymetetricPolygonStructure(children, GenericCoordinate.IsSymetric(children));
             int numCoordinates = GetCordinateCount(children);
             if (children.Count == 0 || numCoordinates != children.Count)
                 return;
 
-            bool sameStartAndEnd = IsSameCoordinate(children.First(), children.Last());
-            if(IsPolygone(numCoordinates, sameStartAndEnd))
+            bool sameStartAndEnd = GenericCoordinate.IsSameCoordinate(children.First(), children.Last());
+            if(IsPolygon(numCoordinates, sameStartAndEnd))
                 attr.AddLabel(ObjectLabel.Polygon, 1);
             if (IsLine(numCoordinates, sameStartAndEnd))
                 attr.AddLabel(ObjectLabel.LineString, 1);
-            if (IsListOfPoints(numCoordinates, sameStartAndEnd))
+            if (IsMultiPoint(numCoordinates, sameStartAndEnd))
                 attr.AddLabel(ObjectLabel.MultiPoint, 1);
         }
 
-        private bool IsListOfPoints(int numCoordinates, bool sameStartAndEnd)
+        private bool IsMultiPoint(int numCoordinates, bool sameStartAndEnd)
         {
             return numCoordinates > 0 && !sameStartAndEnd;
         }
@@ -68,36 +70,9 @@ namespace LabelRecognizer.Helpers
             return numCoordinates > 0 && !sameStartAndEnd;
         }
 
-        private bool IsPolygone(int numCoordinates, bool sameStartAndEnd)
+        private bool IsPolygon(int numCoordinates, bool sameStartAndEnd)
         {
             return numCoordinates > 3 && sameStartAndEnd;
-        }
-
-        private bool IsSameCoordinate(ObjectAttribute first, ObjectAttribute last)
-        {
-            if (!first.HasLabel(ObjectLabel.Coordinate) || !last.HasLabel(ObjectLabel.Coordinate))
-                return false;
-
-            var lat1 = GetLatitue((ListAttribute)first);
-            var lat2 = GetLatitue((ListAttribute)last);
-            if (lat1 != lat2)
-                return false;
-
-            var long1 = GetLongitude((ListAttribute)first);
-            var long2 = GetLongitude((ListAttribute)first);
-            return long1 == long2;
-        }
-
-        private double GetLongitude(ListAttribute obj)
-        {
-            var attr = (DoubleAttribute)((List<ObjectAttribute>)obj.Value).Last();
-            return (double)attr.Value;
-        }
-
-        private double GetLatitue(ListAttribute obj)
-        {
-            var attr = (DoubleAttribute)((List<ObjectAttribute>)obj.Value).First();
-            return (double)attr.Value;
         }
 
         private static int GetCordinateCount(List<ObjectAttribute> children)

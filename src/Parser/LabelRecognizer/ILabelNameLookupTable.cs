@@ -1,7 +1,10 @@
-﻿namespace LabelRecognizer
+﻿using Shared.Models;
+
+namespace LabelRecognizer
 {
     public interface ILabelNameLookupTable
     {
-        bool IncludesTarget(TargetKey target, string name, LookupLanguages language);
+    Task AssignLabels(DatasetObject dataset);
+    bool IncludesTarget(TargetKey target, string name, LookupLanguages language);
     }
 }

@@ -110,7 +110,7 @@ namespace DatasetParser
             foreach (ObjectAttribute obj in objAttr)
             {
 
-                JObject geoObj = CheckObjAttrForTags(obj);
+                JObject? geoObj = CheckObjAttrForTags(obj);
                 if (geoObj != null)
                 {
                     geoObjects.Add(geoObj);
@@ -134,19 +134,20 @@ namespace DatasetParser
             {
                 return GetObjectWithCoordinates(objAttr, ObjectLabel.Polygon.ToString());
             }
-            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.MultiPoint)))
-            {
-                return GetObjectWithCoordinates(objAttr, ObjectLabel.MultiPoint.ToString());
-            }
             if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.LineString)))
             {
                 return GetObjectWithCoordinates(objAttr, ObjectLabel.LineString.ToString());
+            }
+            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.MultiPoint)))
+            {
+                return GetObjectWithCoordinates(objAttr, ObjectLabel.MultiPoint.ToString());
             }
             else return null;
         }
 
         private JObject GetObjectWithCoordinates(ObjectAttribute objAttr, string typeName)
         {
+
             return new JObject(
                     new JProperty("type", "Feature"),
                     new JProperty("geometry",
