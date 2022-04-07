@@ -77,7 +77,7 @@ namespace DatasetGenerator.ParseFile
         private static bool IsGeometricColumn(string name)
         {
             return name.Equals("wkb_geometry", StringComparison.OrdinalIgnoreCase) ||
-                            name.Equals("", StringComparison.OrdinalIgnoreCase);
+                            name.Equals("Geometry_SPA", StringComparison.OrdinalIgnoreCase);
         }
     }
 }
