@@ -171,15 +171,8 @@ namespace DatasetParser
             }
             else if (objAttr.HasLabel(ObjectLabel.Point))
             {
-                JArray jArray = new JArray();
-                List<GenericCoordinate> coords = new List<GenericCoordinate>();
-
-                coords.Add(new GenericCoordinate(objAttr, geographicFormat, utmZoneLetter, utmZoneNumber));
-                coords = GenericCoordinate.SortAccordingToRightHandRule(coords);
-                foreach (var gCoord in coords)
-                {
-                    jArray.Add(new JArray(gCoord.latitude, gCoord.longitude));
-                }
+                GenericCoordinate coord = GetCoordinate(objAttr);
+                JArray jArray = new JArray(coord.latitude, coord.longitude);
                 return new JProperty("coordinates", jArray);
             }
             else
