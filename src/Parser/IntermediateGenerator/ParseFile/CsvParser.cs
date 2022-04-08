@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-
+using System.Globalization;
 
 namespace DatasetGenerator.ParseFile
 {
@@ -17,6 +17,12 @@ namespace DatasetGenerator.ParseFile
 
     internal class CsvParser : ICsvParser
     {
+        private static Regex _multipolygonRegx = new Regex(@"\(\((([0-9]+.[0-9]+( )+[0-9]+.[0-9]+)(,( )*)*)*\)\)");
+        private static Regex _polygonRegx = new Regex(@"\((([0-9]+.[0-9]+( )+[0-9]+.[0-9]+)(,( )*)*)*\)");
+        private static Regex _pointRegx =  new Regex(@"[0-9]+.[0-9]+( )+[0-9]+.[0-9]+");
+        private static Regex _doubleRegx = new Regex(@"[0-9]+(\.[0-9]+)|[0-9]+");
+
+
         public Task<DatasetObject> Parse(string stringFile, string extensionName, string fileName)
         {
             var dataset = new DatasetObject(extensionName, fileName);
@@ -60,18 +66,59 @@ namespace DatasetGenerator.ParseFile
         {
             if (value.Contains("Point", StringComparison.OrdinalIgnoreCase))
                 return CreatePointAttribute(name, value);
-            return null;
+            if (value.Contains("Multipolygon", StringComparison.OrdinalIgnoreCase))
+                return CreateMultipolygonAttribute(name, value);
+            if (value.Contains("POLYGON ", StringComparison.OrdinalIgnoreCase))
+                return CreatePolygonAttribute(name, value);
+            throw new NotImplementedException("Unable to handle geometric type: " + value.Substring(0, Math.Min(value.Length, 16)));
+        }
+
+        private ObjectAttribute CreatePolygonAttribute(string name, string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        private ObjectAttribute CreateMultipolygonAttribute(string name, string value)
+        {
+            var polygons = new List<ObjectAttribute>();
+            var multipolygonString = _multipolygonRegx.Match(value).Value;
+            foreach (var polygonMatch in _polygonRegx.Matches(multipolygonString).AsEnumerable())
+            {
+                var points = new List<ObjectAttribute>();
+                foreach (var pointMatch in _pointRegx.Matches(polygonMatch.Value).AsEnumerable())
+                {
+                    points.Add(GeneratePoint(pointMatch.Value));
+                }
+                polygons.Add(new ListAttribute("Polygon", points));
+            }
+            
+            var multiPolygon = new ListAttribute("Multipolygon", polygons);
+            var root = new ListAttribute(name, new List<ObjectAttribute>() { multiPolygon });
+            return root;
         }
 
         private ObjectAttribute CreatePointAttribute(string name, string value)
         {
-            var pointsRegx = new Regex("[0-9]+.[0-9]+( )+[0-9]+.[0-9]+");
-            var points = pointsRegx.Match(value).Value.Split(' ');
-            var longitude = new DoubleAttribute("Double", double.Parse(points[0]));
-            var latitude = new DoubleAttribute("Double", double.Parse(points[1]));
-            var point = new ListAttribute("Point", new List<ObjectAttribute>() { longitude, latitude });
+            var point = GeneratePoint(_pointRegx.Match(value).Value);
             var root = new ListAttribute(name, new List<ObjectAttribute>() { point });
             return root;
+        }
+
+        private static ListAttribute GeneratePoint(string pointString)
+        {
+            var doubleMatches = _doubleRegx.Matches(pointString);
+            var doubles = new List<string>(doubleMatches.Count);
+            for (int i = 0; i < doubleMatches.Count; i++)
+            {
+                var value = doubleMatches[i].Value;
+                doubles.Add(value.Replace(',', '.'));
+            }
+            if(doubles.Count != 2)
+                Console.WriteLine("CBB");
+            var latitude = new DoubleAttribute("Double", double.Parse(doubles[1], NumberStyles.Any, CultureInfo.InvariantCulture));
+            var longitude = new DoubleAttribute("Double", double.Parse(doubles[0], NumberStyles.Any, CultureInfo.InvariantCulture));
+            var point = new ListAttribute("Point", new List<ObjectAttribute>() { longitude, latitude });
+            return point;
         }
 
         private static bool IsGeometricColumn(string name)

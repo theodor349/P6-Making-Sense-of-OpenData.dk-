@@ -45,7 +45,9 @@ namespace LabelRecognizer.Helpers
 
         private void AddGeographicStructure(ObjectAttribute attr, List<ObjectAttribute> children)
         {
-            int childLength = children.Count;
+            if (children.Count == 0)
+                return;
+
             GenericCoordinate.FixSymetetricPolygonStructure(children, GenericCoordinate.IsSymetric(children));
             int numCoordinates = GetCordinateCount(children);
             if (children.Count == 0 || numCoordinates != children.Count)
