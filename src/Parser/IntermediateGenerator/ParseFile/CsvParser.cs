@@ -65,39 +65,44 @@ namespace DatasetGenerator.ParseFile
         private ObjectAttribute CreateGeometricAttribute(string name, string value)
         {
             if (value.Contains("Point", StringComparison.OrdinalIgnoreCase))
-                return CreatePointAttribute(name, value);
+                return CreatePointAttribute(value, name);
             if (value.Contains("Multipolygon", StringComparison.OrdinalIgnoreCase))
-                return CreateMultipolygonAttribute(name, value);
+                return CreateMultipolygonAttribute(value, name);
             if (value.Contains("POLYGON ", StringComparison.OrdinalIgnoreCase))
-                return CreatePolygonAttribute(name, value);
+                return CreatePolygonAttribute(value, name);
             throw new NotImplementedException("Unable to handle geometric type: " + value.Substring(0, Math.Min(value.Length, 16)));
         }
 
-        private ObjectAttribute CreatePolygonAttribute(string name, string value)
-        {
-            throw new NotImplementedException();
-        }
-
-        private ObjectAttribute CreateMultipolygonAttribute(string name, string value)
+        private ObjectAttribute CreateMultipolygonAttribute(string value, string name)
         {
             var polygons = new List<ObjectAttribute>();
             var multipolygonString = _multipolygonRegx.Match(value).Value;
             foreach (var polygonMatch in _polygonRegx.Matches(multipolygonString).AsEnumerable())
             {
-                var points = new List<ObjectAttribute>();
-                foreach (var pointMatch in _pointRegx.Matches(polygonMatch.Value).AsEnumerable())
-                {
-                    points.Add(GeneratePoint(pointMatch.Value));
-                }
-                polygons.Add(new ListAttribute("Polygon", points));
+                var polygonString = polygonMatch.Value;
+                ListAttribute polygon = CreatePolygonAttribute(polygonString);
+                polygons.Add(polygon);
             }
-            
+
             var multiPolygon = new ListAttribute("Multipolygon", polygons);
             var root = new ListAttribute(name, new List<ObjectAttribute>() { multiPolygon });
             return root;
         }
 
-        private ObjectAttribute CreatePointAttribute(string name, string value)
+        private static ListAttribute CreatePolygonAttribute(string polygonString, string? name = null)
+        {
+            var points = new List<ObjectAttribute>();
+            foreach (var pointMatch in _pointRegx.Matches(polygonString).AsEnumerable())
+            {
+                points.Add(GeneratePoint(pointMatch.Value));
+            }
+            var polygon = new ListAttribute("Polygon", points);
+            if(name != null)
+                polygon = new ListAttribute(name, new List<ObjectAttribute>() { polygon });
+            return polygon;
+        }
+
+        private ObjectAttribute CreatePointAttribute(string value, string name)
         {
             var point = GeneratePoint(_pointRegx.Match(value).Value);
             var root = new ListAttribute(name, new List<ObjectAttribute>() { point });
@@ -113,8 +118,6 @@ namespace DatasetGenerator.ParseFile
                 var value = doubleMatches[i].Value;
                 doubles.Add(value.Replace(',', '.'));
             }
-            if(doubles.Count != 2)
-                Console.WriteLine("CBB");
             var latitude = new DoubleAttribute("Double", double.Parse(doubles[1], NumberStyles.Any, CultureInfo.InvariantCulture));
             var longitude = new DoubleAttribute("Double", double.Parse(doubles[0], NumberStyles.Any, CultureInfo.InvariantCulture));
             var point = new ListAttribute("Point", new List<ObjectAttribute>() { longitude, latitude });
