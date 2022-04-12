@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Parser\DatasetParser\DatasetParser.csproj" />
     <ProjectReference Include="..\Parser\Shared\Shared.csproj" />
   </ItemGroup>
 

@@ -27,16 +27,96 @@ namespace DatasetParser.Test
                             new JProperty("geometry", 
                                 new JObject(
                                     new JProperty("type", "Polygon"),
-                                    new JProperty("coordinates", new JArray(
-                                        new JArray(
-                                            new JArray(1.1, 1.2),
-                                            new JArray(1.3, 1.4),
-                                            new JArray(1.5, 1.6),
-                                            new JArray(1.1, 1.2)
-                                            ))))),
+                                    ModelFactory.ReturnCoordinateProperty())),
                             new JProperty("properties", new JObject())))));
 
+            List<ObjectAttribute> coordsList = new List<ObjectAttribute>()
+            {
+                new ListAttribute("", new List<ObjectAttribute>()
+                {
+                    new DoubleAttribute("lat", 1.1),
+                    new DoubleAttribute("long", 1.2)
+                }),
+                new ListAttribute("", new List<ObjectAttribute>()
+                {
+                    new DoubleAttribute("lat", 1.3),
+                    new DoubleAttribute("long", 1.4)
+                }),
+                new ListAttribute("", new List<ObjectAttribute>()
+                {
+                    new DoubleAttribute("lat", 1.5),
+                    new DoubleAttribute("long", 1.6)
+                }),
+                new ListAttribute("", new List<ObjectAttribute>()
+                {
+                    new DoubleAttribute("lat", 1.1),
+                    new DoubleAttribute("long", 1.2)
+                })
+            };
+            var polygon = new ListAttribute("");
+            ((List<ObjectAttribute>)polygon.Value).AddRange(coordsList);
+            polygon.Labels.Add(new LabelModel(ObjectLabel.Polygon));
 
+            List<ObjectAttribute> attrs = new List<ObjectAttribute>() { polygon };
+
+            var ios = new List<IntermediateObject>() { new IntermediateObject(attrs) };
+            var inputDataset = ModelFactory.GetDatasetObject(ios);
+
+            var setup = new TestSetup();
+            var ParseToJson = setup.DatasetParser("json");
+            var res = ParseToJson.Parse(inputDataset, DatasetType.Parking, 1).Result;
+
+            res.ToString().Should().Be(expected.ToString());
+        }
+
+        [TestMethod]
+        public void Test_ParseToGeojsonLine_Correct()
+        {
+            var expected = new JObject(
+                 new JProperty("type", "FeatureCollection"),
+                 new JProperty("features",
+                    new JArray(
+                        new JObject(
+                            new JProperty("type", "Feature"),
+                            new JProperty("geometry",
+                                new JObject(
+                                    new JProperty("type", ObjectLabel.Line.ToString()),
+                                    ModelFactory.ReturnLineProperty())),
+                            new JProperty("properties", new JObject())))));
+
+            List<ObjectAttribute> coordsList = new List<ObjectAttribute>()
+            {
+                new ListAttribute("", new List<ObjectAttribute>()
+                {
+                    new DoubleAttribute("lat", 1.1),
+                    new DoubleAttribute("long", 1.2)
+                }),
+                new ListAttribute("", new List<ObjectAttribute>()
+                {
+                    new DoubleAttribute("lat", 1.3),
+                    new DoubleAttribute("long", 1.4)
+                }),
+                new ListAttribute("", new List<ObjectAttribute>()
+                {
+                    new DoubleAttribute("lat", 1.5),
+                    new DoubleAttribute("long", 1.6)
+                }),
+            };
+            var line = new ListAttribute("");
+            ((List<ObjectAttribute>)line.Value).AddRange(coordsList);
+            line.Labels.Add(new LabelModel(ObjectLabel.Line));
+
+            List<ObjectAttribute> attrs = new List<ObjectAttribute>() { line };
+
+            var ios = new List<IntermediateObject>() { new IntermediateObject(attrs) };
+            var inputDataset = ModelFactory.GetDatasetObject(ios);
+
+            var setup = new TestSetup();
+            var ParseToJson = setup.DatasetParser("json");
+            var res = ParseToJson.Parse(inputDataset, DatasetType.Parking, 1).Result;
+            string StrRes = res.ToString();
+
+            res.ToString().Should().Be(expected.ToString());
         }
     }
 }
