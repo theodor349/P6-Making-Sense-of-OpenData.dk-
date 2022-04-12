@@ -1,7 +1,7 @@
 ﻿{
   "LookupTargets": [
     {
-      "Target": "Count",
+      "Target": "Amount",
       "Languages": [
         {
           "Language": "ENG",
@@ -13,7 +13,8 @@
         {
           "Language": "DK",
           "Values": [
-            "Antal"
+            "Antal",
+            "Pladser"
           ]
         }
       ]

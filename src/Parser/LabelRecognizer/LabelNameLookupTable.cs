@@ -10,13 +10,13 @@ namespace LabelRecognizer
 
     class LabelNameLookupTable : ILabelNameLookupTable
     {
-        private Dictionary<TargetKey, LookupValue>? _dic = new();
         private readonly IConfiguration _configuration;
+        private readonly LookupTable _lookupTable;
 
         public LabelNameLookupTable(IConfiguration configuration)
         {
             _configuration = configuration;
-            GenerateLookuptable(configuration["Input:LabelNameLookupTablePath"]);
+            _lookupTable = GenerateLookuptable(configuration["Input:LabelNameLookupTablePath"]);
         }
         public Task AssignLabels(DatasetObject dataset)
         {
@@ -32,41 +32,53 @@ namespace LabelRecognizer
 
         private void SetLabels(ObjectAttribute attr)
         {
-            //  ASSIGN Actual labels
-            AssignLabelFromLookup();
+            // ASSIGN Actual labels
+            AssignLabelFromLookup(attr);
             if (attr.GetType() == typeof(ListAttribute))
             {
-               // Get children
-               //    for each child
-               //    SetLabels
+                // Get children
+                //   for each child
+                //   SetLabels
+                var children = (List<ObjectAttribute>)attr.Value;
+                foreach (var child in children)
+                {
+                    SetLabels(child);
+                }
             }
         }
 
-        private void AssignLabelFromLookup()
+        private void AssignLabelFromLookup(ObjectAttribute attr)
         {
-            //throw new NotImplementedException();
+            var labelTuple = Lookup(attr);
+            if (labelTuple.Item1)
+            {
+                attr.AddLabel(labelTuple.Item3, labelTuple.Item2);
+            }
         }
 
-        private void GenerateLookuptable(string lookupTablePath)
+        private Tuple<bool, float, ObjectLabel> Lookup(ObjectAttribute attr)
+        {
+            foreach (var target in _lookupTable.LookupTargets)
+            {
+                foreach (var lang in target.Languages)
+                {
+                    foreach (var value in lang.Values)
+                    {
+                        if (attr.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            return new Tuple<bool, float, ObjectLabel>(true, 1, (ObjectLabel) Enum.Parse(typeof(ObjectLabel), target.Target));
+                        }
+                    }
+                }
+            }
+            return new Tuple<bool, float, ObjectLabel>(false, 0, new ObjectLabel());
+        }
+
+        private LookupTable GenerateLookuptable(string lookupTablePath)
         {
             var json = File.ReadAllText(lookupTablePath);
             LookupTable? table = JsonSerializer.Deserialize<LookupTable>(json);
+            return table;
         }
-
-        public bool IncludesTarget(TargetKey target, string name, LookupLanguages language)
-        {
-            return _dic[target].Contains(name, language);
-        }
-    }
-
-    internal class LookupValue
-    {
-        private Dictionary<LookupLanguages, List<string>> LangaugeValues = new();
-
-        public bool Contains(string name, LookupLanguages language)
-        {
-            return LangaugeValues[language].Contains(name) ? true : false;
-        }
-    }
-    
+    }    
 }
