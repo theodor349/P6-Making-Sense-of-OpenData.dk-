@@ -61,7 +61,7 @@ namespace OpenDataParser
             if(dataset != null)
             {
                 await Preprocessing(dataset);
-                _logger.LogInformation("Post processing");
+                _logger.LogInformation("Pre processing");
 
                 await AddLabels(dataset);
                 _logger.LogInformation("Labels added");
