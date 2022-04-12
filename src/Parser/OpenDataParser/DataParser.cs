@@ -60,8 +60,14 @@ namespace OpenDataParser
             _logger.LogInformation("Dataset generated");
             if(dataset != null)
             {
+                await Preprocessing(dataset);
+                _logger.LogInformation("Post processing");
+
                 await AddLabels(dataset);
                 _logger.LogInformation("Labels added");
+
+                await PostProcess(dataset);
+                _logger.LogInformation("Post processing done");
 
                 await GetClassification(dataset);
                 _logger.LogInformation("Dataset classified");
@@ -72,6 +78,18 @@ namespace OpenDataParser
                 PrintToFile(iteration, output, dataset);
                 _logger.LogInformation("Output printed to file");
             }
+        }
+
+        private Task Preprocessing(DatasetObject dataset)
+        {
+            // TODO: Preprocessing
+            return Task.CompletedTask;
+        }
+
+        private async Task PostProcess(DatasetObject dataset)
+        {
+            var postProcessor = _serviceProvider.GetService<IPostProcessor>();
+            await postProcessor.Process(dataset);
         }
 
         private void PrintToFile(int iteration, JObject output, DatasetObject dataset)

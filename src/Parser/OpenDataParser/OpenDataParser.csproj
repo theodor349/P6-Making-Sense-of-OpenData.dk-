@@ -25,6 +25,7 @@
     <ProjectReference Include="..\DatasetParser\DatasetParser.csproj" />
     <ProjectReference Include="..\IntermediateGenerator\DatasetGenerator.csproj" />
     <ProjectReference Include="..\LabelRecognizer\LabelRecognizer.csproj" />
+    <ProjectReference Include="..\PostProcessing\PostProcessing.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
