@@ -10,9 +10,19 @@ namespace DatasetDecider
 {
     public class DatasetClassifier : IDatasetClassifier
     {
-        public async Task<DatasetType> Classify(DatasetObject dataset)
+        public async Task Classify(DatasetObject dataset)
         {
-            return await Task.Run(() => { return DatasetType.Parking; });
+            await Task.Run(() => {
+
+                if (dataset.originalName == "vesthimmerland_cykel_og_vandre_ruter.geojson")
+                {
+                    dataset.DatasetType = DatasetType.Routes;
+                }
+                else
+                {
+                    dataset.DatasetType = DatasetType.Parking;
+                }
+            });
         }
 
     }

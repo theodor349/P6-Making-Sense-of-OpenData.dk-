@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DatasetGenerator.ParseFile
 {
-    public interface IParseJson
+    public interface IFileParser
     {
         Task<DatasetObject> Parse(string stringFile, string extensionName, string fileName);
     }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenDataParser;
 using Serilog;
+using PostProcessing;
 
 var builder = new ConfigurationBuilder();
 
@@ -26,6 +27,7 @@ var host = Host.CreateDefaultBuilder()
         services.AddDatasetClassifier();
         services.AddDatasetParser();
         services.AddLabelRecognizer();
+        services.AddPostProcessing();
     })
     .UseSerilog()
     .Build();

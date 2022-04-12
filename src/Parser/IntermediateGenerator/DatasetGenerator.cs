@@ -9,13 +9,15 @@ namespace DatasetGenerator
 {
     public class DatasetGenerator : IDatasetGenerator
     {
-        private readonly IParseJson _parseJson;
+        private readonly IJsonParser _jsonParser;
         private readonly IDatasetObjectSplitter _intermediateSplitter;
+        private readonly ICsvParser _csvParser;
 
-        public DatasetGenerator(IParseJson parseJson, IDatasetObjectSplitter intermediate)
+        public DatasetGenerator(IJsonParser parseJson, IDatasetObjectSplitter intermediate, ICsvParser csvParser)
         {
-            _parseJson = parseJson;
+            _jsonParser = parseJson;
             _intermediateSplitter = intermediate;
+            _csvParser = csvParser;
         }
         
         public async Task<DatasetObject> GenerateAsync(string filePath)
@@ -26,8 +28,11 @@ namespace DatasetGenerator
             {
                 case ".geojson":
                 case ".json":
-                    datasetObject = await _parseJson.Parse(File.ReadAllText(file.FullName), file.Extension, file.Name);
+                    datasetObject = await _jsonParser.Parse(File.ReadAllText(file.FullName), file.Extension, file.Name);
                     datasetObject = await _intermediateSplitter.SplitObject(datasetObject);
+                    break;
+                case ".csv":
+                    datasetObject = await _csvParser.Parse(File.ReadAllText(file.FullName), file.Extension, file.Name);
                     break;
             }
 

@@ -9,7 +9,8 @@ namespace DatasetGenerator
         public static void AddIntermediateGenerator(this IServiceCollection services)
         {
             services.AddTransient<IDatasetGenerator, DatasetGenerator>();
-            services.AddTransient<IParseJson, ParseJson>();
+            services.AddTransient<IJsonParser, JsonParser>();
+            services.AddTransient<ICsvParser, CsvParser>();
             services.AddTransient<IDatasetObjectSplitter, DatasetObjectSplitter>();
         }
     }

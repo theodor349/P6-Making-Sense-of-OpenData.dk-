@@ -1,0 +1,41 @@
+﻿{
+  "LookupTargets": [
+    {
+      "Target": "Count",
+      "Languages": [
+        {
+          "Language": "ENG",
+          "Values": [
+            "Count",
+            "cnt"
+          ]
+        },
+        {
+          "Language": "DK",
+          "Values": [
+            "Antal"
+          ]
+        }
+      ]
+    },
+    {
+      "Target": "Address",
+      "Languages": [
+        {
+          "Language": "ENG",
+          "Values": [
+            "Address",
+            "Adr"
+          ]
+        },
+        {
+          "Language": "DK",
+          "Values": [
+            "Addresse",
+            "Adr"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -53,17 +53,43 @@ namespace OpenDataParser
         {
             _logger.LogInformation("Iteration: {i}, File: {file}", new object[] { iteration, new FileInfo(file).Name });
 
-            var intermediateGenerator = _serviceProvider.GetService<IDatasetGenerator>();
+            var datasetGenerator = _serviceProvider.GetService<IDatasetGenerator>();
             var datasetParser = _serviceProvider.GetService<IDatasetParser>();
 
-            var dataset = await intermediateGenerator.GenerateAsync(file);
+            var dataset = await datasetGenerator.GenerateAsync(file);
+            _logger.LogInformation("Dataset generated");
             if(dataset != null)
             {
+                await Preprocessing(dataset);
+                _logger.LogInformation("Pre processing");
+
                 await AddLabels(dataset);
-                var datasetType = await GetClassification(dataset);
-                var output = await datasetParser.Parse(dataset, datasetType, iteration);
+                _logger.LogInformation("Labels added");
+
+                await PostProcess(dataset);
+                _logger.LogInformation("Post processing done");
+
+                await GetClassification(dataset);
+                _logger.LogInformation("Dataset classified");
+
+                var output = await datasetParser.Parse(dataset, iteration);
+                _logger.LogInformation("Output generated");
+
                 PrintToFile(iteration, output, dataset);
+                _logger.LogInformation("Output printed to file");
             }
+        }
+
+        private Task Preprocessing(DatasetObject dataset)
+        {
+            // TODO: Preprocessing
+            return Task.CompletedTask;
+        }
+
+        private async Task PostProcess(DatasetObject dataset)
+        {
+            var postProcessor = _serviceProvider.GetService<IPostProcessor>();
+            await postProcessor.Process(dataset);
         }
 
         private void PrintToFile(int iteration, JObject output, DatasetObject dataset)
@@ -75,10 +101,10 @@ namespace OpenDataParser
             File.WriteAllText(outputPath, output.ToString());
         }
 
-        private async Task<DatasetType> GetClassification(DatasetObject dataset)
+        private async Task GetClassification(DatasetObject dataset)
         {
             var datasetClassifier = _serviceProvider.GetService<IDatasetClassifier>();
-            return await datasetClassifier.Classify(dataset);
+            await datasetClassifier.Classify(dataset);
         }
 
         private async Task AddLabels(DatasetObject dataset)

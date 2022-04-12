@@ -12,11 +12,14 @@ using Shared.Models.ObjectAttributes;
 
 namespace DatasetGenerator.ParseFile
 {
-    public class ParseJson : IParseJson
+    public interface IJsonParser : IFileParser
     {
-        
-        private readonly ILogger<ParseJson> _logger;
-        public ParseJson(ILogger<ParseJson> logger)
+    }
+
+    public class JsonParser : IJsonParser
+    {
+        private readonly ILogger<JsonParser> _logger;
+        public JsonParser(ILogger<JsonParser> logger)
         {
             _logger = logger;
         }
