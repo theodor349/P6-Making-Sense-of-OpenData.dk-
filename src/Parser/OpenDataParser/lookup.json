@@ -37,6 +37,30 @@
           ]
         }
       ]
+    },
+    {
+      "Target": "Remark",
+      "Languages": [
+        {
+          "Language": "ENG",
+          "Values": [
+            "Note",
+            "Comment",
+            "Remark",
+            "Description"
+          ]
+        },
+        {
+          "Language": "DK",
+          "Values": [
+            "Notat",
+            "Bemærkning",
+            "Bemaerkning",
+            "Beskrivelse",
+            "Kommentar"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -50,6 +50,7 @@ namespace LabelRecognizer
         private void AssignLabelFromLookup(ObjectAttribute attr)
         {
             var labelTuple = Lookup(attr);
+            // If a value is found
             if (labelTuple.Item1)
             {
                 attr.AddLabel(labelTuple.Item3, labelTuple.Item2);
