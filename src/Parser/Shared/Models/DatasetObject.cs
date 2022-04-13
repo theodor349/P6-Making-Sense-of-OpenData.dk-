@@ -14,9 +14,9 @@ namespace Shared.Models
 
         public List<IntermediateObject> Objects { get; set; } = new List<IntermediateObject>();
         public IntermediateObject? ObjectSchema { get; set; }
-        public List<DatasetProperty> Properties { get; set; } = new List<DatasetProperty>();
-        public bool HasProperty(string key) => Properties.FirstOrDefault(x => x.name.Equals(key, StringComparison.InvariantCultureIgnoreCase)).name != null;
-        public string GetProperty(string key) => Properties.FirstOrDefault(x => x.name.Equals(key, StringComparison.InvariantCultureIgnoreCase)).value;
+        public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
+        public bool HasProperty(string key) => Properties.ContainsKey(key);
+        public string GetProperty(string key) => Properties[key];
 
 
         public DatasetObject(string originalExtensionName, string originalName)

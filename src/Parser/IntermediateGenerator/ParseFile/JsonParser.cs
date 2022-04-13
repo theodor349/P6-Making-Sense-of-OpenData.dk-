@@ -105,7 +105,7 @@ namespace DatasetGenerator.ParseFile
                 {
                     var crs = GetCoordinateReferenceSystem(reader.Value.ToString());
                     if(crs != null)
-                        datasetObj.Properties.Add(new DatasetProperty("CoordinateReferenceSystem", System.Text.Json.JsonSerializer.Serialize(crs)));
+                        datasetObj.Properties.Add("CoordinateReferenceSystem", System.Text.Json.JsonSerializer.Serialize(crs));
                 }
             }
             while (reader.Read() && depth != 0);

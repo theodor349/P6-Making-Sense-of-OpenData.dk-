@@ -19,23 +19,22 @@ namespace Shared.Models
 
         public GenericCoordinate(ObjectAttribute objectAttribute, CoordinateReferenceSystem crs)
         {
+            if (crs == null)
+                return;
+            
             var coordValues = (List<ObjectAttribute>)objectAttribute.Value;
             double coord1 = Convert.ToDouble(coordValues[crs.CoordsAreSwapped ? 0 : 1].Value);
             double coord2 = Convert.ToDouble(coordValues[crs.CoordsAreSwapped ? 1 : 0].Value);
-
-            if(crs != null)
+            if (crs.IsWgs84)
             {
-                if (crs.IsWgs84)
-                {
-                    longitude = coord1;
-                    latitude = coord2;
-                }
-                else if (crs.IsUtm)
-                {
-                    var latlongformat = ConvertFromUtm(new GenericCoordinate(coord1, coord2), crs.GeodeticCrs, crs.UtmZoneLetter, crs.UtmZoneNumber);
-                    longitude = latlongformat.longitude;
-                    latitude = latlongformat.latitude;
-                }
+                longitude = coord1;
+                latitude = coord2;
+            }
+            else if (crs.IsUtm)
+            {
+                var latlongformat = ConvertFromUtm(new GenericCoordinate(coord1, coord2), crs.GeodeticCrs, crs.UtmZoneLetter, crs.UtmZoneNumber);
+                longitude = latlongformat.longitude;
+                latitude = latlongformat.latitude;
             }
         }
 

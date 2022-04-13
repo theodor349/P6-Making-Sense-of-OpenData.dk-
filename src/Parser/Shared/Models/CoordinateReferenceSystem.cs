@@ -23,6 +23,13 @@ namespace Shared.Models
 
         }
 
+        public CoordinateReferenceSystem(string utmLetter, int utmNumber)
+        {
+            IsUtm = true;
+            UtmZoneLetter = utmLetter;
+            UtmZoneNumber = utmNumber;
+        }
+
         public CoordinateReferenceSystem(string urnString)
         {
             if (urnString.Contains("CRS84", StringComparison.InvariantCultureIgnoreCase))
@@ -59,6 +66,12 @@ namespace Shared.Models
         public CoordinateReferenceSystem(bool isWgs84)
         {
             IsWgs84 = isWgs84;
+        }
+
+        public CoordinateReferenceSystem(bool isWgs84, bool coordsAreSwapped)
+        {
+            IsWgs84 = isWgs84;
+            CoordsAreSwapped = coordsAreSwapped;
         }
     }
 }
