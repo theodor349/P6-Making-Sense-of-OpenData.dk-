@@ -36,7 +36,7 @@ namespace DatasetGenerator.Test.Json
             task.Wait();
             var res = task.Result;
 
-            res.Should().BeEquivalentTo(expected);
+            res.Objects.Should().BeEquivalentTo(expected.Objects);
         }
 
         [TestMethod]

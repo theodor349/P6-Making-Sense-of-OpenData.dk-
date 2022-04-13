@@ -1,4 +1,5 @@
-﻿using Shared.ComponentInterfaces;
+﻿using PostProcessing.Helpers;
+using Shared.ComponentInterfaces;
 using Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,16 @@ namespace PostProcessing
 {
     internal class PostProcessor : IPostProcessor
     {
-        public Task Process(DatasetObject dataset)
+        private readonly IGeoMetaData _geoMetaData;
+
+        public PostProcessor(IGeoMetaData geoMetaData)
         {
-            return Task.CompletedTask;
+            _geoMetaData = geoMetaData;
+        }
+
+        public async Task Process(DatasetObject dataset)
+        {
+            await _geoMetaData.AssignGeoMetaData(dataset);
         }
     }
 }

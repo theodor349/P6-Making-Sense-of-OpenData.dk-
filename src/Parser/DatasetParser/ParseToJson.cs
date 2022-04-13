@@ -22,9 +22,7 @@ namespace DatasetParser
 
         private Shared.Models.GenericCoordinate firstCoordinate;
 
-        private string geographicFormat = null;
-        private string utmZoneLetter = null;
-        private int utmZoneNumber = int.MaxValue;
+        private CoordinateReferenceSystem? crs;
         private DatasetType datasetType;
 
         public ParseToJson(IConfiguration configuration)
@@ -35,22 +33,8 @@ namespace DatasetParser
         public JObject ParseDatasetObjectToJson(DatasetObject dataset, int iteration)
         {
             datasetType = dataset.DatasetType;
-            foreach (var prop in dataset.Properties)
-            {
-                if (prop.name == "geographicFormat")
-                {
-                    geographicFormat = prop.value;
-                    
-                }
-                else if (prop.name == "utmZoneLetter")
-                {
-                    utmZoneLetter = prop.value;
-                }
-                else if (prop.name == "utmZoneNumber")
-                {
-                    utmZoneNumber = int.Parse(prop.value);
-                }
-            }
+            if (dataset.HasProperty("CoordinateReferenceSystem"))
+                crs = JsonSerializer.Deserialize<CoordinateReferenceSystem>(dataset.GetProperty("CoordinateReferenceSystem"));
             
             var GeoJson = new JObject(
                 new JProperty("type", "FeatureCollection"),
@@ -218,7 +202,7 @@ namespace DatasetParser
 
                 foreach (var coord in (List<ObjectAttribute>)objAttr.Value)
                 {
-                    coords.Add(new GenericCoordinate(coord, geographicFormat, utmZoneLetter, utmZoneNumber));
+                    coords.Add(new GenericCoordinate(coord, crs));
                 }
                 coords = GenericCoordinate.SortAccordingToRightHandRule(coords);
                 foreach (var gCoord in coords)
@@ -255,14 +239,7 @@ namespace DatasetParser
         private GenericCoordinate GetCoordinate(ObjectAttribute coord)
         {
             GenericCoordinate genericCoord;
-            if (geographicFormat == "utm" && utmZoneLetter != null)
-            {
-                genericCoord = new GenericCoordinate(coord, geographicFormat, utmZoneLetter, utmZoneNumber);
-            }
-            else
-            {
-                 genericCoord = new GenericCoordinate(coord);
-            }
+            genericCoord = new GenericCoordinate(coord, crs);
             return genericCoord;
         }
     }

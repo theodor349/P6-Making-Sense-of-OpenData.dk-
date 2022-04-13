@@ -5,6 +5,12 @@ namespace Shared.Models
 	{
 		public string name;
 		public string value;
-	}
+
+        public DatasetProperty(string name, string value)
+        {
+            this.name = name;
+            this.value = value;
+        }
+    }
 }
 

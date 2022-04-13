@@ -103,97 +103,19 @@ namespace DatasetGenerator.ParseFile
                 }
                 if (propertiesFound && propName == "name" && reader.TokenType.Equals(JsonToken.String) && reader.Value != null)
                 {
-                    string geoFormat = GetGeographicFormat(reader.Value.ToString());
-
-                    if (geoFormat == "utm")
-                    {
-                        datasetObj.Properties.Add(
-                        new DatasetProperty
-                        {
-                            name = "geographicFormat",
-                            value = geoFormat
-                        });
-
-                        datasetObj.Properties.Add(
-                        new DatasetProperty
-                        {
-                            name = "utmZoneLetter",
-                            value = GetUTMZoneLetter(reader.Value.ToString())
-                        });
-
-                        datasetObj.Properties.Add(
-                        new DatasetProperty
-                        {
-                            name = "utmZoneNumber",
-                            value = GetUTMZoneNumber(reader.Value.ToString())
-                        });
-                    }
+                    var crs = GetCoordinateReferenceSystem(reader.Value.ToString());
+                    if(crs != null)
+                        datasetObj.Properties.Add(new DatasetProperty("CoordinateReferenceSystem", System.Text.Json.JsonSerializer.Serialize(crs)));
                 }
             }
             while (reader.Read() && depth != 0);
         }
 
-        private string GetGeographicFormat(string? data)
+        private CoordinateReferenceSystem GetCoordinateReferenceSystem(string? data)
         {
-
-            if(data != null)
-            {
-                if (data.Contains("EPSG") && !data.Contains("4326"))
-                {
-                    return "utm";
-                }
-
-                else
-                {
-                    return "undefined";
-                }
-            }
-            else
-            {
-                return "undefined";
-            }
-        }
-
-        private string GetUTMZoneNumber(string? data)
-        {
-            if (data != null)
-            {
-                if (data.Contains("25832"))
-                {
-                    return "32";
-                }
-                else if (data.Contains("25833"))
-                {
-                    return "33";
-                }
-                else
-                {
-                    return "undefined";
-                }
-            }
-            else
-            {
-                return "undefined";
-            }
-        }
-
-        private string GetUTMZoneLetter(string? data)
-        {
-            if (data != null)
-            {
-                if (data.Contains("25832") || data.Contains("25833"))
-                {
-                    return "N";
-                }
-                else
-                {
-                    return "undefined";
-                }
-            }
-            else
-            {
-                return "undefined";
-            }
+            if (data is null)
+                return new CoordinateReferenceSystem(true);
+            return new CoordinateReferenceSystem(data);
         }
 
         private string HandleValueToken(JsonTextReader reader, IntermediateObject? intermediate, Stack<ListAttribute> currentListAttr, string? propName)
