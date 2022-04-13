@@ -29,6 +29,10 @@ namespace DatasetParser
         {
             _configuration = configuration;
         }
+        public ParseToJson() 
+        {
+            _configuration = null;
+        }
 
         public JObject ParseDatasetObjectToJson(DatasetObject dataset, int iteration)
         {

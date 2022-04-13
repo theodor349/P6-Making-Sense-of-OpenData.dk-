@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace LabelRecognizer
 {
-    internal class LookupTable
+    public class LookupTable
     {
-        public List<LookupTarget>? LookupTargets { get; set; }
+        public List<LookupTarget> LookupTargets { get; set; } = new List<LookupTarget>();
     }
 
     public class LookupTarget
     {
         public string? Target { get; set; }
-        public List<LanguageObject>? Languages { get; set; }
+        public List<LanguageObject> Languages { get; set; } = new List<LanguageObject>();
 
     }
 
     public class LanguageObject
     {
         public string? Language { get; set; }
-        public List<string>? Values { get; set; }
+        public List<string> Values { get; set; } = new List<string>();
     }
 }

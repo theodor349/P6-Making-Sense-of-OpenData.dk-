@@ -35,8 +35,8 @@ namespace LabelRecognizer.Helpers
             if (attr.GetType() != typeof(ListAttribute))
                 return;
             var children = (List<ObjectAttribute>)attr.Value;
-            foreach (var a in children)
-                SetLabels(a);
+            foreach (var child in children)
+                SetLabels(child);
 
             // Logic
             AddCoordinateLabel(attr, children);

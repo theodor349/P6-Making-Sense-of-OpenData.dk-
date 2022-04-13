@@ -1,7 +1,7 @@
 ﻿{
   "LookupTargets": [
     {
-      "Target": "Count",
+      "Target": "Amount",
       "Languages": [
         {
           "Language": "ENG",
@@ -13,7 +13,8 @@
         {
           "Language": "DK",
           "Values": [
-            "Antal"
+            "Antal",
+            "Pladser"
           ]
         }
       ]
@@ -33,6 +34,30 @@
           "Values": [
             "Addresse",
             "Adr"
+          ]
+        }
+      ]
+    },
+    {
+      "Target": "Remark",
+      "Languages": [
+        {
+          "Language": "ENG",
+          "Values": [
+            "Note",
+            "Comment",
+            "Remark",
+            "Description"
+          ]
+        },
+        {
+          "Language": "DK",
+          "Values": [
+            "Notat",
+            "Bemærkning",
+            "Bemaerkning",
+            "Beskrivelse",
+            "Kommentar"
           ]
         }
       ]
