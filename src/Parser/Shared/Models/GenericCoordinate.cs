@@ -20,8 +20,8 @@ namespace Shared.Models
         public GenericCoordinate(ObjectAttribute objectAttribute, CoordinateReferenceSystem crs)
         {
             var coordValues = (List<ObjectAttribute>)objectAttribute.Value;
-            double coord1 = Convert.ToDouble(coordValues[0].Value);
-            double coord2 = Convert.ToDouble(coordValues[1].Value);
+            double coord1 = Convert.ToDouble(coordValues[crs.CoordsAreSwapped ? 0 : 1].Value);
+            double coord2 = Convert.ToDouble(coordValues[crs.CoordsAreSwapped ? 1 : 0].Value);
 
             if(crs != null)
             {
