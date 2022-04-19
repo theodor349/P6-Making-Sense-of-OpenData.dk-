@@ -11,7 +11,8 @@ namespace Shared.Models
         // General
         public bool IsUtm { get; set; }
         public bool IsWgs84 { get; set; }
-        public bool CoordsAreSwapped { get; set; }
+        public bool CoordsAreSwappedBefore { get; set; }
+        public bool CoordsAreSwappedAfter { get; set; }
 
         // UTM
         public string? GeodeticCrs => IsUtm ? "utm" : null;
@@ -33,7 +34,7 @@ namespace Shared.Models
         public CoordinateReferenceSystem(string urnString)
         {
             if (urnString.Contains("CRS84", StringComparison.InvariantCultureIgnoreCase))
-                IsWgs84 = CoordsAreSwapped = true;
+                IsWgs84 = CoordsAreSwappedBefore = true;
             else if (urnString.Contains("EPSG", StringComparison.InvariantCultureIgnoreCase))
                 HandleEpsg(urnString);
             else
@@ -71,7 +72,7 @@ namespace Shared.Models
         public CoordinateReferenceSystem(bool isWgs84, bool coordsAreSwapped)
         {
             IsWgs84 = isWgs84;
-            CoordsAreSwapped = coordsAreSwapped;
+            CoordsAreSwappedBefore = coordsAreSwapped;
         }
     }
 }

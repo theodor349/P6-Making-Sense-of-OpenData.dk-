@@ -51,7 +51,7 @@ namespace PostProcessing.Helpers
             else if (IsInDenmark(Swap(point)))
             {
                 crs = new CoordinateReferenceSystem(isWgs84: true);
-                crs.CoordsAreSwapped = true;
+                crs.CoordsAreSwappedBefore = true;
             }
             else if (IsInDenmark(ConvertFromUtm(point, "N", 33)))
             {
@@ -64,12 +64,22 @@ namespace PostProcessing.Helpers
             else if (IsInDenmark(ConvertFromUtm(Swap(point), "N", 33)))
             {
                 crs = new CoordinateReferenceSystem("N", 33);
-                crs.CoordsAreSwapped = true;
+                crs.CoordsAreSwappedBefore = true;
             }
             else if (IsInDenmark(ConvertFromUtm(Swap(point), "N", 32)))
             {
                 crs = new CoordinateReferenceSystem("N", 32);
-                crs.CoordsAreSwapped = true;
+                crs.CoordsAreSwappedBefore = true;
+            }
+            else if (IsInDenmark(Swap(ConvertFromUtm(point, "N", 33))))
+            {
+                crs = new CoordinateReferenceSystem("N", 33);
+                crs.CoordsAreSwappedAfter = true;
+            }
+            else if (IsInDenmark(Swap(ConvertFromUtm(point, "N", 32))))
+            {
+                crs = new CoordinateReferenceSystem("N", 32);
+                crs.CoordsAreSwappedAfter = true;
             }
 
 

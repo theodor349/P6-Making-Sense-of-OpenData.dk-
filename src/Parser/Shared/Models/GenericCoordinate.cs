@@ -23,8 +23,8 @@ namespace Shared.Models
                 return;
             
             var coordValues = (List<ObjectAttribute>)objectAttribute.Value;
-            double coord1 = Convert.ToDouble(coordValues[crs.CoordsAreSwapped ? 0 : 1].Value);
-            double coord2 = Convert.ToDouble(coordValues[crs.CoordsAreSwapped ? 1 : 0].Value);
+            double coord1 = Convert.ToDouble(coordValues[crs.CoordsAreSwappedBefore ? 1 : 0].Value);
+            double coord2 = Convert.ToDouble(coordValues[crs.CoordsAreSwappedBefore ? 0 : 1].Value);
             if (crs.IsWgs84)
             {
                 longitude = coord1;
@@ -35,6 +35,13 @@ namespace Shared.Models
                 var latlongformat = ConvertFromUtm(new GenericCoordinate(coord1, coord2), crs.GeodeticCrs, crs.UtmZoneLetter, crs.UtmZoneNumber);
                 longitude = latlongformat.longitude;
                 latitude = latlongformat.latitude;
+            }
+
+            if (crs.CoordsAreSwappedAfter)
+            {
+                var temp = longitude;
+                longitude = latitude;
+                latitude = temp;
             }
         }
 

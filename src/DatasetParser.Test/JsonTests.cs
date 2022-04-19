@@ -61,10 +61,11 @@ namespace DatasetParser.Test
 
             var ios = new List<IntermediateObject>() { new IntermediateObject(attrs) };
             var inputDataset = ModelFactory.GetDatasetObject(ios);
+            inputDataset.DatasetType = DatasetType.Parking;
 
             var setup = new TestSetup();
             var ParseToJson = setup.DatasetParser("json");
-            var res = ParseToJson.Parse(inputDataset, DatasetType.Parking, 1).Result;
+            var res = ParseToJson.Parse(inputDataset, 1).Result;
 
             res.ToString().Should().Be(expected.ToString());
         }
@@ -80,7 +81,7 @@ namespace DatasetParser.Test
                             new JProperty("type", "Feature"),
                             new JProperty("geometry",
                                 new JObject(
-                                    new JProperty("type", ObjectLabel.Line.ToString()),
+                                    new JProperty("type", ObjectLabel.LineString.ToString()),
                                     ModelFactory.ReturnLineProperty())),
                             new JProperty("properties", new JObject())))));
 
@@ -104,16 +105,17 @@ namespace DatasetParser.Test
             };
             var line = new ListAttribute("");
             ((List<ObjectAttribute>)line.Value).AddRange(coordsList);
-            line.Labels.Add(new LabelModel(ObjectLabel.Line));
+            line.Labels.Add(new LabelModel(ObjectLabel.LineString));
 
             List<ObjectAttribute> attrs = new List<ObjectAttribute>() { line };
 
             var ios = new List<IntermediateObject>() { new IntermediateObject(attrs) };
             var inputDataset = ModelFactory.GetDatasetObject(ios);
+            inputDataset.DatasetType = DatasetType.Parking;
 
             var setup = new TestSetup();
             var ParseToJson = setup.DatasetParser("json");
-            var res = ParseToJson.Parse(inputDataset, DatasetType.Parking, 1).Result;
+            var res = ParseToJson.Parse(inputDataset, 1).Result;
             string StrRes = res.ToString();
 
             res.ToString().Should().Be(expected.ToString());
