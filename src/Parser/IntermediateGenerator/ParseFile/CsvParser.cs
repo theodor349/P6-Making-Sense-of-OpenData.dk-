@@ -118,8 +118,8 @@ namespace DatasetGenerator.ParseFile
                 var value = doubleMatches[i].Value;
                 doubles.Add(value.Replace(',', '.'));
             }
-            var latitude = new DoubleAttribute("Double", double.Parse(doubles[1], NumberStyles.Any, CultureInfo.InvariantCulture));
-            var longitude = new DoubleAttribute("Double", double.Parse(doubles[0], NumberStyles.Any, CultureInfo.InvariantCulture));
+            var latitude = new DoubleAttribute("Double", double.Parse(doubles[0], NumberStyles.Any, CultureInfo.InvariantCulture));
+            var longitude = new DoubleAttribute("Double", double.Parse(doubles[1], NumberStyles.Any, CultureInfo.InvariantCulture));
             var point = new ListAttribute("Point", new List<ObjectAttribute>() { longitude, latitude });
             return point;
         }

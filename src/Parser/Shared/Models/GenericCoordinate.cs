@@ -23,16 +23,24 @@ namespace Shared.Models
                 return;
             
             var coordValues = (List<ObjectAttribute>)objectAttribute.Value;
-            double coord1 = Convert.ToDouble(coordValues[crs.CoordsAreSwappedBefore ? 0 : 1].Value);
-            double coord2 = Convert.ToDouble(coordValues[crs.CoordsAreSwappedBefore ? 1 : 0].Value);
+            double coordLong = Convert.ToDouble(coordValues[0].Value);
+            double coordLati = Convert.ToDouble(coordValues[1].Value);
+
+            if (crs.CoordsAreSwappedBefore)
+            {
+                var temp = coordLong;
+                coordLong = coordLati;
+                coordLati = temp;
+            }
+
             if (crs.IsWgs84)
             {
-                longitude = coord1;
-                latitude = coord2;
+                longitude = coordLong;
+                latitude = coordLati;
             }
             else if (crs.IsUtm)
             {
-                var latlongformat = ConvertFromUtm(new GenericCoordinate(coord1, coord2), crs.GeodeticCrs, crs.UtmZoneLetter, crs.UtmZoneNumber);
+                var latlongformat = ConvertFromUtm(new GenericCoordinate(coordLong, coordLati), crs.GeodeticCrs, crs.UtmZoneLetter, crs.UtmZoneNumber);
                 longitude = latlongformat.longitude;
                 latitude = latlongformat.latitude;
             }
@@ -50,7 +58,7 @@ namespace Shared.Models
 
             if (utmZoneLetter != null && utmZoneNumber != null)
             {
-                UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZoneLetter, (int)utmZoneNumber, coord.latitude, coord.longitude);
+                UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZoneLetter, (int)utmZoneNumber, coord.longitude, coord.latitude);
                 var latlongformat = UniversalTransverseMercator.ConvertUTMtoLatLong(utm);
 
                 coord.longitude = latlongformat.Latitude.ToDouble();

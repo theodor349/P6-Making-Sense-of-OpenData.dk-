@@ -125,9 +125,9 @@ namespace PostProcessing.Helpers
         private Tuple<double, double> GetPointData(ListAttribute point)
         {
             var list = (List<ObjectAttribute>)point.Value;
-            var coord0 = (double)list[0].Value;
-            var coord1 = (double)list[1].Value;
-            return new Tuple<double, double>(coord0, coord1);
+            var coordLong = (double)list[0].Value;
+            var coordLati = (double)list[1].Value;
+            return new Tuple<double, double>(coordLong, coordLati);
         }
 
         private ListAttribute? GetFirstPoint(ObjectAttribute attr)
