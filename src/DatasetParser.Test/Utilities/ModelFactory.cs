@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Shared.Models;
 using Shared.Models.ObjectAttributes;
 using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace DatasetParser.Test.Utilities
 {
@@ -71,6 +72,12 @@ namespace DatasetParser.Test.Utilities
             coords.Add(new JArray(1.5, 1.6));
             JProperty JProp = new JProperty("coordinates", coords);
             return JProp;
+        }
+
+        internal static void AddCrs(DatasetObject inputDataset)
+        {
+            var crs = new CoordinateReferenceSystem(true);
+            inputDataset.Properties.Add("CoordinateReferenceSystem", JsonSerializer.Serialize(crs));
         }
     }
 }

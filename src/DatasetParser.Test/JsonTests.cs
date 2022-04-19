@@ -62,6 +62,7 @@ namespace DatasetParser.Test
             var ios = new List<IntermediateObject>() { new IntermediateObject(attrs) };
             var inputDataset = ModelFactory.GetDatasetObject(ios);
             inputDataset.DatasetType = DatasetType.Parking;
+            ModelFactory.AddCrs(inputDataset);
 
             var setup = new TestSetup();
             var ParseToJson = setup.DatasetParser("json");
@@ -112,8 +113,9 @@ namespace DatasetParser.Test
             var ios = new List<IntermediateObject>() { new IntermediateObject(attrs) };
             var inputDataset = ModelFactory.GetDatasetObject(ios);
             inputDataset.DatasetType = DatasetType.Parking;
+            ModelFactory.AddCrs(inputDataset);
 
-            var setup = new TestSetup();
+            var setup = new TestSetup(); 
             var ParseToJson = setup.DatasetParser("json");
             var res = ParseToJson.Parse(inputDataset, 1).Result;
             string StrRes = res.ToString();

@@ -22,8 +22,9 @@ namespace DatasetParser
 
         private Shared.Models.GenericCoordinate firstCoordinate;
 
-        private CoordinateReferenceSystem? crs;
+        private CoordinateReferenceSystem? _crs;
         private DatasetType datasetType;
+        private bool _useRightHandRule;
 
         public ParseToJson(IConfiguration configuration)
         {
@@ -38,7 +39,7 @@ namespace DatasetParser
         {
             datasetType = dataset.DatasetType;
             if (dataset.HasProperty("CoordinateReferenceSystem"))
-                crs = JsonSerializer.Deserialize<CoordinateReferenceSystem>(dataset.GetProperty("CoordinateReferenceSystem"));
+                _crs = JsonSerializer.Deserialize<CoordinateReferenceSystem>(dataset.GetProperty("CoordinateReferenceSystem"));
             
             var GeoJson = new JObject(
                 new JProperty("type", "FeatureCollection"),
@@ -78,7 +79,6 @@ namespace DatasetParser
             {
                 geoObjects.Add(geoObj);
             }
-
             else if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.List)))
             {
                 List<JObject> newGeoObjects = CheckObjAttrForGeoObjects((List<ObjectAttribute>)objAttr.Value);
@@ -132,6 +132,7 @@ namespace DatasetParser
         {
             if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
             {
+                _useRightHandRule = true;
                 return GetObjectWithCoordinates(objAttr, ObjectLabel.Polygon.ToString());
             }
             if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.LineString)))
@@ -206,9 +207,10 @@ namespace DatasetParser
 
                 foreach (var coord in (List<ObjectAttribute>)objAttr.Value)
                 {
-                    coords.Add(new GenericCoordinate(coord, crs));
+                    coords.Add(new GenericCoordinate(coord, _crs));
                 }
-                coords = GenericCoordinate.SortAccordingToRightHandRule(coords);
+                if(_useRightHandRule)
+                    coords = GenericCoordinate.SortAccordingToRightHandRule(coords);
                 foreach (var gCoord in coords)
                 {
                     jArray.Add(new JArray(gCoord.latitude, gCoord.longitude));
@@ -229,7 +231,9 @@ namespace DatasetParser
             {
                 coords.Add(GetCoordinate(coord));
             }
-            coords = GenericCoordinate.SortAccordingToRightHandRule(coords);
+
+            if(_useRightHandRule)
+                coords = GenericCoordinate.SortAccordingToRightHandRule(coords);
 
             foreach(GenericCoordinate coord in coords)
             {
@@ -243,7 +247,7 @@ namespace DatasetParser
         private GenericCoordinate GetCoordinate(ObjectAttribute coord)
         {
             GenericCoordinate genericCoord;
-            genericCoord = new GenericCoordinate(coord, crs);
+            genericCoord = new GenericCoordinate(coord, _crs);
             return genericCoord;
         }
     }

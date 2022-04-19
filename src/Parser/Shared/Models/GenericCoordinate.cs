@@ -23,8 +23,8 @@ namespace Shared.Models
                 return;
             
             var coordValues = (List<ObjectAttribute>)objectAttribute.Value;
-            double coord1 = Convert.ToDouble(coordValues[crs.CoordsAreSwappedBefore ? 1 : 0].Value);
-            double coord2 = Convert.ToDouble(coordValues[crs.CoordsAreSwappedBefore ? 0 : 1].Value);
+            double coord1 = Convert.ToDouble(coordValues[crs.CoordsAreSwappedBefore ? 0 : 1].Value);
+            double coord2 = Convert.ToDouble(coordValues[crs.CoordsAreSwappedBefore ? 1 : 0].Value);
             if (crs.IsWgs84)
             {
                 longitude = coord1;
