@@ -21,7 +21,7 @@ namespace LabelRecognizer
         public Task AssignLabels(DatasetObject dataset)
         {
            // FindSynonym("blomst", LookupLanguages.DK);
-           // FindSynonym("park", LookupLanguages.ENG);
+            FindSynonym("park", LookupLanguages.ENG);
 
             foreach (var obj in dataset.Objects)
             {
@@ -82,8 +82,8 @@ namespace LabelRecognizer
         {
             if (lang == LookupLanguages.DK)
             {
-                Hunspell hunspellDanish = new Hunspell("da_dk.aff", "da_dk.dic");
-                MyThes thesDanish = new MyThes("th_da_dk.dat");
+                Hunspell hunspellDanish = new Hunspell("Dictionaries/da_dk.aff", "Dictionaries/da_dk.dic");
+                MyThes thesDanish = new MyThes("Dictionaries/th_da_dk.dat");
 
                 ThesResult resDanish = thesDanish.Lookup(inputWord, hunspellDanish);
                 if (resDanish.IsGenerated)
@@ -102,8 +102,8 @@ namespace LabelRecognizer
             } 
             else if (lang == LookupLanguages.ENG)
             {
-                Hunspell hunspellEnglish = new Hunspell("en_us.aff", "en_us.dic");
-                MyThes thesEnglish = new MyThes("th_en_us_v2.dat");
+                Hunspell hunspellEnglish = new Hunspell("Dictionaries/en_us.aff", "Dictionaries/en_us.dic");
+                MyThes thesEnglish = new MyThes("Dictionaries/th_en_us_v2.dat");
 
                 ThesResult resEnglish = thesEnglish.Lookup(inputWord, hunspellEnglish);
                 if (resEnglish.IsGenerated)
