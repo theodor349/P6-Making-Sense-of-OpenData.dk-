@@ -141,6 +141,7 @@ namespace DatasetParser
             }
             if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.MultiPoint)))
             {
+                _useRightHandRule = true;
                 return GetObjectWithCoordinates(objAttr, ObjectLabel.MultiPoint.ToString());
             }
             if (objAttr.HasLabel(ObjectLabel.Point))
@@ -165,6 +166,7 @@ namespace DatasetParser
             }
             if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.MultiPoint)))
             {
+                _useRightHandRule = true;
                 return GetObjectWithCoordinates(objAttr, ObjectLabel.MultiPoint.ToString());
             }
             if (objAttr.HasLabel(ObjectLabel.Point))
@@ -197,7 +199,7 @@ namespace DatasetParser
             else if (objAttr.HasLabel(ObjectLabel.Point))
             {
                 GenericCoordinate coord = GetCoordinate(objAttr);
-                JArray jArray = new JArray(coord.latitude, coord.longitude);
+                JArray jArray = new JArray(coord.Longitude, coord.Latitude);
                 return new JProperty("coordinates", jArray);
             }
             else
@@ -213,7 +215,7 @@ namespace DatasetParser
                     coords = GenericCoordinate.SortAccordingToRightHandRule(coords);
                 foreach (var gCoord in coords)
                 {
-                    jArray.Add(new JArray(gCoord.latitude, gCoord.longitude));
+                    jArray.Add(new JArray(gCoord.Longitude, gCoord.Latitude));
                 }
 
                 return new JProperty("coordinates", jArray);
@@ -237,7 +239,7 @@ namespace DatasetParser
 
             foreach(GenericCoordinate coord in coords)
             {
-                coordinates.Add(new JArray(coord.latitude, coord.longitude));
+                coordinates.Add(new JArray(coord.Longitude, coord.Latitude));
             }
 
             jArray.Add(coordinates);

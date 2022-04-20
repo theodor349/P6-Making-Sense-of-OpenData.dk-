@@ -8,13 +8,13 @@ namespace Shared.Models
 
     public struct GenericCoordinate 
     {
-        public double latitude = 0;
-        public double longitude = 0;
+        public double Latitude = 0;
+        public double Longitude = 0;
 
         public GenericCoordinate(double latitude, double longitude)
         {
-            this.latitude = latitude;
-            this.longitude = longitude;
+            this.Latitude = latitude;
+            this.Longitude = longitude;
         }
 
         public GenericCoordinate(ObjectAttribute objectAttribute, CoordinateReferenceSystem crs)
@@ -35,21 +35,21 @@ namespace Shared.Models
 
             if (crs.IsWgs84)
             {
-                longitude = coordLong;
-                latitude = coordLati;
+                Longitude = coordLong;
+                Latitude = coordLati;
             }
             else if (crs.IsUtm)
             {
                 var latlongformat = ConvertFromUtm(new GenericCoordinate(coordLong, coordLati), crs.GeodeticCrs, crs.UtmZoneLetter, crs.UtmZoneNumber);
-                longitude = latlongformat.longitude;
-                latitude = latlongformat.latitude;
+                Longitude = latlongformat.Longitude;
+                Latitude = latlongformat.Latitude;
             }
 
             if (crs.CoordsAreSwappedAfter)
             {
-                var temp = longitude;
-                longitude = latitude;
-                latitude = temp;
+                var temp = Longitude;
+                Longitude = Latitude;
+                Latitude = temp;
             }
         }
 
@@ -58,11 +58,11 @@ namespace Shared.Models
 
             if (utmZoneLetter != null && utmZoneNumber != null)
             {
-                UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZoneLetter, (int)utmZoneNumber, coord.longitude, coord.latitude);
+                UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZoneLetter, (int)utmZoneNumber, coord.Longitude, coord.Latitude);
                 var latlongformat = UniversalTransverseMercator.ConvertUTMtoLatLong(utm);
 
-                coord.longitude = latlongformat.Latitude.ToDouble();
-                coord.latitude = latlongformat.Longitude.ToDouble();
+                coord.Longitude = latlongformat.Latitude.ToDouble();
+                coord.Latitude = latlongformat.Longitude.ToDouble();
                 return coord;
             }
             else
@@ -76,7 +76,7 @@ namespace Shared.Models
             try
             {
                 var other = (GenericCoordinate)obj;
-                if (other.longitude == longitude && other.latitude == latitude)
+                if (other.Longitude == Longitude && other.Latitude == Latitude)
                     return true;
                 else
                     return false;
@@ -92,9 +92,9 @@ namespace Shared.Models
             double sum = 0;
             for (var i = 0; i < (coords.Count - 1); i++)
             {
-                sum += (coords[i + 1].latitude - coords[i].latitude) * (coords[i + 1].longitude + coords[i].longitude);
+                sum += (coords[i + 1].Latitude - coords[i].Latitude) * (coords[i + 1].Longitude + coords[i].Longitude);
             }
-            if (sum > 0)
+            if (sum < 0)
             {
                 coords.Reverse();
             }

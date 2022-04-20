@@ -34,7 +34,7 @@ namespace Shared.Models
         public CoordinateReferenceSystem(string urnString)
         {
             if (urnString.Contains("CRS84", StringComparison.InvariantCultureIgnoreCase))
-                IsWgs84 = CoordsAreSwappedBefore = true;
+                IsWgs84 = true;
             else if (urnString.Contains("EPSG", StringComparison.InvariantCultureIgnoreCase))
                 HandleEpsg(urnString);
             else
@@ -56,6 +56,8 @@ namespace Shared.Models
             {
                 UtmZoneNumber = 32;
                 UtmZoneLetter = "N";
+                CoordsAreSwappedBefore = true;
+                CoordsAreSwappedAfter = true;
             }
             else if (urnString.Contains("25833", StringComparison.InvariantCultureIgnoreCase))
             {

@@ -104,9 +104,9 @@ namespace PostProcessing.Helpers
 
         private bool IsInDenmark(Tuple<double, double> point)
         {
-            if (point.Item1 < 54 || 58 < point.Item1)
+            if (point.Item1 < 6 || 16 < point.Item1)
                 return false;
-            if (point.Item2 < 6 || 16 < point.Item2)
+            if (point.Item2 < 54 || 58 < point.Item2)
                 return false;
             return true;
         }
@@ -132,6 +132,7 @@ namespace PostProcessing.Helpers
 
         private ListAttribute? GetFirstPoint(ObjectAttribute attr)
         {
+            ListAttribute point = null;
             if (attr.GetType() == typeof(ListAttribute))
             {
                 if (attr.HasLabel(ObjectLabel.Point))
@@ -142,11 +143,13 @@ namespace PostProcessing.Helpers
                 {
                     foreach (var a in (List<ObjectAttribute>)attr.Value)
                     {
-                        return GetFirstPoint(a);
+                        point = GetFirstPoint(a);
+                        if (point != null)
+                            return point;
                     }
                 }
             }
-            return null;
+            return point;
         }
     }
 }
