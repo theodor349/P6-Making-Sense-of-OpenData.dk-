@@ -36,12 +36,12 @@ namespace PostProcessing.Helpers
         {
             var point = GetFirstPoint(dataset.Objects.FirstOrDefault());
             if (point != null)
-                InferCoordinateReferenceSystem(dataset, point);
+                InferCoordinateReferenceSystem(dataset, (GenericCoordinate)point);
             else
                 _logger.LogWarning("Unable to find a any points");
         }
 
-        private void InferCoordinateReferenceSystem(DatasetObject dataset, Tuple<double, double> point)
+        private void InferCoordinateReferenceSystem(DatasetObject dataset, GenericCoordinate point)
         {
             CoordinateReferenceSystem? crs = null;
             if (IsInDenmark(point))
@@ -81,6 +81,15 @@ namespace PostProcessing.Helpers
                 crs = new CoordinateReferenceSystem("N", 32);
                 crs.CoordsAreSwappedAfter = true;
             }
+            else if (IsInDenmark(ConvertFromUtm(point, "V", 32)))
+            {
+                crs = new CoordinateReferenceSystem("V", 32);
+            }
+            else if (IsInDenmark(ConvertFromUtm(Swap(point), "V", 32)))
+            {
+                crs = new CoordinateReferenceSystem("V", 32);
+                crs.CoordsAreSwappedBefore = true;
+            }
 
 
             if (crs != null)
@@ -89,29 +98,29 @@ namespace PostProcessing.Helpers
                 _logger.LogWarning("Unable to identify the Coordinate Reference System");
         }
 
-        private static Tuple<double, double> Swap(Tuple<double, double> point)
+        private static GenericCoordinate Swap(GenericCoordinate point)
         {
-            return new Tuple<double, double>(point.Item2, point.Item1);
+            return new GenericCoordinate(point.Longitude, point.Latitude);
         }
 
-        private Tuple<double, double> ConvertFromUtm(Tuple<double, double> point, string utmLetter, int utmNumber)
+        private GenericCoordinate ConvertFromUtm(GenericCoordinate point, string utmLetter, int utmNumber)
         {
-            UniversalTransverseMercator utm = new UniversalTransverseMercator(utmLetter, utmNumber, point.Item1, point.Item2);
+            UniversalTransverseMercator utm = new UniversalTransverseMercator(utmLetter, utmNumber, point.Longitude, point.Latitude);
             var latlongformat = UniversalTransverseMercator.ConvertUTMtoLatLong(utm);
 
-            return new Tuple<double, double>(latlongformat.Longitude.ToDouble(), latlongformat.Latitude.ToDouble());
+            return new GenericCoordinate(latlongformat.Latitude.ToDouble(), latlongformat.Longitude.ToDouble());
         }
 
-        private bool IsInDenmark(Tuple<double, double> point)
+        private bool IsInDenmark(GenericCoordinate point)
         {
-            if (point.Item1 < 6 || 16 < point.Item1)
+            if (point.Longitude < 6 || 16 < point.Longitude)
                 return false;
-            if (point.Item2 < 54 || 58 < point.Item2)
+            if (point.Latitude < 54 || 58 < point.Latitude)
                 return false;
             return true;
         }
 
-        private Tuple<double, double>? GetFirstPoint(IntermediateObject? intermediateObject)
+        private GenericCoordinate? GetFirstPoint(IntermediateObject? intermediateObject)
         {
             foreach (var attr in intermediateObject.Attributes)
             {
@@ -122,12 +131,15 @@ namespace PostProcessing.Helpers
             return null;
         }
 
-        private Tuple<double, double> GetPointData(ListAttribute point)
+        private GenericCoordinate GetPointData(ListAttribute point)
         {
             var list = (List<ObjectAttribute>)point.Value;
             var coordLong = (double)list[0].Value;
             var coordLati = (double)list[1].Value;
-            return new Tuple<double, double>(coordLong, coordLati);
+            Console.WriteLine("Long: " + coordLong);
+            Console.WriteLine("Lati: " + coordLati);
+            Console.WriteLine();
+            return new GenericCoordinate(coordLati, coordLong);
         }
 
         private ListAttribute? GetFirstPoint(ObjectAttribute attr)
