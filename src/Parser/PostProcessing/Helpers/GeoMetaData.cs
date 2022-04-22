@@ -132,11 +132,6 @@ namespace PostProcessing.Helpers
                 return false;
             if (point.Latitude <= _targetLowerRight.Latitude || point.Latitude >= _targetUpperLeft.Latitude)
                 return false;
-
-            if (point.Longitude < 6 || 16 < point.Longitude)
-                return false;
-            if (point.Latitude < 54 || 58 < point.Latitude)
-                return false;
             return true;
         }
 
