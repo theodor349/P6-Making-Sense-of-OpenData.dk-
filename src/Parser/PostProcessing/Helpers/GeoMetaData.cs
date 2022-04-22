@@ -136,9 +136,7 @@ namespace PostProcessing.Helpers
             var list = (List<ObjectAttribute>)point.Value;
             var coordLong = (double)list[0].Value;
             var coordLati = (double)list[1].Value;
-            Console.WriteLine("Long: " + coordLong);
-            Console.WriteLine("Lati: " + coordLati);
-            Console.WriteLine();
+            Console.WriteLine("Long: " + coordLong + ", Lati: " + coordLati);
             return new GenericCoordinate(coordLati, coordLong);
         }
 

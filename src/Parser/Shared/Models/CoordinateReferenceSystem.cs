@@ -56,8 +56,6 @@ namespace Shared.Models
             {
                 UtmZoneNumber = 32;
                 UtmZoneLetter = "N";
-                CoordsAreSwappedBefore = true;
-                CoordsAreSwappedAfter = true;
             }
             else if (urnString.Contains("25833", StringComparison.InvariantCultureIgnoreCase))
             {
