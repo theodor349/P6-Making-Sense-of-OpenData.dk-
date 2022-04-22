@@ -51,7 +51,7 @@ namespace DatasetParser.Test.Utilities
             }
         }
 
-        internal static JProperty ReturnCoordinateProperty()
+        internal static JProperty ReturnPolygonProperty()
         {
             JArray coords = new JArray();
             coords.Add(new JArray(1.1, 1.2));
@@ -70,6 +70,13 @@ namespace DatasetParser.Test.Utilities
             coords.Add(new JArray(1.1, 1.2));
             coords.Add(new JArray(1.3, 1.4));
             coords.Add(new JArray(1.5, 1.6));
+            JProperty JProp = new JProperty("coordinates", coords);
+            return JProp;
+        }
+
+        internal static JProperty ReturnPointProperty()
+        {
+            JArray coords = new JArray(1.1, 1.2);
             JProperty JProp = new JProperty("coordinates", coords);
             return JProp;
         }
