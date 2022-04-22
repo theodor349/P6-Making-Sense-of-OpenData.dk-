@@ -25,6 +25,7 @@ namespace Shared.Models
             var coordValues = (List<ObjectAttribute>)objectAttribute.Value;
             double coordLong = Convert.ToDouble(coordValues[0].Value);
             double coordLati = Convert.ToDouble(coordValues[1].Value);
+            Console.WriteLine("Long: " + coordLong + ", Lati: " + coordLati);
 
             if (crs.CoordsAreSwappedBefore)
             {
@@ -61,8 +62,8 @@ namespace Shared.Models
                 UniversalTransverseMercator utm = new UniversalTransverseMercator(utmZoneLetter, (int)utmZoneNumber, coord.Longitude, coord.Latitude);
                 var latlongformat = UniversalTransverseMercator.ConvertUTMtoLatLong(utm);
 
-                coord.Longitude = latlongformat.Latitude.ToDouble();
-                coord.Latitude = latlongformat.Longitude.ToDouble();
+                coord.Latitude = latlongformat.Latitude.ToDouble();
+                coord.Longitude= latlongformat.Longitude.ToDouble();
                 return coord;
             }
             else
