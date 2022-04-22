@@ -23,5 +23,6 @@ namespace LabelRecognizer
     {
         public string? Language { get; set; }
         public List<string> Values { get; set; } = new List<string>();
+        public List<string> Synonyms { get; set; } = new List<string>();
     }
 }

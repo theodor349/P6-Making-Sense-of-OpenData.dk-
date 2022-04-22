@@ -16,16 +16,18 @@ namespace LabelRecognizer
         private readonly MyThes _thesDanish;
         private readonly Hunspell _hunspellEnglish;
         private readonly MyThes _thesEnglish;
-
+        private readonly List<string> _hasBeenSearchedDanish = new List<string>();
+        private readonly List<string> _hasBeenSearchedEnglish = new List<string>();
         public LabelNameLookupTable(IConfiguration configuration)
         {
             _configuration = configuration;
-            _lookupTable = GenerateLookuptable(configuration["Input:LabelNameLookupTablePath"]);
 
             _hunspellDanish = new Hunspell("Dictionaries/da_dk.aff", "Dictionaries/da_dk.dic");
             _hunspellEnglish = new Hunspell("Dictionaries/en_us.aff", "Dictionaries/en_us.dic");
             _thesDanish = new MyThes("Dictionaries/th_da_dk.dat");
             _thesEnglish = new MyThes("Dictionaries/th_en_us_v2.dat");
+
+            _lookupTable = GenerateLookuptable(configuration["Input:LabelNameLookupTablePath"]);
 
         }
         public Task AssignLabels(DatasetObject dataset)
@@ -45,7 +47,7 @@ namespace LabelRecognizer
 
         private void SetLabels(ObjectAttribute attr)
         {
-            if (ContainsPredefinedName(attr))
+            if (!ContainsPredefinedName(attr))
             {
                 AssignLabelFromLookup(attr);
             }
@@ -84,9 +86,9 @@ namespace LabelRecognizer
                 case "DateValue":
                 case "BytesValue":
                 case "DoubleValue":
-                    return false;
-                default:
                     return true;
+                default:
+                    return false;
             }
         }
 
@@ -103,20 +105,18 @@ namespace LabelRecognizer
         private List<Tuple<float, ObjectLabel>> Lookup(ObjectAttribute attr)
         {
             var list = new List<Tuple<float, ObjectLabel>>();
-            var hasBeenSearched = new List<string>();
 
             foreach (var target in _lookupTable.LookupTargets)
             {
                 bool targetFound = false;
                 foreach (var lang in target.Languages)
                 {
-                    if (targetFound == true)
+                    if (targetFound)
                     {
                         break;
                     }
                     foreach (var value in lang.Values)
                     {
-                        List<string> synonyms = new List<string>();
                         if (attr.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase))
                         {
                             list.Add(new Tuple<float, ObjectLabel>(1f, (ObjectLabel)Enum.Parse(typeof(ObjectLabel), target.Target)));
@@ -125,22 +125,18 @@ namespace LabelRecognizer
                         }
                         else
                         {
-                            if (lang.Language == "ENG" && !hasBeenSearched.Contains(attr.Name))
+                            foreach (var synonym in lang.Synonyms)
                             {
-                                synonyms = FindSynonyms(value, LookupLanguages.ENG);
-                                hasBeenSearched.Add(attr.Name);
-                            }
-                            else if (lang.Language == "DK" && !hasBeenSearched.Contains(attr.Name))
-                            {
-                                synonyms = FindSynonyms(value, LookupLanguages.DK);
-                                hasBeenSearched.Add(attr.Name);
-                            }
-                            foreach (var synonym in synonyms)
-                            {
-                                if (attr.Name.Contains(synonym, StringComparison.InvariantCultureIgnoreCase))
+                                if (attr.Name.Contains(synonym))
                                 {
                                     list.Add(new Tuple<float, ObjectLabel>(0.5f, (ObjectLabel)Enum.Parse(typeof(ObjectLabel), target.Target)));
+                                    targetFound = true;
+                                    break;
                                 }
+                            }
+                            if (targetFound)
+                            {
+                                break;
                             }
                         }  
                     }
@@ -149,44 +145,51 @@ namespace LabelRecognizer
             return list;
         }
 
-        public List<string> FindSynonyms(string inputWord, LookupLanguages lang)
-        {
-            List<string> listOfSynonyms = new List<string>();
-            if (lang == LookupLanguages.DK)
-            {   
-                ThesResult resDanish = _thesDanish.Lookup(inputWord, _hunspellDanish);
-                if (resDanish != null)
-                {
-                    foreach (ThesMeaning meaning in resDanish.Meanings)
-                    {
-                        foreach (string synonym in meaning.Synonyms)
-                        {
-                            listOfSynonyms.Add(synonym);
-                        }
-                    }
-                }
-            } 
-            else if (lang == LookupLanguages.ENG)
-            {
-                ThesResult resEnglish = _thesEnglish.Lookup(inputWord, _hunspellEnglish);
-                if (resEnglish != null)
-                {
-                    foreach (ThesMeaning meaning in resEnglish.Meanings)
-                    {
-                        foreach (string synonym in meaning.Synonyms)
-                        {
-                            listOfSynonyms.Add(synonym);
-                        }
-                    }
-                }
-            }
-            return listOfSynonyms;
-        }
-
         private LookupTable GenerateLookuptable(string lookupTablePath)
         {
             var json = File.ReadAllText(lookupTablePath);
             LookupTable? table = JsonSerializer.Deserialize<LookupTable>(json);
+
+            foreach (LookupTarget target in table.LookupTargets)
+            {
+                foreach (LanguageObject lang in target.Languages)
+                {
+                    if (lang.Language == LookupLanguages.DK.ToString())
+                    {
+                        foreach (var value in lang.Values)
+                        {
+                            ThesResult resDanish = _thesDanish.Lookup(value, _hunspellDanish);
+                            if (resDanish != null)
+                            {
+                                foreach (ThesMeaning meaning in resDanish.Meanings)
+                                {
+                                    foreach (string synonym in meaning.Synonyms)
+                                    {
+                                        lang.Synonyms.Add(synonym);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (lang.Language == LookupLanguages.ENG.ToString())
+                    {
+                        foreach (var value in lang.Values)
+                        {
+                            ThesResult resEnglish = _thesEnglish.Lookup(value, _hunspellEnglish);
+                            if (resEnglish != null)
+                            {
+                                foreach (ThesMeaning meaning in resEnglish.Meanings)
+                                {
+                                    foreach (string synonym in meaning.Synonyms)
+                                    {
+                                        lang.Synonyms.Add(synonym);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             return table;
         }
     }    
