@@ -40,7 +40,7 @@ namespace Shared.Models
             }
             else if (crs.IsUtm)
             {
-                var latlongformat = ConvertFromUtm(new GenericCoordinate(coordLong, coordLati), crs.GeodeticCrs, crs.UtmZoneLetter, crs.UtmZoneNumber);
+                var latlongformat = ConvertFromUtm(new GenericCoordinate(coordLati, coordLong), crs.GeodeticCrs, crs.UtmZoneLetter, crs.UtmZoneNumber);
                 Longitude = latlongformat.Longitude;
                 Latitude = latlongformat.Latitude;
             }
