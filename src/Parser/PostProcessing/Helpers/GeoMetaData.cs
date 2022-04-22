@@ -1,4 +1,5 @@
 ﻿using CoordinateSharp;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Shared.Models;
 using Shared.Models.ObjectAttributes;
@@ -19,10 +20,24 @@ namespace PostProcessing.Helpers
     internal class GeoMetaData : IGeoMetaData
     {
         private readonly ILogger<GeoMetaData> _logger;
+        private readonly IConfiguration _configuration;
 
-        public GeoMetaData(ILogger<GeoMetaData> logger)
+        private readonly GenericCoordinate _targetUpperLeft;
+        private readonly GenericCoordinate _targetLowerRight;
+
+        public GeoMetaData(ILogger<GeoMetaData> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
+
+            _targetUpperLeft = new GenericCoordinate(
+                double.Parse(_configuration["GeoMetaData:TargetArea:LatiMax"]),
+                double.Parse(_configuration["GeoMetaData:TargetArea:LongMin"])
+                );
+            _targetLowerRight = new GenericCoordinate(
+                double.Parse(_configuration["GeoMetaData:TargetArea:LatiMin"]),
+                double.Parse(_configuration["GeoMetaData:TargetArea:LongMax"])
+                );
         }
 
         public Task AssignGeoMetaData(DatasetObject dataset)
@@ -113,6 +128,11 @@ namespace PostProcessing.Helpers
 
         private bool IsInDenmark(GenericCoordinate point)
         {
+            if (point.Longitude <= _targetUpperLeft.Longitude || point.Longitude >= _targetLowerRight.Longitude)
+                return false;
+            if (point.Latitude <= _targetLowerRight.Latitude || point.Latitude >= _targetUpperLeft.Latitude)
+                return false;
+
             if (point.Longitude < 6 || 16 < point.Longitude)
                 return false;
             if (point.Latitude < 54 || 58 < point.Latitude)
