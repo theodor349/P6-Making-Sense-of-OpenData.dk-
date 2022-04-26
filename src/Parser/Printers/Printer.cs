@@ -18,7 +18,7 @@ namespace Printers
             _configuration = configuration;
         }
 
-        public Task Print(OutputDataset dataset)
+        public Task Print(OutputDataset dataset, int i)
         {
             throw new NotImplementedException();
         }
