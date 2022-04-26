@@ -20,7 +20,7 @@ namespace Printers
 
         public Task Print(OutputDataset dataset)
         {
-            
+            throw new NotImplementedException();
         }
     }
 }
