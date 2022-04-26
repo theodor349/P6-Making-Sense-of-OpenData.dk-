@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using OpenDataParser;
 using Serilog;
 using PostProcessing;
+using Printers;
 
 var builder = new ConfigurationBuilder();
 
@@ -28,6 +29,7 @@ var host = Host.CreateDefaultBuilder()
         services.AddDatasetParser();
         services.AddLabelRecognizer();
         services.AddPostProcessing();
+        services.AddPrinters();
     })
     .UseSerilog()
     .Build();

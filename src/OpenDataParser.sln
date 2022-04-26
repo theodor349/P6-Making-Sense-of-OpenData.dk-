@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LabelRecognizer.Tests", "Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatasetParser.Test", "DatasetParser.Test\DatasetParser.Test.csproj", "{F97DD281-D7EB-42DE-80F5-728D2BA01BE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostProcessing", "Parser\PostProcessing\PostProcessing.csproj", "{3383E79B-08BD-450F-88F8-853223287B41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostProcessing", "Parser\PostProcessing\PostProcessing.csproj", "{3383E79B-08BD-450F-88F8-853223287B41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Printers", "Parser\Printers\Printers.csproj", "{ED9720C8-9EE4-4F81-AB0A-991180075495}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,10 @@ Global
 		{3383E79B-08BD-450F-88F8-853223287B41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3383E79B-08BD-450F-88F8-853223287B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3383E79B-08BD-450F-88F8-853223287B41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED9720C8-9EE4-4F81-AB0A-991180075495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED9720C8-9EE4-4F81-AB0A-991180075495}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED9720C8-9EE4-4F81-AB0A-991180075495}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED9720C8-9EE4-4F81-AB0A-991180075495}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,6 +94,7 @@ Global
 		{891D75E3-2B89-4DB2-8477-7B7E004234E8} = {AF02912D-9C47-4138-85E8-86D6AAEE07FF}
 		{F97DD281-D7EB-42DE-80F5-728D2BA01BE0} = {AF02912D-9C47-4138-85E8-86D6AAEE07FF}
 		{3383E79B-08BD-450F-88F8-853223287B41} = {41D878AE-62BE-42C4-99E8-EFF9493A02C0}
+		{ED9720C8-9EE4-4F81-AB0A-991180075495} = {41D878AE-62BE-42C4-99E8-EFF9493A02C0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A553F2C4-4AA3-47A4-9FF5-C18E7C4E249F}
