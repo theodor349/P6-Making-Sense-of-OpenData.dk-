@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LabelRecognizer
 {
-    public class LookupTable
+    public class LabelerLookupTable
     {
         public List<LookupTarget> LookupTargets { get; set; } = new List<LookupTarget>();
     }

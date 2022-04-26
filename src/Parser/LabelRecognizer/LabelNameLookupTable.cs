@@ -11,7 +11,7 @@ namespace LabelRecognizer
     class LabelNameLookupTable : ILabelNameLookupTable
     {
         private readonly IConfiguration _configuration;
-        private readonly LookupTable _lookupTable;
+        private readonly LabelerLookupTable _lookupTable;
         private readonly Hunspell _hunspellDanish;
         private readonly MyThes _thesDanish;
         private readonly Hunspell _hunspellEnglish;
@@ -145,10 +145,10 @@ namespace LabelRecognizer
             return list;
         }
 
-        private LookupTable GenerateLookuptable(string lookupTablePath)
+        private LabelerLookupTable GenerateLookuptable(string lookupTablePath)
         {
             var json = File.ReadAllText(lookupTablePath);
-            LookupTable? table = JsonSerializer.Deserialize<LookupTable>(json);
+            LabelerLookupTable? table = JsonSerializer.Deserialize<LabelerLookupTable>(json);
 
             foreach (LookupTarget target in table.LookupTargets)
             {
