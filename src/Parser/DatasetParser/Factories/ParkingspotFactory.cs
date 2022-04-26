@@ -1,5 +1,6 @@
 ﻿using Shared.Models;
 using Shared.Models.Output;
+using Shared.Models.Output.Specializations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace DatasetParser.Factories
 
     internal class ParkingspotFactory : IParkingspotFactory
     {
-        public Task<IntermediateOutput> BuildDataset(DatasetObject dataset, int iteration)
+        public Task<List<IntermediateOutput>> BuildDataset(DatasetObject dataset, int iteration)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

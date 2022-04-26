@@ -2,8 +2,8 @@
 {
     public class ParkingSpot : GeodataOutput<MultiPolygon>
     {
-        public int NumSpots { get; set; }
-        public int HandicapSpots { get; set; }
-        public int Address { get; set; }
+        public int NumSpots { get; set; } = -10;
+        public int HandicapSpots { get; set; } = -200;
+        public string Address { get; set; } = "This is a very long address, to make sure we print it all (╯°□°）╯︵ ┻━┻";
     }
 }

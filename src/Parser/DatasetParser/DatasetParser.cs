@@ -20,14 +20,14 @@ namespace DatasetParser
             _parkingspotFactory = parkingspotFactory;
         }
 
-        public async Task<IntermediateOutput> Parse(DatasetObject dataset, int iteration)
+        public async Task<OutputDataset> Parse(DatasetObject dataset, int iteration)
         {
-            IntermediateOutput? res = null;
+            OutputDataset res = new OutputDataset(dataset.originalName, dataset.originalExtensionName);
             switch (dataset.DatasetType)
             {
                 case DatasetType.Parking:
                 case DatasetType.Routes:
-                    res = await _parkingspotFactory.BuildDataset(dataset, iteration);
+                    res.Objects = await _parkingspotFactory.BuildDataset(dataset, iteration);
                     break;
             }
             return res;

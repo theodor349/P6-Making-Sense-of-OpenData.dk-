@@ -5,6 +5,6 @@ namespace DatasetParser.Factories
 {
     public interface IDatasetOutputFactory
     {
-        Task<IntermediateOutput> BuildDataset(DatasetObject dataset, int iteration);
+        Task<List<IntermediateOutput>> BuildDataset(DatasetObject dataset, int iteration);
     }
 }
