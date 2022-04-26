@@ -75,7 +75,7 @@ namespace OpenDataParser
                 var output = await datasetParser.Parse(dataset, iteration);
                 _logger.LogInformation("Output generated");
 
-                PrintToFile(iteration, output, dataset);
+                //PrintToFile(iteration, output, dataset);
                 _logger.LogInformation("Output printed to file");
             }
         }

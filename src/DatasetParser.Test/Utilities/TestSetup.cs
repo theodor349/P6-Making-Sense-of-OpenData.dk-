@@ -16,12 +16,13 @@ namespace DatasetParser.Test.Utilities
 
         public DatasetParser DatasetParser(string dataType)
         {
-            switch (dataType) {
-                case "json":
-                    return new DatasetParser(new ParseToJson());
-                default:
-                    return new DatasetParser(new ParseToJson());
-            }
+            //switch (dataType) {
+            //    case "json":
+            //        return new DatasetParser(new ParseToJson());
+            //    default:
+            //        return new DatasetParser(new ParseToJson());
+            //}
+            return null;
         }
     }
 }

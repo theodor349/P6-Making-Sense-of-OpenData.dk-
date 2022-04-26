@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DatasetParser.Factories;
+using Newtonsoft.Json.Linq;
 using Shared.ComponentInterfaces;
 using Shared.Models;
+using Shared.Models.Output;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,24 +13,24 @@ namespace DatasetParser
 {
     public class DatasetParser : IDatasetParser
     {
-        private readonly IParseToJson _parseToJson;
+        private readonly IParkingspotFactory _parkingspotFactory;
 
-        public DatasetParser(IParseToJson parseToJson)
+        public DatasetParser(IParkingspotFactory parkingspotFactory)
         {
-            _parseToJson = parseToJson;
+            _parkingspotFactory = parkingspotFactory;
         }
 
-        public Task<JObject> Parse(DatasetObject dataset, int iteration)
+        public async Task<IntermediateOutput> Parse(DatasetObject dataset, int iteration)
         {
-            JObject? res = null;
+            IntermediateOutput? res = null;
             switch (dataset.DatasetType)
             {
                 case DatasetType.Parking:
                 case DatasetType.Routes:
-                    res = _parseToJson.ParseDatasetObjectToJson(dataset, iteration);
+                    res = await _parkingspotFactory.BuildDataset(dataset, iteration);
                     break;
             }
-            return Task.FromResult(res);
+            return res;
         }
     }
 }
