@@ -9,6 +9,6 @@ namespace Shared.ComponentInterfaces
 {
     public interface IPrinter
     {
-        Task Print(OutputDataset dataset);
+        Task Print(OutputDataset dataset, int iteration);
     }
 }

@@ -2,6 +2,6 @@
 {
     public class GeodataOutput<T> : IntermediateOutput where T : GeoFeature
     {
-        public List<T> GeoFeatures { get; set; } = new List<T>();
+        public T GeoFeatures { get; set; }
     }
 }
