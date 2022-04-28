@@ -1,3 +1,33 @@
 {
-
+  "TitleSpecification": 
+  [
+    {
+      "DatasetClassification": "Parking",
+      "Score": 1,
+      "Requirements": [
+        "Parking",
+        "Parkering"
+      ]
+    }
+  ],
+  "ContentSpecification": 
+  [
+    {
+      "DatasetClassification": "Parking",
+      "Score": 0.6,
+      "Requirements": [
+        "Parking",
+        "Point"
+      ]
+    },
+    {
+      "DatasetClassification": "Route",
+      "Score": 0.6,
+      "Requirements": [
+        "Route",
+        "Point"
+      ]
+    }
+  ],
+    "DefaultSpecification": "Parking"
 }

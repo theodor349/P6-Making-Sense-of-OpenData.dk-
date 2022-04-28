@@ -16,8 +16,6 @@ namespace LabelRecognizer
         private readonly MyThes _thesDanish;
         private readonly Hunspell _hunspellEnglish;
         private readonly MyThes _thesEnglish;
-        private readonly List<string> _hasBeenSearchedDanish = new List<string>();
-        private readonly List<string> _hasBeenSearchedEnglish = new List<string>();
         public LabelNameLookupTable(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -32,9 +30,6 @@ namespace LabelRecognizer
         }
         public Task AssignLabels(DatasetObject dataset)
         {
-           // FindSynonym("blomst", LookupLanguages.DK);
-           // FindSynonym("park", LookupLanguages.ENG);
-
             foreach (var obj in dataset.Objects)
             {
                 foreach (var attr in obj.Attributes)
