@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DatasetParser.Factories;
+using Microsoft.Extensions.DependencyInjection;
 using Shared.ComponentInterfaces;
 
 namespace DatasetParser
@@ -9,6 +10,7 @@ namespace DatasetParser
         {
             services.AddTransient<IDatasetParser, DatasetParser>();
             services.AddTransient<IParseToJson, ParseToJson>();
+            services.AddTransient<IParkingspotFactory, ParkingspotFactory>();
         }
     }
 }

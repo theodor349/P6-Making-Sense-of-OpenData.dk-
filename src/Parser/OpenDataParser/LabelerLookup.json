@@ -20,20 +20,66 @@
       ]
     },
     {
+      "Target": "Parking",
+      "Languages": [
+        {
+          "Language": "ENG",
+          "Values": [
+            "Parking Spot",
+            "Parking Lot"
+          ]
+        },
+        {
+          "Language": "DK",
+          "Values": [
+            "Holdeplads",
+            "Parkering"
+          ]
+        }
+      ]
+    },
+    {
+      "Target": "Route",
+      "Languages": [
+        {
+          "Language": "ENG",
+          "Values": [
+            "Trail",
+            "Path",
+            "Road",
+            "Track"
+          ]
+        },
+        {
+          "Language": "DK",
+          "Values": [
+            "Sti",
+            "Rute",
+            "Motionssti"
+          ]
+        }
+      ]
+    },
+    {
       "Target": "Address",
       "Languages": [
         {
           "Language": "ENG",
           "Values": [
             "Address",
-            "Adr"
+            "Adr",
+            "Location",
+            "Place"
           ]
         },
         {
           "Language": "DK",
           "Values": [
             "Addresse",
-            "Adr"
+            "Adr",
+            "Vej",
+            "Lokation",
+            "Placering"
           ]
         }
       ]
