@@ -55,7 +55,17 @@ namespace Printers.GeoJson
 
         private JObject GenerateProperties(IntermediateOutput io)
         {
-            return new JObject();
+            var root = new JObject();
+            
+            var geoProperties = typeof(GeodataOutput<GeoFeature>).GetProperties().ToLookup(y => y.Name);
+            var properties = io.GetType().GetProperties().Where(x => !geoProperties.Contains(x.Name)).ToArray();
+
+            foreach (var p in properties)
+            {
+                root.Add(new JProperty(p.Name, p.GetValue(io)));
+            }
+
+            return root;
         }
 
         private JObject GenerateGeometry(IntermediateOutput io)

@@ -13,91 +13,6 @@ using System.Reflection;
 
 namespace Printers.Tests
 {
-    public class temp
-    {
-        public async void Print(OutputDataset dataset, int iteration)
-        {
-            var features = new JArray();
-            var root = new JObject();
-            root.Add(new JProperty("type", "FeatureCollection"));
-            root.Add(new JProperty("features", features));
-
-
-            var expected = new JObject(
-                             new JProperty("type", "FeatureCollection"),
-                             new JProperty("features",
-                                new JArray(
-                                    new JObject(
-                                        new JProperty("type", "Feature"),
-                                        new JProperty("geometry",
-                                            new JObject(
-                                                new JProperty("type", "MultiPolygon"),
-                                                new JProperty("coordinates", new JArray(new JArray[]
-                                                    {
-                                                        new JArray(new JArray[]
-                                                        {
-                                                            new JArray(new JArray[]
-                                                            {
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                }),
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                })
-                                                            }),
-                                                            new JArray(new JArray[]
-                                                            {
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                }),
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                })
-                                                            })
-                                                        }),
-                                                        new JArray(new JArray[]
-                                                        {
-                                                            new JArray(new JArray[]
-                                                            {
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                }),
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                })
-                                                            }),
-                                                            new JArray(new JArray[]
-                                                            {
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                }),
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                })
-                                                            })
-                                                        })
-
-                                                })))),
-                                        new JProperty("properties", new JObject())))));
-        }
-    }
-
     class MultiPolygonPolygon : ISpecimenBuilder
     {
         public object Create(object request, ISpecimenContext context)
@@ -123,7 +38,64 @@ namespace Printers.Tests
     public class GeoJsonTests
     {
         [TestMethod]
-        public void Print_ParkingSpot_CorrectJObject()
+        public void Print_ParkingSpot_CorrectParkingData()
+        {
+            // Arange 
+            var fixture = new Fixture();
+            fixture.Customizations.Add(new MultiPolygonPolygon());
+            fixture.Customizations.Add(
+            new TypeRelay(
+                typeof(IntermediateOutput),
+                typeof(ParkingSpot)));
+
+            var dataset = fixture.Create<OutputDataset>();
+            var setup = new TestSetup();
+            JObject? res = null;
+            setup.OnPrintToFile(x => res = x);
+
+            // Act
+            var printer = setup.GeoJsonPrinter();
+            printer.Print(dataset, 0);
+
+            string s = res.ToString();
+
+            // Assert
+            res.Should().NotBeNull();
+            res.Children().Should().ContainEquivalentOf(new JProperty("type", "FeatureCollection"));
+            var children = GetIOs(res);
+            for (int i = 0; i < dataset.Objects.Count; i++)
+            {
+                VerifyIOData(dataset.Objects[i], children[i]);
+            }
+        }
+
+        private void VerifyIOData(IntermediateOutput intermediateOutput, JToken jToken)
+        {
+            var geoProperties = typeof(GeodataOutput<GeoFeature>).GetProperties().ToLookup(y => y.Name);
+            var expected = intermediateOutput.GetType().GetProperties();
+            expected = expected.Where(x => !geoProperties.Contains(x.Name)).ToArray();
+
+            var properties = jToken.Children().ToList()[2].ToList()[0].ToList().ConvertAll(x => (JProperty)x);
+
+            properties.Count.Should().Be(expected.Count());
+            foreach (var e in expected)
+            {
+                var v = e.GetValue(intermediateOutput).ToString();
+                bool found = false;
+                foreach (var p in properties)
+                {
+                    if (p.Name == e.Name)
+                    {
+                        p.Value.ToString().Should().Be(v);
+                        found = true;
+                    }
+                }
+                found.Should().BeTrue();
+            }
+        }
+
+        [TestMethod]
+        public void Print_ParkingSpot_CorrectMultiPolygon()
         {
             // Arange 
             var fixture = new Fixture();
@@ -148,7 +120,7 @@ namespace Printers.Tests
             var children = GetIOs(res);
             for (int i = 0; i < dataset.Objects.Count; i++)
             {
-                VerifyIO(dataset.Objects[i], children[i]);
+                VerifyIOMultiPolygon(dataset.Objects[i], children[i]);
             }
         }
 
@@ -157,14 +129,12 @@ namespace Printers.Tests
             return res.GetValue("features").Children().ToList();
         }
 
-        private void VerifyIO(IntermediateOutput intermediateOutput, JToken jToken)
+        private void VerifyIOMultiPolygon(IntermediateOutput intermediateOutput, JToken jToken)
         {
             if(intermediateOutput is GeodataOutput<MultiPolygon>)
             {
                 var io = (GeodataOutput<MultiPolygon>)intermediateOutput;
-                var type = jToken.Value<string>("type");
 
-                var children = jToken.Children().ToList();
                 var geometry = jToken.Children().ToList()[1].ToList()[0];
                 var multipolygonRoot = geometry.Children().ToList();
                 var multipolygon = multipolygonRoot.Children().ToList()[1];
