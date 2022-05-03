@@ -15,7 +15,7 @@ namespace DatasetDecider
     {
         private readonly IConfiguration _configuration;
         private readonly DatasetLookupTable _lookupTable;
-        private readonly List<ObjectLabel> _objectLabels = new List<ObjectLabel>();
+        private readonly List<string> _objectLabels = new List<string>();
         public DatasetClassifier(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -101,7 +101,7 @@ namespace DatasetDecider
             {
                 foreach (var req in contentSpecification.Requirements)
                 {
-                    if (_objectLabels.Contains((ObjectLabel)Enum.Parse(typeof(ObjectLabel), req)) == false)
+                    if (_objectLabels.Contains(req) == false)
                     {
                         reqMet = false;
                     }

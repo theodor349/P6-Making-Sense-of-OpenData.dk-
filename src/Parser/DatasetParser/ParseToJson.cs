@@ -79,7 +79,7 @@ namespace DatasetParser
             {
                 geoObjects.Add(geoObj);
             }
-            else if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.List)))
+            else if (objAttr.Labels.Contains(new LabelModel(PredefinedLabels.List)))
             {
                 List<JObject> newGeoObjects = CheckObjAttrForGeoObjects((List<ObjectAttribute>)objAttr.Value);
                 if (newGeoObjects != null)
@@ -104,7 +104,7 @@ namespace DatasetParser
                     geoObjects.Add(geoObj);
                 }
 
-                else if (obj.Labels.Contains(new LabelModel(ObjectLabel.List)))
+                else if (obj.Labels.Contains(new LabelModel(PredefinedLabels.List)))
                 {
                     List<JObject> newGeoObjects = CheckObjAttrForGeoObjects((List<ObjectAttribute>)obj.Value);
                     if (newGeoObjects != null)
@@ -130,23 +130,23 @@ namespace DatasetParser
 
         private JObject? ParkingAttrTagOrder(ObjectAttribute objAttr)
         {
-            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
+            if (objAttr.Labels.Contains(new LabelModel(PredefinedLabels.Polygon)))
             {
                 _useRightHandRule = true;
-                return GetObjectWithCoordinates(objAttr, ObjectLabel.Polygon.ToString());
+                return GetObjectWithCoordinates(objAttr, PredefinedLabels.Polygon);
             }
-            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.LineString)))
+            if (objAttr.Labels.Contains(new LabelModel(PredefinedLabels.LineString)))
             {
-                return GetObjectWithCoordinates(objAttr, ObjectLabel.LineString.ToString());
+                return GetObjectWithCoordinates(objAttr, PredefinedLabels.LineString);
             }
-            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.MultiPoint)))
+            if (objAttr.Labels.Contains(new LabelModel(PredefinedLabels.MultiPoint)))
             {
                 _useRightHandRule = true;
-                return GetObjectWithCoordinates(objAttr, ObjectLabel.MultiPoint.ToString());
+                return GetObjectWithCoordinates(objAttr, PredefinedLabels.MultiPoint);
             }
-            if (objAttr.HasLabel(ObjectLabel.Point))
+            if (objAttr.HasLabel(PredefinedLabels.Point))
             {
-                return GetObjectWithCoordinates(objAttr, ObjectLabel.Point.ToString());
+                return GetObjectWithCoordinates(objAttr, PredefinedLabels.Point);
             }
             else return null;
         }
@@ -154,24 +154,24 @@ namespace DatasetParser
         private JObject? RoutesAttrTagOrder(ObjectAttribute objAttr)
         {
 
-            if (objAttr.HasLabel(ObjectLabel.Polygon))
+            if (objAttr.HasLabel(PredefinedLabels.Polygon))
             {
-                objAttr.Labels.Remove(new LabelModel(ObjectLabel.Polygon));
-                objAttr.AddLabel(ObjectLabel.LineString, 1);
+                objAttr.Labels.Remove(new LabelModel(PredefinedLabels.Polygon));
+                objAttr.AddLabel(PredefinedLabels.LineString, 1);
             }
 
-            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.LineString)))
+            if (objAttr.Labels.Contains(new LabelModel(PredefinedLabels.LineString)))
             {
-                return GetObjectWithCoordinates(objAttr, ObjectLabel.LineString.ToString());
+                return GetObjectWithCoordinates(objAttr, PredefinedLabels.LineString);
             }
-            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.MultiPoint)))
+            if (objAttr.Labels.Contains(new LabelModel(PredefinedLabels.MultiPoint)))
             {
                 _useRightHandRule = true;
-                return GetObjectWithCoordinates(objAttr, ObjectLabel.MultiPoint.ToString());
+                return GetObjectWithCoordinates(objAttr, PredefinedLabels.MultiPoint);
             }
-            if (objAttr.HasLabel(ObjectLabel.Point))
+            if (objAttr.HasLabel(PredefinedLabels.Point))
             {
-                return GetObjectWithCoordinates(objAttr, ObjectLabel.Point.ToString());
+                return GetObjectWithCoordinates(objAttr, PredefinedLabels.Point);
             }
             else return null;
         }
@@ -192,11 +192,11 @@ namespace DatasetParser
 
         private JProperty GetCoordinateProperty(ObjectAttribute objAttr)
         {
-            if (objAttr.Labels.Contains(new LabelModel(ObjectLabel.Polygon)))
+            if (objAttr.Labels.Contains(new LabelModel(PredefinedLabels.Polygon)))
             {
                 return new JProperty("coordinates", GetCoordinates(objAttr));
             }
-            else if (objAttr.HasLabel(ObjectLabel.Point))
+            else if (objAttr.HasLabel(PredefinedLabels.Point))
             {
                 GenericCoordinate coord = GetCoordinate(objAttr);
                 JArray jArray = new JArray(coord.Longitude, coord.Latitude);

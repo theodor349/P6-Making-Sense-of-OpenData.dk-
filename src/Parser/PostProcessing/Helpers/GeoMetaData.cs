@@ -160,7 +160,7 @@ namespace PostProcessing.Helpers
             ListAttribute point = null;
             if (attr.GetType() == typeof(ListAttribute))
             {
-                if (attr.HasLabel(ObjectLabel.Point))
+                if (attr.HasLabel(PredefinedLabels.Point))
                 {
                     return (ListAttribute)attr;
                 }
