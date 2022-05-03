@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DatasetParser;
+using DatasetParser.Factories;
 
 namespace DatasetParser.Test.Utilities
 {
@@ -14,15 +15,9 @@ namespace DatasetParser.Test.Utilities
 
         }
 
-        public DatasetParser DatasetParser(string dataType)
+        internal ParkingspotFactory ParkingSpotFactory()
         {
-            //switch (dataType) {
-            //    case "json":
-            //        return new DatasetParser(new ParseToJson());
-            //    default:
-            //        return new DatasetParser(new ParseToJson());
-            //}
-            return null;
+            return new ParkingspotFactory(); 
         }
     }
 }

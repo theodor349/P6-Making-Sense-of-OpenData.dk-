@@ -30,26 +30,26 @@ namespace DatasetParser.Test.Utilities
             return res;
         }
 
-        internal static ObjectAttribute GetObjectAttr(string name, double value, ObjectLabel label)
-        {
-            switch (label)
-            {
-                case ObjectLabel.Null:
-                    return new NullAttribute(name);
-                case ObjectLabel.Text:
-                    return new TextAttribute(name, "Text");
-                case ObjectLabel.Long:
-                    return new LongAttribute(name, (long)value);
-                case ObjectLabel.Double:
-                    return new DoubleAttribute(name, value);
-                case ObjectLabel.Date:
-                    return new DateAttribute(name, DateTime.Now);
-                case ObjectLabel.List:
-                    return new ListAttribute(name);
-                default:
-                    throw new Exception("Label was not found " + label.ToString());
-            }
-        }
+        //internal static ObjectAttribute GetObjectAttr(string name, double value, ObjectLabel label)
+        //{
+        //    switch (label)
+        //    {
+        //        case ObjectLabel.Null:
+        //            return new NullAttribute(name);
+        //        case ObjectLabel.Text:
+        //            return new TextAttribute(name, "Text");
+        //        case ObjectLabel.Long:
+        //            return new LongAttribute(name, (long)value);
+        //        case ObjectLabel.Double:
+        //            return new DoubleAttribute(name, value);
+        //        case ObjectLabel.Date:
+        //            return new DateAttribute(name, DateTime.Now);
+        //        case ObjectLabel.List:
+        //            return new ListAttribute(name);
+        //        default:
+        //            throw new Exception("Label was not found " + label.ToString());
+        //    }
+        //}
 
         internal static JProperty ReturnPolygonProperty()
         {
