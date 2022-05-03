@@ -9,9 +9,116 @@ using Shared.Models.Output.Specializations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Printers.Tests
 {
+    public class temp
+    {
+        public async void Print(OutputDataset dataset, int iteration)
+        {
+            var features = new JArray();
+            var root = new JObject();
+            root.Add(new JProperty("type", "FeatureCollection"));
+            root.Add(new JProperty("features", features));
+
+
+            var expected = new JObject(
+                             new JProperty("type", "FeatureCollection"),
+                             new JProperty("features",
+                                new JArray(
+                                    new JObject(
+                                        new JProperty("type", "Feature"),
+                                        new JProperty("geometry",
+                                            new JObject(
+                                                new JProperty("type", "MultiPolygon"),
+                                                new JProperty("coordinates", new JArray(new JArray[]
+                                                    {
+                                                        new JArray(new JArray[]
+                                                        {
+                                                            new JArray(new JArray[]
+                                                            {
+                                                                new JArray(new JValue[]
+                                                                {
+                                                                    new JValue(552677.64679076),
+                                                                    new JValue(6191070.56990207),
+                                                                }),
+                                                                new JArray(new JValue[]
+                                                                {
+                                                                    new JValue(552677.64679076),
+                                                                    new JValue(6191070.56990207),
+                                                                })
+                                                            }),
+                                                            new JArray(new JArray[]
+                                                            {
+                                                                new JArray(new JValue[]
+                                                                {
+                                                                    new JValue(552677.64679076),
+                                                                    new JValue(6191070.56990207),
+                                                                }),
+                                                                new JArray(new JValue[]
+                                                                {
+                                                                    new JValue(552677.64679076),
+                                                                    new JValue(6191070.56990207),
+                                                                })
+                                                            })
+                                                        }),
+                                                        new JArray(new JArray[]
+                                                        {
+                                                            new JArray(new JArray[]
+                                                            {
+                                                                new JArray(new JValue[]
+                                                                {
+                                                                    new JValue(552677.64679076),
+                                                                    new JValue(6191070.56990207),
+                                                                }),
+                                                                new JArray(new JValue[]
+                                                                {
+                                                                    new JValue(552677.64679076),
+                                                                    new JValue(6191070.56990207),
+                                                                })
+                                                            }),
+                                                            new JArray(new JArray[]
+                                                            {
+                                                                new JArray(new JValue[]
+                                                                {
+                                                                    new JValue(552677.64679076),
+                                                                    new JValue(6191070.56990207),
+                                                                }),
+                                                                new JArray(new JValue[]
+                                                                {
+                                                                    new JValue(552677.64679076),
+                                                                    new JValue(6191070.56990207),
+                                                                })
+                                                            })
+                                                        })
+
+                                                })))),
+                                        new JProperty("properties", new JObject())))));
+        }
+    }
+
+    class MultiPolygonPolygon : ISpecimenBuilder
+    {
+        public object Create(object request, ISpecimenContext context)
+        {
+            if (request is Type type && type == typeof(Polygon))
+            {
+                return new Polygon()
+                {
+                    Coordinates = new List<Point>()
+                    {
+                        context.Create<Point>(),
+                        context.Create<Point>(),
+                        context.Create<Point>(),
+                        context.Create<Point>(),
+                    }
+                };
+            }
+            return new NoSpecimen();
+        }
+    }
+
     [TestClass]
     public class GeoJsonTests
     {
@@ -20,6 +127,7 @@ namespace Printers.Tests
         {
             // Arange 
             var fixture = new Fixture();
+            fixture.Customizations.Add(new MultiPolygonPolygon());
             fixture.Customizations.Add(
             new TypeRelay(
                 typeof(IntermediateOutput),
@@ -70,18 +178,22 @@ namespace Printers.Tests
 
         private void VerifyPolygon(Polygon expected, JToken polygon)
         {
+            VerifyLineRing(expected, polygon[0]);
+        }
+
+        private void VerifyLineRing(Polygon expected, JToken? lineRing)
+        {
             for (int i = 0; i < expected.Coordinates.Count; i++)
             {
-                VerifyPoint(expected.Coordinates[i], polygon[i]);
+                VerifyPoint(expected.Coordinates[i], lineRing[i]);
             }
         }
 
         private void VerifyPoint(Point expected, JToken? point)
         {
-            var coords = point[0].Children().ToList();
-            var coord0 = coords[0];
-            var v0 = ((double)coord0.Children().ToList()[0]);
-            var v1 = ((double)coord0.Children().ToList()[1]);
+            var coords = point.Children().ToList();
+            var v0 = ((double)coords[0]);
+            var v1 = ((double)coords[1]);
             v0.Should().Be(expected.Longitude);
             v1.Should().Be(expected.Latitude);
         }

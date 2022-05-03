@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Shared.ComponentInterfaces;
 using Shared.Models.Output;
+using Shared.Models.Output.Specializations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,81 +22,95 @@ namespace Printers.GeoJson
 
         public async Task Print(OutputDataset dataset, int iteration)
         {
-            var expected = new JObject(
-                             new JProperty("type", "FeatureCollection"),
-                             new JProperty("features",
-                                new JArray(
-                                    new JObject(
-                                        new JProperty("type", "Feature"),
-                                        new JProperty("geometry",
-                                            new JObject(
-                                                new JProperty("type", "Multipolygon"),
-                                                new JProperty("coordinates", new JArray(new JArray[]
-                                                    {
-                                                        new JArray(new JArray[]
-                                                        {
-                                                            new JArray(new JArray[]
-                                                            {
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                }),
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                })
-                                                            }),
-                                                            new JArray(new JArray[]
-                                                            {
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                }),
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                })
-                                                            })
-                                                        }),
-                                                                                                                new JArray(new JArray[]
-                                                        {
-                                                            new JArray(new JArray[]
-                                                            {
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                }),
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                })
-                                                            }),
-                                                            new JArray(new JArray[]
-                                                            {
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                }),
-                                                                new JArray(new JValue[]
-                                                                {
-                                                                    new JValue(552677.64679076),
-                                                                    new JValue(6191070.56990207),
-                                                                })
-                                                            })
-                                                        })
+            var features = GenerateFeatures(dataset);
 
-                                                })))),
-                                        new JProperty("properties", new JObject())))));
+            var root = new JObject();
+            root.Add(new JProperty("type", "FeatureCollection"));
+            root.Add(new JProperty("features", features));
 
-            var json = expected.ToString();
-            await _filePrinter.Print(dataset, expected, iteration);
+            await _filePrinter.Print(dataset, root, iteration);
+        }
+
+        private JArray GenerateFeatures(OutputDataset dataset)
+        {
+            var features = new JArray();
+            foreach (var io in dataset.Objects)
+            {
+                features.Add(GenerateFeature(io));
+            }
+            return features;
+        }
+
+        private JObject GenerateFeature(IntermediateOutput io)
+        {
+            var geometry = GenerateGeometry(io);
+            var properties = GenerateProperties(io);
+
+            var root = new JObject();
+            root.Add(new JProperty("type", "Feature"));
+            root.Add(new JProperty("geometry", geometry));
+            root.Add(new JProperty("properties", properties));
+            return root;
+        }
+
+        private JObject GenerateProperties(IntermediateOutput io)
+        {
+            return new JObject();
+        }
+
+        private JObject GenerateGeometry(IntermediateOutput io)
+        {
+            if(io is ParkingSpot)
+            {
+                return GenerateMultiPolygon(((GeodataOutput<MultiPolygon>)io).GeoFeatures);
+            }
+            return new JObject();
+        }
+
+        private JObject GenerateMultiPolygon(MultiPolygon geoFeatures)
+        {
+            var polygons = new JArray();
+            foreach (var polygon in geoFeatures.Polygons)
+            {
+                polygons.Add(GeneratePolygon(polygon));
+            }
+
+            var root = new JObject();
+            root.Add(new JProperty("type", "MultiPolygon"));
+            root.Add("coordinates", polygons);
+            return root;
+        }
+
+        private JArray GeneratePolygon(Polygon polygon)
+        {
+            var root = new JArray();
+            root.Add(GenerateLinearRing(polygon.Coordinates));
+            return root;
+        }
+
+        private JArray GenerateLinearRing(List<Point> coordinates)
+        {
+            var root = new JArray();
+            foreach (var coord in coordinates)
+            {
+                root.Add(GenerateCoordinate(coord));
+            }
+            return root;
+        }
+
+        private JArray GenerateCoordinate(Point coord)
+        {
+            var root = new JValue[2]
+            {
+                GenerateDoubleValue(coord.Longitude),
+                GenerateDoubleValue(coord.Latitude),
+            };
+            return new JArray(root);
+        }
+
+        private JValue GenerateDoubleValue(double value)
+        {
+            return new JValue(value);
         }
 
         internal static JProperty ReturnPolygonProperty()
