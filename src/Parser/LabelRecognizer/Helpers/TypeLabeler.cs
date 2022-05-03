@@ -92,13 +92,13 @@ namespace LabelRecognizer.Helpers
         {
             var totalLabelCount = typeCounter.Counter.Sum(x => x.Value);
             if (typeCounter.ContainsOnlyDoubleAndLong())
-                attribute.AddLabel(ObjectLabel.Double, 1);
+                attribute.AddLabel(PredefinedLabels.Double, 1);
             else if (typeCounter.ContainsNullAndOtherType())
                 attribute.AddLabel(typeCounter.GetNotNullType(), 1);
             else if (typeCounter.CanParseTextAsOtherType())
                 attribute.AddLabel(typeCounter.GetNotTextType(), 1);
             else if (typeCounter.ContainsTextAndOtherPrimitiveType())
-                attribute.AddLabel(ObjectLabel.Text, 1);
+                attribute.AddLabel(PredefinedLabels.Text, 1);
             else
             {
                 foreach (var label in typeCounter.Counter)
@@ -153,12 +153,12 @@ namespace LabelRecognizer.Helpers
 
         private void IncrementBool(BoolAttribute a, TypeCounter typeCounter)
         {
-            typeCounter.Increment(ObjectLabel.Bool);
+            typeCounter.Increment(PredefinedLabels.Bool);
         }
 
         private void IncrementList(ListAttribute attribute, TypeCounter typeCounter)
         {
-            typeCounter.Increment(ObjectLabel.List);
+            typeCounter.Increment(PredefinedLabels.List);
             var list = (List<ObjectAttribute>)attribute.Value;
             foreach (var attr in list)
             {
@@ -169,27 +169,27 @@ namespace LabelRecognizer.Helpers
 
         private void IncrementNull(NullAttribute attribute, TypeCounter typeCounter)
         {
-            typeCounter.Increment(ObjectLabel.Null);
+            typeCounter.Increment(PredefinedLabels.Null);
         }
 
         private void IncrementDate(DateAttribute attribute, TypeCounter typeCounter)
         {
-            typeCounter.Increment(ObjectLabel.Date);
+            typeCounter.Increment(PredefinedLabels.Date);
         }
 
         private void IncrementDouble(DoubleAttribute attribute, TypeCounter typeCounter)
         {
-            typeCounter.Increment(ObjectLabel.Double);
+            typeCounter.Increment(PredefinedLabels.Double);
         }
 
         private void IncrementLong(LongAttribute attribute, TypeCounter typeCounter)
         {
-            typeCounter.Increment(ObjectLabel.Long);
+            typeCounter.Increment(PredefinedLabels.Long);
         }
 
         private void IncrementText(TextAttribute attribute, TypeCounter typeCounter)
         {
-            typeCounter.Increment(ObjectLabel.Text);
+            typeCounter.Increment(PredefinedLabels.Text);
         }
     }
 }

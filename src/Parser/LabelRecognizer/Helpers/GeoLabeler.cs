@@ -55,11 +55,11 @@ namespace LabelRecognizer.Helpers
 
             bool sameStartAndEnd = GenericCoordinate.IsSameCoordinate(children.First(), children.Last());
             if(IsPolygon(numCoordinates, sameStartAndEnd))
-                attr.AddLabel(ObjectLabel.Polygon, 1);
+                attr.AddLabel(PredefinedLabels.Polygon, 1);
             if (IsLine(numCoordinates, sameStartAndEnd))
-                attr.AddLabel(ObjectLabel.LineString, 1);
+                attr.AddLabel(PredefinedLabels.LineString, 1);
             if (IsMultiPoint(numCoordinates, sameStartAndEnd))
-                attr.AddLabel(ObjectLabel.MultiPoint, 1);
+                attr.AddLabel(PredefinedLabels.MultiPoint, 1);
         }
 
         private bool IsMultiPoint(int numCoordinates, bool sameStartAndEnd)
@@ -82,7 +82,7 @@ namespace LabelRecognizer.Helpers
             int coordinates = 0;
             foreach (var child in children)
             {
-                if (child.HasLabel(ObjectLabel.Point))
+                if (child.HasLabel(PredefinedLabels.Point))
                     coordinates++;
             }
 
@@ -93,13 +93,13 @@ namespace LabelRecognizer.Helpers
         {
             if (children.Count != 2)
                 return;
-            var left = children[0].GetLabel(ObjectLabel.Double);
+            var left = children[0].GetLabel(PredefinedLabels.Double);
             if (left == null)
                 return;
-            var right = children[1].GetLabel(ObjectLabel.Double);
+            var right = children[1].GetLabel(PredefinedLabels.Double);
             if (right == null)
                 return;
-            attr.AddLabel(ObjectLabel.Point, left.Probability * right.Probability);
+            attr.AddLabel(PredefinedLabels.Point, left.Probability * right.Probability);
         }
     }
 }

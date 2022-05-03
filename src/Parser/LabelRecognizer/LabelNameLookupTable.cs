@@ -97,9 +97,9 @@ namespace LabelRecognizer
             }
         }
 
-        private List<Tuple<float, ObjectLabel>> Lookup(ObjectAttribute attr)
+        private List<Tuple<float, string>> Lookup(ObjectAttribute attr)
         {
-            var list = new List<Tuple<float, ObjectLabel>>();
+            var list = new List<Tuple<float, string>>();
 
             foreach (var target in _lookupTable.LookupTargets)
             {
@@ -114,7 +114,7 @@ namespace LabelRecognizer
                     {
                         if (attr.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            list.Add(new Tuple<float, ObjectLabel>(1f, (ObjectLabel)Enum.Parse(typeof(ObjectLabel), target.Target)));
+                            list.Add(new Tuple<float, string>(1f, target.Target));
                             targetFound = true;
                             break;
                         }
@@ -124,7 +124,7 @@ namespace LabelRecognizer
                             {
                                 if (attr.Name.Contains(synonym))
                                 {
-                                    list.Add(new Tuple<float, ObjectLabel>(0.5f, (ObjectLabel)Enum.Parse(typeof(ObjectLabel), target.Target)));
+                                    list.Add(new Tuple<float, string>(0.5f, target.Target));
                                     targetFound = true;
                                     break;
                                 }

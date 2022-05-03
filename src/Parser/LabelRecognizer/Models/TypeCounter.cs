@@ -1,4 +1,5 @@
-﻿using Shared.Models.ObjectAttributes;
+﻿using Shared.Models;
+using Shared.Models.ObjectAttributes;
 
 namespace LabelRecognizer.Models
 {
@@ -6,23 +7,23 @@ namespace LabelRecognizer.Models
     {
         public string AttrName { get; set; }
         public List<TypeCounter> Types { get; } = new List<TypeCounter>();
-        public Dictionary<ObjectLabel, long> Counter { get; } = new Dictionary<ObjectLabel, long>();
+        public Dictionary<string, long> Counter { get; } = new Dictionary<string, long>();
 
         private int parsableStrings = 0;
-        public bool CanParseTextAsOtherType () => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Text) && parsableStrings == Counter[ObjectLabel.Text];
+        public bool CanParseTextAsOtherType () => Counter.Count == 2 && Counter.ContainsKey(PredefinedLabels.Text) && parsableStrings == Counter[PredefinedLabels.Text];
   
-        public bool ContainsOnlyDoubleAndLong() => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Long) && Counter.ContainsKey(ObjectLabel.Double);
+        public bool ContainsOnlyDoubleAndLong() => Counter.Count == 2 && Counter.ContainsKey(PredefinedLabels.Long) && Counter.ContainsKey(PredefinedLabels.Double);
 
-        public bool ContainsNullAndOtherType() => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Null);
+        public bool ContainsNullAndOtherType() => Counter.Count == 2 && Counter.ContainsKey(PredefinedLabels.Null);
 
-        public bool ContainsTextAndOtherPrimitiveType() => Counter.Count == 2 && Counter.ContainsKey(ObjectLabel.Text) && !Counter.ContainsKey(ObjectLabel.List);
+        public bool ContainsTextAndOtherPrimitiveType() => Counter.Count == 2 && Counter.ContainsKey(PredefinedLabels.Text) && !Counter.ContainsKey(PredefinedLabels.List);
 
         public TypeCounter(string attrName)
         {
             AttrName = attrName;
         }
 
-        public void Increment(ObjectLabel type)
+        public void Increment(string type)
         {
             if (Counter.ContainsKey(type))
                 Counter[type]++;
@@ -37,29 +38,29 @@ namespace LabelRecognizer.Models
             {
                 if (Counter.Count == 2)
                 {
-                    ObjectLabel tryParseType = ObjectLabel.Null;
+                    string tryParseType = PredefinedLabels.Null;
                     foreach (var KeyValuePair in Counter)
                     {
-                        if (KeyValuePair.Key != ObjectLabel.Text)
+                        if (KeyValuePair.Key != PredefinedLabels.Text)
                             tryParseType = KeyValuePair.Key;
                     }
 
                     string text = (string)attribute.Value;
                     switch (tryParseType)
                     {
-                        case ObjectLabel.Long:
+                        case PredefinedLabels.Long:
                             if (long.TryParse(text, out long test))
                             {
                                 parsableStrings++;
                             }
                             break;
-                        case ObjectLabel.Double:
+                        case PredefinedLabels.Double:
                             if (double.TryParse(text, out double test2))
                             {
                                 parsableStrings++;
                             }
                             break;
-                        case ObjectLabel.Date:
+                        case PredefinedLabels.Date:
                             break;
                     }
                 }
@@ -77,21 +78,21 @@ namespace LabelRecognizer.Models
             return res;
         }
 
-        public ObjectLabel GetNotNullType()
+        public string GetNotNullType()
         {
             foreach (var KeyValuePair in Counter)
             {
-                if (KeyValuePair.Key != ObjectLabel.Null)
+                if (KeyValuePair.Key != PredefinedLabels.Null)
                     return KeyValuePair.Key;
             }
             throw new NullReferenceException("Expected atleast one other type than null in TypeCounter");
         }
 
-        public ObjectLabel GetNotTextType()
+        public string GetNotTextType()
         {
             foreach (var KeyValuePair in Counter)
             {
-                if (KeyValuePair.Key != ObjectLabel.Text)
+                if (KeyValuePair.Key != PredefinedLabels.Text)
                     return KeyValuePair.Key;
             }
             throw new NullReferenceException("Expected atleast one other type than Text in TypeCounter");

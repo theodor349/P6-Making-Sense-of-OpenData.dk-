@@ -1,18 +1,17 @@
 ﻿namespace Shared.Models.ObjectAttributes
 {
-    public enum ObjectLabel { Text = 0, Long = 1, Double = 2, Date = 3, List = 4, Null = 5, Point = 6, Polygon = 7, Bool = 8, LineString = 9, MultiPoint = 10, Amount = 11, Address = 12, Remark = 13, Parking = 14, Route = 15}
     public class LabelModel
     {
-        public ObjectLabel Label { get; set; }
+        public string Label { get; set; }
         public float Probability { get; set; }
 
-        public LabelModel(ObjectLabel label, float probability)
+        public LabelModel(string label, float probability)
         {
             Label = label;
             Probability = probability;
         }
 
-        public LabelModel(ObjectLabel label)
+        public LabelModel(string label)
         {
             Label = label;
         }
@@ -50,16 +49,16 @@
             Value = value;
         }
 
-        public void AddLabel(ObjectLabel label, float probability)
+        public void AddLabel(string label, float probability)
         {
             Labels.Add(new LabelModel(label, probability));
         }
 
-        public bool HasLabel(ObjectLabel label)
+        public bool HasLabel(string label)
         {
            return GetLabel(label) != null;
         }
-        public LabelModel? GetLabel(ObjectLabel label)
+        public LabelModel? GetLabel(string label)
         {
             return Labels.FirstOrDefault(x => x.Label == label);
         }

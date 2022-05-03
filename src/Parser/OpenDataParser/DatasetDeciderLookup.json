@@ -2,12 +2,12 @@
   "TitleSpecification": 
   [
     {
-      "DatasetClassification": "Parking",
-      "Score": 1,
-      "Requirements": [
-        "Parking",
-        "Parkering"
-      ]
+        "DatasetClassification": "Parking",
+        "Score": 1,
+        "Requirements": [
+            "Parking",
+            "Parkering"
+        ]
     }
   ],
   "ContentSpecification": 
