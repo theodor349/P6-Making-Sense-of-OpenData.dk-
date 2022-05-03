@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Printers.GeoJson;
 using Shared.ComponentInterfaces;
 using Shared.Models.Output;
 using System;
@@ -12,15 +13,17 @@ namespace Printers
     public class Printer : IPrinter
     {
         private readonly IConfiguration _configuration;
+        private readonly IGeoJsonPrinter _geoJsonPrinter;
 
-        public Printer(IConfiguration configuration)
+        public Printer(IConfiguration configuration, IGeoJsonPrinter geoJsonPrinter)
         {
             _configuration = configuration;
+            _geoJsonPrinter = geoJsonPrinter;
         }
 
-        public Task Print(OutputDataset dataset)
+        public async Task Print(OutputDataset dataset, int iteration)
         {
-            
+            await _geoJsonPrinter.Print(dataset, iteration);
         }
     }
 }
