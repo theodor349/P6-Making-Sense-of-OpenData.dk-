@@ -24,5 +24,14 @@ namespace Shared.Models
         public const string Remark = "Remark";
         public const string Parking = "Parking";
         public const string Route = "Route";
+
+        public static List<string> Labels { get
+            {
+                var t = typeof(string);
+                return new List<string>(t.GetFields().Select(x => x.Name));           
+            } 
+        }
+
     }
+
 }

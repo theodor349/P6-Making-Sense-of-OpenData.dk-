@@ -13,9 +13,23 @@ namespace DatasetDecider
 {
     public class DatasetClassifier : IDatasetClassifier
     {
+
+        private class LabelInfo
+        {
+            public int amount;
+            public float confidence;
+        }
+
+
         private readonly IConfiguration _configuration;
         private readonly DatasetLookupTable _lookupTable;
-        private readonly List<string> _objectLabels = new List<string>();
+        private readonly Dictionary<string, LabelInfo> _objectLabels = new Dictionary<string, LabelInfo>();
+
+        private bool succesfullyClassified;
+        private int totalDataSetObjects;
+        private int totalClassifiedObjects;
+        private int customLabeledObjects;
+
         public DatasetClassifier(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -31,15 +45,125 @@ namespace DatasetDecider
 
         public async Task Classify(DatasetObject dataset)
         {
-         await Task.Run(() => {
+         await Task.Run(() =>
+         {
+
+             GetAllLabels(dataset);
+             Dictionary<string, float> datasetTypeScore = GenerateDataTypeScores(dataset);
+
+             var datasetTypeScoreMax = datasetTypeScore.Aggregate((x, y) => x.Value > y.Value ? x : y);
+
+             if (datasetTypeScoreMax.Value == 0)
+             {
+                 succesfullyClassified = true;
+                 dataset.DatasetType = (DatasetType)Enum.Parse(typeof(DatasetType), _lookupTable.DefaultSpecification);
+             }
+             else
+             {
+                 succesfullyClassified = false;
+                 dataset.DatasetType = (DatasetType)Enum.Parse(typeof(DatasetType), datasetTypeScoreMax.Key);
+             }
+
+             List<DatasetClassification> datasetClassifications = new List<DatasetClassification>();
+
+             foreach (var datasetClassification in datasetTypeScore)
+             {
+                 if (datasetClassification.Key != datasetTypeScoreMax.Key)
+                 {
+                     datasetClassifications.Add(new DatasetClassification() { Name = datasetClassification.Key, Score = datasetClassification.Value });
+                 }
+             }
+
+             List<LabelClassification> datasetLabelClassifications = new List<LabelClassification>();
+
+             foreach (var label in _objectLabels)
+             {
+                 datasetLabelClassifications.Add(new LabelClassification() { Label =  label.Key, Amount = label.Value.amount, Confidence = label.Value.confidence});
+             }
+
+             // start here!
+
+             OuputLogObject ouputLogObject = new OuputLogObject(
+                 dataset.originalName,
+                 succesfullyClassified,
+                 new DatasetClassification()
+                 {
+                     Name = datasetTypeScoreMax.Key.ToString(),
+                     Score = datasetTypeScoreMax.Value
+                 },
+                 datasetClassifications,
+                 datasetLabelClassifications,
+                 totalDataSetObjects,
+                 totalClassifiedObjects,
+                 customLabeledObjects
+            );
+         });
+        }
+
+        private void GetAllLabels(DatasetObject dataset)
+        {
             foreach (var obj in dataset.Objects)
             {
+                totalDataSetObjects++;
+
                 foreach (var attr in obj.Attributes)
                 {
                     GetLabels(attr);
                 }
             }
-            Dictionary<string, float> datasetTypeScore = new Dictionary<string, float>();
+        }
+
+        private void GetLabels(ObjectAttribute attr)
+        {
+            totalDataSetObjects++;
+            if(attr.Labels.Count > 0)
+            {
+                totalClassifiedObjects++;
+            }
+            bool hasCustomLabel = false;
+
+            foreach (var label in attr.Labels)
+            {              
+                if (_objectLabels.ContainsKey(label.Label) == false)
+                {
+                    _objectLabels.Add(label.Label, new LabelInfo() { amount = 1, confidence = label.Probability});
+                }
+                else
+                {
+                    LabelInfo labelInfo = _objectLabels[label.Label];
+
+                    float oldAmount = labelInfo.amount;
+                    float oldPercentage = labelInfo.confidence;
+                    float newPercentage = label.Probability;
+
+                    float averagePercentage = ((oldAmount * oldPercentage) + newPercentage) / (oldAmount + 1);
+
+                    _objectLabels[label.Label] = new LabelInfo() { amount = labelInfo.amount++, confidence = averagePercentage};
+                }
+                if (PredefinedLabels.Labels.Contains(label.Label) == false)
+                {
+                    hasCustomLabel = true;
+                }
+            }
+
+            if (hasCustomLabel)
+            {
+                customLabeledObjects++;
+            }
+
+            if (attr.GetType() == typeof(ListAttribute))
+            {
+                var children = (List<ObjectAttribute>)attr.Value;
+                foreach (var child in children)
+                {
+                    GetLabels(child);
+                }
+            }
+        }
+
+        private Dictionary<string, float> GenerateDataTypeScores(DatasetObject dataset)
+        {
+            var datasetTypeScore = new Dictionary<string, float>();
             foreach (var item in _lookupTable.TitleSpecification)
             {
                 if (datasetTypeScore.ContainsKey(item.DatasetClassification) == false)
@@ -61,36 +185,7 @@ namespace DatasetDecider
                 score += GetContentScore(item);
                 datasetTypeScore[item.Key] = score;
             }
-                var pairMaxValue = datasetTypeScore.Aggregate((x, y) => x.Value > y.Value ? x : y);
-
-                if (pairMaxValue.Value == 0)
-                {
-                    dataset.DatasetType = (DatasetType)Enum.Parse(typeof(DatasetType), _lookupTable.DefaultSpecification);
-                }
-                else
-                {
-                    dataset.DatasetType = (DatasetType)Enum.Parse(typeof(DatasetType), pairMaxValue.Key);
-                }
-            });
-        }
-
-        private void GetLabels(ObjectAttribute attr)
-        {
-            foreach (var label in attr.Labels)
-            {
-                if (_objectLabels.Contains(label.Label) == false)
-                {
-                    _objectLabels.Add(label.Label);
-                }
-            }
-            if (attr.GetType() == typeof(ListAttribute))
-            {
-                var children = (List<ObjectAttribute>)attr.Value;
-                foreach (var child in children)
-                {
-                    GetLabels(child);
-                }
-            }
+            return datasetTypeScore;
         }
 
         private float GetContentScore(KeyValuePair<string, float> item)
@@ -101,7 +196,7 @@ namespace DatasetDecider
             {
                 foreach (var req in contentSpecification.Requirements)
                 {
-                    if (_objectLabels.Contains(req) == false)
+                    if (_objectLabels.ContainsKey(req) == false)
                     {
                         reqMet = false;
                     }
