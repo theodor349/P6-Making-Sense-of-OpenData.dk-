@@ -10,7 +10,7 @@ namespace DatasetParser
         {
             services.AddTransient<IDatasetParser, DatasetParser>();
             services.AddTransient<IParseToJson, ParseToJson>();
-            services.AddTransient<IParkingspotFactory, ParkingspotFactory>();
+            services.AddTransient<IRouteFactory, RouteFactory>();
         }
     }
 }

@@ -15,9 +15,9 @@ namespace DatasetParser.Test.Utilities
 
         }
 
-        internal ParkingspotFactory ParkingSpotFactory()
+        internal RouteFactory RouteFactory()
         {
-            return new ParkingspotFactory(); 
+            return new RouteFactory(); 
         }
     }
 }

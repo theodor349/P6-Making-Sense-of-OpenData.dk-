@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace DatasetParser.Factories
 {
-    public interface IParkingspotFactory : IDatasetOutputFactory { }
+    public interface IRouteFactory : IDatasetOutputFactory { }
 
-    public class ParkingspotFactory : IParkingspotFactory
+    public class RouteFactory : IRouteFactory
     {
         public Task<List<IntermediateOutput>> BuildDataset(DatasetObject dataset, int iteration)
         {

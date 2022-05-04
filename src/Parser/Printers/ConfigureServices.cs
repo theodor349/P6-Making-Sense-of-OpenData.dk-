@@ -10,6 +10,7 @@ namespace Printers
         {
             services.AddTransient<IPrinter, Printer>();
             services.AddTransient<IGeoJsonPrinter, GeoJsonPrinter>();
+            services.AddTransient<IFilePrinter, FilePrinter>();
         }
     }
 }

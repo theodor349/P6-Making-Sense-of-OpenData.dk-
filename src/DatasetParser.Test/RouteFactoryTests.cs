@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace DatasetParser.Test
 {
-    class ListAttributePolygon : ISpecimenBuilder
+    class ListAttributeRoute : ISpecimenBuilder
     {
         ISpecimenContext _context;
 
@@ -67,7 +67,7 @@ namespace DatasetParser.Test
         }
     }
 
-    class IntermediateObjectParkingSpot : ISpecimenBuilder
+    class IntermediateObjectRoute : ISpecimenBuilder
     {
         ISpecimenContext _context;
 
@@ -84,14 +84,14 @@ namespace DatasetParser.Test
     }
 
     [TestClass]
-    public class ParkingSpotFactoryTests
+    public class RouteFactoryTests
     {
         [TestMethod]
-        public void ParkingSpot_SingleIO_GetsPolygon()
+        public void Route_SingleIO_GetsPolygon()
         {
             var fixture = new Fixture();
-            fixture.Customizations.Add(new IntermediateObjectParkingSpot());
-            fixture.Customizations.Add(new ListAttributePolygon());
+            fixture.Customizations.Add(new IntermediateObjectRoute());
+            fixture.Customizations.Add(new ListAttributeRoute());
             fixture.Customizations.Add(
                 new TypeRelay(
                     typeof(ObjectAttribute),
@@ -101,7 +101,7 @@ namespace DatasetParser.Test
             var iteration = fixture.Create<int>();
 
             var setup = new TestSetup();
-            var factory = setup.ParkingSpotFactory();
+            var factory = setup.RouteFactory();
 
             var task = factory.BuildDataset(dataset, iteration);
             task.Wait();
@@ -109,10 +109,10 @@ namespace DatasetParser.Test
 
             res.Count.Should().Be(objects.Count);
             res[0].GeoFeatures.Polygons.Count.Should().Be(objects[0].Attributes.Count);
-            EvaluatePolygon(objects[0].Attributes[0], res[0].GeoFeatures.Polygons[0]);
+            EvaluateLinering(objects[0].Attributes[0], res[0].GeoFeatures.Polygons[0]);
         }
 
-        private void EvaluatePolygon(ObjectAttribute objectAttribute, Polygon polygon)
+        private void EvaluateLinering(ObjectAttribute objectAttribute, Polygon polygon)
         {
             var list = (List<ObjectAttribute>)objectAttribute.Value;
             for (int i = 0; i < list.Count; i++)

@@ -13,9 +13,9 @@ namespace DatasetParser
 {
     public class DatasetParser : IDatasetParser
     {
-        private readonly IParkingspotFactory _parkingspotFactory;
+        private readonly IRouteFactory _parkingspotFactory;
 
-        public DatasetParser(IParkingspotFactory parkingspotFactory)
+        public DatasetParser(IRouteFactory parkingspotFactory)
         {
             _parkingspotFactory = parkingspotFactory;
         }
