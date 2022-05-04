@@ -34,7 +34,7 @@ namespace DatasetParser.Test
             var points = GeneratePoints(4);
             var polygon = new ListAttribute("", points);
             polygon.AddLabel(PredefinedLabels.List, 1);
-            polygon.AddLabel(PredefinedLabels.Polygon, 1);
+            polygon.AddLabel(PredefinedLabels.LineString, 1);
             return polygon;
         }
 
@@ -71,12 +71,32 @@ namespace DatasetParser.Test
     {
         ISpecimenContext _context;
 
+        private string name = "name";
+        private string description = "description";
+
+        public IntermediateObjectRoute()
+        {
+
+        }
+
+        public IntermediateObjectRoute(string name, string description)
+        {
+            this.name = name;
+            this.description = description;
+        }
+
         public object Create(object request, ISpecimenContext context)
         {
             _context = context;
             if (request is Type type && type == typeof(IntermediateObject))
             {
                 var attributes = _context.CreateMany<ListAttribute>(1).ToList().ConvertAll(x => (ObjectAttribute)x);
+                var nameAttribute = new TextAttribute("name", name);
+                nameAttribute.AddLabel("Name", 1);
+                var descriptionAttribute = new TextAttribute("description", description);
+                descriptionAttribute.AddLabel("Description", 1);
+                attributes.Add(nameAttribute);
+                attributes.Add(descriptionAttribute);
                 return new IntermediateObject(attributes);
             }
             return new NoSpecimen();
@@ -105,14 +125,13 @@ namespace DatasetParser.Test
 
             var task = factory.BuildDataset(dataset, iteration);
             task.Wait();
-            var res = task.Result.ConvertAll(x => (ParkingSpot)x);
+            var res = task.Result.ConvertAll(x => (RouteSpecialization)x);
 
             res.Count.Should().Be(objects.Count);
-            res[0].GeoFeatures.Polygons.Count.Should().Be(objects[0].Attributes.Count);
-            EvaluateLinering(objects[0].Attributes[0], res[0].GeoFeatures.Polygons[0]);
+            EvaluateLinering(objects[0].Attributes[0], res[0].GeoFeatures);
         }
 
-        private void EvaluateLinering(ObjectAttribute objectAttribute, Polygon polygon)
+        private void EvaluateLinering(ObjectAttribute objectAttribute, LineString polygon)
         {
             var list = (List<ObjectAttribute>)objectAttribute.Value;
             for (int i = 0; i < list.Count; i++)
@@ -129,6 +148,33 @@ namespace DatasetParser.Test
 
             point.Longitude.Should().Be(longi);
             point.Latitude.Should().Be(lati);
+        }
+
+        [DataRow("name0", "Description0")]
+        [DataRow("name1", "Description1")]
+        [TestMethod]
+        public void Route_SingleIO_GetsData(string name, string description)
+        {
+            var fixture = new Fixture();
+            fixture.Customizations.Add(new IntermediateObjectRoute(name, description));
+            fixture.Customizations.Add(new ListAttributeRoute());
+            fixture.Customizations.Add(
+                new TypeRelay(
+                    typeof(ObjectAttribute),
+                    typeof(ListAttribute)));
+            var objects = fixture.CreateMany<IntermediateObject>(1).ToList();
+            var dataset = new DatasetObject("filename.geojson", "geojson", objects);
+            var iteration = fixture.Create<int>();
+
+            var setup = new TestSetup();
+            var factory = setup.RouteFactory();
+
+            var task = factory.BuildDataset(dataset, iteration);
+            task.Wait();
+            var res = task.Result.ConvertAll(x => (RouteSpecialization)x);
+
+            res.First().Name.Should().Be(name);
+            res.First().Description.Should().Be(description);
         }
     }
 }

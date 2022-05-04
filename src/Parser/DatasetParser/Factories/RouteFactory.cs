@@ -17,7 +17,6 @@ namespace DatasetParser.Factories
         public Task<List<IntermediateOutput>> BuildDataset(DatasetObject dataset, int iteration)
         {
             var res = new List<IntermediateOutput>();
-            return Task.FromResult(res);
 
             foreach (var io in dataset.Objects)
             {
@@ -29,48 +28,73 @@ namespace DatasetParser.Factories
 
         private IntermediateOutput GenerateParkingSpot(IntermediateObject io)
         {
-            var res = new ParkingSpot();
-            res.GeoFeatures = GetMultiPolygon(io);
+            var res = new RouteSpecialization();
+            res.GeoFeatures = GetLinestrig(io);
             return res;
         }
 
-        private MultiPolygon GetMultiPolygon(IntermediateObject io)
+        private LineString GetLinestrig(IntermediateObject io)
         {
-            var res = new MultiPolygon();
-            var polygons = new List<Polygon>();
-            polygons.Add(GetPolygon(io));
-            return res;
-        }
-
-        private Polygon GetPolygon(IntermediateObject io)
-        {
-            var res = new Polygon();
-            var polygonAttribute = FindPolygonAttribute(io.Attributes);
+            var res = new LineString();
+            var polygonAttribute = FindLinestringAttribute(io.Attributes);
             if(polygonAttribute != null)
                 res.Coordinates = GetCoordinates(polygonAttribute);
             return res;
         }
 
-        private List<Point> GetCoordinates(ListAttribute polygonAttribute)
+        private List<Point> GetCoordinates(ListAttribute attribute)
         {
-            throw new NotImplementedException();
+            var points = new List<Point>();
+            foreach (var child in (List<ObjectAttribute>)attribute.Value)
+            {
+                points.Add(GetCoordinate(child));
+            }
+            return points;
         }
 
-        private ListAttribute? FindPolygonAttribute(List<ObjectAttribute> attributes)
+        private Point GetCoordinate(ObjectAttribute child)
+        {
+            var children = (List<ObjectAttribute>)child.Value;
+            var point = new Point();
+            point.Longitude = GetDouble(children[0]);
+            point.Latitude = GetDouble(children[1]);
+            return point;
+        }
+
+        private double GetDouble(ObjectAttribute objectAttribute)
+        {
+            return (double)objectAttribute.Value;
+        }
+
+        private ListAttribute? FindLinestringAttribute(List<ObjectAttribute> attributes)
         {
             ListAttribute? res = null;
             foreach (var attribute in attributes)
             {
-                res = FindPolygonAttribute(attribute);
+                res = FindLinestringAttribute(attribute);
                 if (res is not null)
                     return res;
             }
             return res;
         }
 
-        private ListAttribute FindPolygonAttribute(ObjectAttribute attributes)
+        private ListAttribute FindLinestringAttribute(ObjectAttribute attribute)
         {
-            throw new NotImplementedException();
+            ListAttribute? res = null;
+            if(attribute is ListAttribute list)
+            {
+                if (list.HasLabel(PredefinedLabels.LineString))
+                    return list;
+
+                var children = (List<ObjectAttribute>)list.Value;
+                foreach (var child in children)
+                {
+                    res = FindLinestringAttribute(child);
+                    if (res is not null)
+                        return res;
+                }
+            }
+            return res;
         }
     }
 }
