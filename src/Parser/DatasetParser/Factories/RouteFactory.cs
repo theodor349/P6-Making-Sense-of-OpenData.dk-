@@ -31,13 +31,16 @@ namespace DatasetParser.Factories
         {
             var res = new RouteSpecialization();
             res.GeoFeatures = GetLinestrig(io);
+            var labelResults = LabelFinder.FindLabels(io, new List<string>() { "Name", "Description"});
+            res.Name = (string)labelResults.BestFit("Name").Value;
+            res.Description = (string)labelResults.BestFit("Description").Value;
             return res;
         }
 
         private LineString GetLinestrig(IntermediateObject io)
         {
             var res = new LineString();
-            var polygonAttribute = LabelFinder.FindLabel(io, new List<string>() { PredefinedLabels.LineString });
+            var polygonAttribute = LabelFinder.FindLabels(io, new List<string>() { PredefinedLabels.LineString });
             if(polygonAttribute != null)
                 res.Coordinates = GetCoordinates((ListAttribute)polygonAttribute.BestFit(PredefinedLabels.LineString));
             return res;

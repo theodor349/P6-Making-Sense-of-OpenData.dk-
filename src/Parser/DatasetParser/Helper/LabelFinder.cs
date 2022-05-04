@@ -5,17 +5,17 @@ namespace DatasetParser.Helper
 {
     public static class LabelFinder
     {
-        public static LabelFindeResult FindLabel(IntermediateObject io, List<string> labels)
+        public static LabelFindeResult FindLabels(IntermediateObject io, List<string> labels)
         {
             var result = new LabelFindeResult();
             foreach (var attribute in io.Attributes)
             {
-                result.AddFindings(FindLabel(attribute, labels));
+                result.AddFindings(FindLabels(attribute, labels));
             }
             return result;
         }
 
-        private static LabelFindeResult FindLabel(ObjectAttribute attribute, List<string> labels)
+        private static LabelFindeResult FindLabels(ObjectAttribute attribute, List<string> labels)
         {
             var result = new LabelFindeResult();
             foreach (var label in labels)
@@ -29,7 +29,7 @@ namespace DatasetParser.Helper
                 var list = (List<ObjectAttribute>)attribute.Value;
                 foreach (var a in list)
                 {
-                    result.AddFindings(FindLabel(a, labels));
+                    result.AddFindings(FindLabels(a, labels));
                 }
             }
 

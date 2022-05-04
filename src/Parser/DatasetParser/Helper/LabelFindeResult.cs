@@ -29,7 +29,7 @@ namespace DatasetParser.Helper
         internal ObjectAttribute BestFit(string label)
         {
             if (Result.ContainsKey(label))
-                return Result[label].First().Value;
+                return Result[label].Last().Value;
             else
                 return null;
 
