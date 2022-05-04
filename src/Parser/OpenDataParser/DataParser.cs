@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using Shared.ComponentInterfaces;
 using Shared.Models;
+using Shared.Models.Output;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,7 +76,7 @@ namespace OpenDataParser
                 var output = await datasetParser.Parse(dataset, iteration);
                 _logger.LogInformation("Output generated");
 
-                //PrintToFile(iteration, output, dataset);
+                await PrintToFile(iteration, output);
                 _logger.LogInformation("Output printed to file");
             }
         }
@@ -92,13 +93,10 @@ namespace OpenDataParser
             await postProcessor.Process(dataset);
         }
 
-        private void PrintToFile(int iteration, JObject output, DatasetObject dataset)
+        private async Task PrintToFile(int iteration, OutputDataset dataset)
         {
-            var splits = dataset.originalName.Split('.');
-            string fileName = splits.Count() == 1 ? splits.First() : splits.Take(splits.Count() - 1).Aggregate((x, y) => x += y);
-            string outputPath = Path.Combine(_configuration["Output:JsonText"], fileName + "-" + iteration.ToString() + ".geojson");
-            File.Delete(outputPath);
-            File.WriteAllText(outputPath, output.ToString());
+            var pritner = _serviceProvider.GetService<IPrinter>();
+            await pritner.Print(dataset, iteration);
         }
 
         private async Task GetClassification(DatasetObject dataset)
