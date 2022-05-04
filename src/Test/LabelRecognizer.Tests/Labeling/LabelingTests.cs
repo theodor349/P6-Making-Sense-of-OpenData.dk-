@@ -19,7 +19,7 @@ namespace LabelRecognizer.Tests.Labeling
         [TestMethod]
         public void LabelGenerator_SameName_CorrectType(int num)
         {
-            var expectedLabel = ObjectLabel.List;
+            var expectedLabel = PredefinedLabels.List;
             var ios = new List<IntermediateObject>();
             var attributes = ModelFactory.GetObjectAttrList(num, () => ModelFactory.GetObjectAttr("StartList", expectedLabel));
             ios.Add(ModelFactory.GetIntermediateObject(ModelFactory.GetListAttribute("name", attributes)));
@@ -40,16 +40,16 @@ namespace LabelRecognizer.Tests.Labeling
         [TestMethod]
         public void LabelGenerator_AllTypes_All(int num)
         {
-            var res = new Dictionary<ObjectLabel, long>();
+            var res = new Dictionary<string, long>();
             var ios = new List<IntermediateObject>();
-            var typeList = new List<ObjectLabel>()
+            var typeList = new List<string>()
             {
-                ObjectLabel.Long,
-                ObjectLabel.Double,
-                ObjectLabel.List,
-                ObjectLabel.Null,
-                ObjectLabel.Date,
-                ObjectLabel.Text,
+                PredefinedLabels.Long,
+                PredefinedLabels.Double,
+                PredefinedLabels.List,
+                PredefinedLabels.Null,
+                PredefinedLabels.Date,
+                PredefinedLabels.Text,
             };
             foreach (var t in typeList)
             {
@@ -76,11 +76,11 @@ namespace LabelRecognizer.Tests.Labeling
         //  - List Attr     - Nesting: 1
         //    - List Attr   - Nesting: 2
         //      - Attr      - Nesting: 3
-        [DataRow(2, 2, ObjectLabel.Long)]
-        [DataRow(4, 3, ObjectLabel.Long)]
-        [DataRow(5, 10, ObjectLabel.Long)]
+        [DataRow(2, 2, PredefinedLabels.Long)]
+        [DataRow(4, 3, PredefinedLabels.Long)]
+        [DataRow(5, 10, PredefinedLabels.Long)]
         [TestMethod]
-        public void LabelGenerator_Nested_Labels(int ioCount, int nestings, ObjectLabel buttomAttr)
+        public void LabelGenerator_Nested_Labels(int ioCount, int nestings, string buttomAttr)
         {
             var ios = new List<IntermediateObject>();
             for (int i = 0; i < ioCount; i++)
@@ -100,13 +100,13 @@ namespace LabelRecognizer.Tests.Labeling
             }
         }
 
-        private void TestNesting(ObjectAttribute objectAttr, int nestings, ObjectLabel buttomAttr)
+        private void TestNesting(ObjectAttribute objectAttr, int nestings, string buttomAttr)
         {
             if(nestings == 1)
                 objectAttr.Labels.First().Label.Should().Be(buttomAttr);
             else
             {
-                objectAttr.Labels.First().Label.Should().Be(ObjectLabel.List);
+                objectAttr.Labels.First().Label.Should().Be(PredefinedLabels.List);
                 TestNesting(((List<ObjectAttribute>)objectAttr.Value).First(), --nestings, buttomAttr);
             }
         }
@@ -116,8 +116,8 @@ namespace LabelRecognizer.Tests.Labeling
         public void LabelGenerator_LongDouble_LabelDoubleOnly(int numLongs, int numDoubles)
         {
             var ios = new List<IntermediateObject>();
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(ObjectLabel.Long)));
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numDoubles, () => ModelFactory.GetObjectAttr(ObjectLabel.Double)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(PredefinedLabels.Long)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numDoubles, () => ModelFactory.GetObjectAttr(PredefinedLabels.Double)));
             var inputDataset = ModelFactory.GetDatasetObject(ios);
 
             var setup = new TestSetup();
@@ -132,11 +132,11 @@ namespace LabelRecognizer.Tests.Labeling
             {
                 foreach (var objectAttr in intermediateObj.Attributes)
                 {
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Long) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Long) == 1)
                     {
                         longCount++;
                     }
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Double) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Double) == 1)
                     {
                         doubleCount++;
                     }
@@ -152,9 +152,9 @@ namespace LabelRecognizer.Tests.Labeling
         public void LabelGenerator_TextLongDouble_AllLabels(int numText, int numLongs, int numDoubles)
         {
             var ios = new List<IntermediateObject>();
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numText, () => ModelFactory.GetObjectAttr(ObjectLabel.Text)));
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(ObjectLabel.Long)));
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numDoubles, () => ModelFactory.GetObjectAttr(ObjectLabel.Double)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numText, () => ModelFactory.GetObjectAttr(PredefinedLabels.Text)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(PredefinedLabels.Long)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numDoubles, () => ModelFactory.GetObjectAttr(PredefinedLabels.Double)));
             var inputDataset = ModelFactory.GetDatasetObject(ios);
 
             var setup = new TestSetup();
@@ -170,15 +170,15 @@ namespace LabelRecognizer.Tests.Labeling
             {
                 foreach (var objectAttr in intermediateObj.Attributes)
                 {
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Text) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Text) == 1)
                     {
                         textCount++;
                     }
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Long) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Long) == 1)
                     {
                         longCount++;
                     }
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Double) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Double) == 1)
                     {
                         doubleCount++;
                     }
@@ -195,8 +195,8 @@ namespace LabelRecognizer.Tests.Labeling
         public void LabelGenerator_LongNull_LabelLongOnly(int numLongs, int numNulls)
         {
             var ios = new List<IntermediateObject>();
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(ObjectLabel.Long)));
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numNulls, () => ModelFactory.GetObjectAttr(ObjectLabel.Null)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(PredefinedLabels.Long)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numNulls, () => ModelFactory.GetObjectAttr(PredefinedLabels.Null)));
             var inputDataset = ModelFactory.GetDatasetObject(ios);
 
             var setup = new TestSetup();
@@ -211,11 +211,11 @@ namespace LabelRecognizer.Tests.Labeling
             {
                 foreach (var objectAttr in intermediateObj.Attributes)
                 {
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Long) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Long) == 1)
                     {
                         longCount++;
                     }
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Null) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Null) == 1)
                     {
                         nullCount++;
                     }
@@ -232,8 +232,8 @@ namespace LabelRecognizer.Tests.Labeling
         public void LabelGenerator_LongText_CantParseTextAsLongLabelTextOnly(int numLongs, int numText)
         {
             var ios = new List<IntermediateObject>();
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(ObjectLabel.Long)));
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numText, () => ModelFactory.GetObjectAttr(ObjectLabel.Text)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(PredefinedLabels.Long)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numText, () => ModelFactory.GetObjectAttr(PredefinedLabels.Text)));
             var inputDataset = ModelFactory.GetDatasetObject(ios);
 
             var setup = new TestSetup();
@@ -248,11 +248,11 @@ namespace LabelRecognizer.Tests.Labeling
             {
                 foreach (var objectAttr in intermediateObj.Attributes)
                 {
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Long) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Long) == 1)
                     {
                         longCount++;
                     }
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Text) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Text) == 1)
                     {
                         textCount++;
                     }
@@ -283,11 +283,11 @@ namespace LabelRecognizer.Tests.Labeling
             {
                 foreach (var objectAttr in intermediateObj.Attributes)
                 {
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Long) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Long) == 1)
                     {
                         longCount++;
                     }
-                    if (objectAttr.Labels.Count(x => x.Label == ObjectLabel.Text) == 1)
+                    if (objectAttr.Labels.Count(x => x.Label == PredefinedLabels.Text) == 1)
                     {
                         textCount++;
                     }

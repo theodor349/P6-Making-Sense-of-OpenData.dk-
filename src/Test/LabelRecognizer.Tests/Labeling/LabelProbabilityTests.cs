@@ -19,12 +19,12 @@ namespace LabelRecognizer.Tests.Labeling
         {
             var ios = new List<IntermediateObject>();
             // Left IO
-            var lList = ModelFactory.GetListAttribute("n1", ModelFactory.GetObjectAttr("n1", ObjectLabel.Double));
-            var lAttr = ModelFactory.GetObjectAttr("n2", ObjectLabel.Date);
+            var lList = ModelFactory.GetListAttribute("n1", ModelFactory.GetObjectAttr("n1", PredefinedLabels.Double));
+            var lAttr = ModelFactory.GetObjectAttr("n2", PredefinedLabels.Date);
             ios.Add(ModelFactory.GetIntermediateObject(lList, lAttr));
             // Right IO
-            var rAttr = ModelFactory.GetObjectAttr("n1", ObjectLabel.Text);
-            var rList = ModelFactory.GetListAttribute("n2", ModelFactory.GetObjectAttr("n1", ObjectLabel.Long));
+            var rAttr = ModelFactory.GetObjectAttr("n1", PredefinedLabels.Text);
+            var rList = ModelFactory.GetListAttribute("n2", ModelFactory.GetObjectAttr("n1", PredefinedLabels.Long));
             ios.Add(ModelFactory.GetIntermediateObject(rAttr, rList));
 
             var inputDataset = ModelFactory.GetDatasetObject(ios);
@@ -34,18 +34,18 @@ namespace LabelRecognizer.Tests.Labeling
 
             // Left IO
             var lIO = inputDataset.Objects[0].Attributes;
-            lIO[0].Labels.First(x => x.Label == ObjectLabel.List).Probability.Should().Be(0.5f);
-            lIO[0].Labels.First(x => x.Label == ObjectLabel.Text).Probability.Should().Be(0.5f);
-            ((List<ObjectAttribute>)lIO[0].Value).First().Labels.First(x => x.Label == ObjectLabel.Double).Probability.Should().Be(1f);
-            lIO[1].Labels.First(x => x.Label == ObjectLabel.Date).Probability.Should().Be(0.5f);
-            lIO[1].Labels.First(x => x.Label == ObjectLabel.List).Probability.Should().Be(0.5f);
+            lIO[0].Labels.First(x => x.Label == PredefinedLabels.List).Probability.Should().Be(0.5f);
+            lIO[0].Labels.First(x => x.Label == PredefinedLabels.Text).Probability.Should().Be(0.5f);
+            ((List<ObjectAttribute>)lIO[0].Value).First().Labels.First(x => x.Label == PredefinedLabels.Double).Probability.Should().Be(1f);
+            lIO[1].Labels.First(x => x.Label == PredefinedLabels.Date).Probability.Should().Be(0.5f);
+            lIO[1].Labels.First(x => x.Label == PredefinedLabels.List).Probability.Should().Be(0.5f);
             // Right IO
             var rIO = inputDataset.Objects[1].Attributes;
-            rIO[0].Labels.First(x => x.Label == ObjectLabel.List).Probability.Should().Be(0.5f);
-            rIO[0].Labels.First(x => x.Label == ObjectLabel.Text).Probability.Should().Be(0.5f);
-            ((List<ObjectAttribute>)rIO[1].Value).First().Labels.First(x => x.Label == ObjectLabel.Long).Probability.Should().Be(1f);
-            rIO[1].Labels.First(x => x.Label == ObjectLabel.Date).Probability.Should().Be(0.5f);
-            rIO[1].Labels.First(x => x.Label == ObjectLabel.List).Probability.Should().Be(0.5f);
+            rIO[0].Labels.First(x => x.Label == PredefinedLabels.List).Probability.Should().Be(0.5f);
+            rIO[0].Labels.First(x => x.Label == PredefinedLabels.Text).Probability.Should().Be(0.5f);
+            ((List<ObjectAttribute>)rIO[1].Value).First().Labels.First(x => x.Label == PredefinedLabels.Long).Probability.Should().Be(1f);
+            rIO[1].Labels.First(x => x.Label == PredefinedLabels.Date).Probability.Should().Be(0.5f);
+            rIO[1].Labels.First(x => x.Label == PredefinedLabels.List).Probability.Should().Be(0.5f);
         }
 
         [DataRow(10, 11)]
@@ -54,8 +54,8 @@ namespace LabelRecognizer.Tests.Labeling
         {
             float expected = 1;
             var ios = new List<IntermediateObject>();
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(ObjectLabel.Long)));
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numDoubles, () => ModelFactory.GetObjectAttr(ObjectLabel.Double)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(PredefinedLabels.Long)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numDoubles, () => ModelFactory.GetObjectAttr(PredefinedLabels.Double)));
             var inputDataset = ModelFactory.GetDatasetObject(ios);
 
             var setup = new TestSetup();
@@ -69,7 +69,7 @@ namespace LabelRecognizer.Tests.Labeling
                 intermediateObj.Attributes.Count.Should().BeGreaterThan(0);
                 foreach (var objectAttr in intermediateObj.Attributes)
                 {
-                    var probability = objectAttr.Labels.First(x => x.Label == ObjectLabel.Double).Probability;
+                    var probability = objectAttr.Labels.First(x => x.Label == PredefinedLabels.Double).Probability;
                     probability.Should().Be(expected);
                 }
             }
@@ -85,9 +85,9 @@ namespace LabelRecognizer.Tests.Labeling
             float expectedDouble = (float)numDoubles / numTotal;
 
             var ios = new List<IntermediateObject>();
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numText, () => ModelFactory.GetObjectAttr(ObjectLabel.Text)));
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(ObjectLabel.Long)));
-            ios.AddRange(ModelFactory.GetIntermediateObjectList(numDoubles, () => ModelFactory.GetObjectAttr(ObjectLabel.Double)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numText, () => ModelFactory.GetObjectAttr(PredefinedLabels.Text)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numLongs, () => ModelFactory.GetObjectAttr(PredefinedLabels.Long)));
+            ios.AddRange(ModelFactory.GetIntermediateObjectList(numDoubles, () => ModelFactory.GetObjectAttr(PredefinedLabels.Double)));
             var inputDataset = ModelFactory.GetDatasetObject(ios);
 
             var setup = new TestSetup();
@@ -102,13 +102,13 @@ namespace LabelRecognizer.Tests.Labeling
                 foreach (var objectAttr in intermediateObj.Attributes)
                 {
                     LabelModel? label = null;
-                    label = objectAttr.Labels.First(x => x.Label == ObjectLabel.Text);
+                    label = objectAttr.Labels.First(x => x.Label == PredefinedLabels.Text);
                     label.Probability.Should().Be(expectedText);
 
-                    label = objectAttr.Labels.First(x => x.Label == ObjectLabel.Long);
+                    label = objectAttr.Labels.First(x => x.Label == PredefinedLabels.Long);
                     label.Probability.Should().Be(expectedLong);
 
-                    label = objectAttr.Labels.First(x => x.Label == ObjectLabel.Double);
+                    label = objectAttr.Labels.First(x => x.Label == PredefinedLabels.Double);
                     label.Probability.Should().Be(expectedDouble);
                 }
             }

@@ -96,39 +96,39 @@ namespace LabelRecognizer.Tests.Utilities
             return res;
         }
 
-        internal static ObjectAttribute GetObjectAttr(string name, ObjectLabel label)
+        internal static ObjectAttribute GetObjectAttr(string name, string label)
         {
             switch (label)
             {
-                case ObjectLabel.Null:
+                case PredefinedLabels.Null:
                     return new NullAttribute(name);
-                case ObjectLabel.Text:
+                case PredefinedLabels.Text:
                     return new TextAttribute(name, "Text");
-                case ObjectLabel.Long:
+                case PredefinedLabels.Long:
                     return new LongAttribute(name, 32);
-                case ObjectLabel.Double:
+                case PredefinedLabels.Double:
                     return new DoubleAttribute(name, 69.420);
-                case ObjectLabel.Date:
+                case PredefinedLabels.Date:
                     return new DateAttribute(name, DateTime.Now);
-                case ObjectLabel.List:
+                case PredefinedLabels.List:
                     return new ListAttribute(name);
                 default:
                     throw new Exception("Label was not found " + label.ToString());
             }
         }
 
-        internal static ObjectAttribute GetObjectAttr(ObjectLabel label)
+        internal static ObjectAttribute GetObjectAttr(string label)
         {
             return GetObjectAttr("name", label);
         }
 
-        internal static IntermediateObject CreateNested(int nestings, ObjectLabel buttomObject)
+        internal static IntermediateObject CreateNested(int nestings, string buttomObject)
         {
             var attr = GetNestedAttr(nestings, buttomObject);
             return new IntermediateObject(new List<ObjectAttribute>() { attr });
         }
 
-        private static ObjectAttribute GetNestedAttr(int nestings, ObjectLabel buttomObject)
+        private static ObjectAttribute GetNestedAttr(int nestings, string buttomObject)
         {
             if(nestings == 1)
                 return GetObjectAttr(buttomObject);
