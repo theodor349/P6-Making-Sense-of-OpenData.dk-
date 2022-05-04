@@ -1,4 +1,5 @@
-﻿using Shared.Models;
+﻿using DatasetParser.Helper;
+using Shared.Models;
 using Shared.Models.ObjectAttributes;
 using Shared.Models.Output;
 using Shared.Models.Output.Specializations;
@@ -20,13 +21,13 @@ namespace DatasetParser.Factories
 
             foreach (var io in dataset.Objects)
             {
-                res.Add(GenerateParkingSpot(io));
+                res.Add(GenerateRoute(io));
             }
 
             return Task.FromResult(res);
         }
 
-        private IntermediateOutput GenerateParkingSpot(IntermediateObject io)
+        private IntermediateOutput GenerateRoute(IntermediateObject io)
         {
             var res = new RouteSpecialization();
             res.GeoFeatures = GetLinestrig(io);
@@ -36,9 +37,9 @@ namespace DatasetParser.Factories
         private LineString GetLinestrig(IntermediateObject io)
         {
             var res = new LineString();
-            var polygonAttribute = FindLinestringAttribute(io.Attributes);
+            var polygonAttribute = LabelFinder.FindLabel(io, new List<string>() { PredefinedLabels.LineString });
             if(polygonAttribute != null)
-                res.Coordinates = GetCoordinates(polygonAttribute);
+                res.Coordinates = GetCoordinates((ListAttribute)polygonAttribute.BestFit(PredefinedLabels.LineString));
             return res;
         }
 
@@ -64,37 +65,6 @@ namespace DatasetParser.Factories
         private double GetDouble(ObjectAttribute objectAttribute)
         {
             return (double)objectAttribute.Value;
-        }
-
-        private ListAttribute? FindLinestringAttribute(List<ObjectAttribute> attributes)
-        {
-            ListAttribute? res = null;
-            foreach (var attribute in attributes)
-            {
-                res = FindLinestringAttribute(attribute);
-                if (res is not null)
-                    return res;
-            }
-            return res;
-        }
-
-        private ListAttribute FindLinestringAttribute(ObjectAttribute attribute)
-        {
-            ListAttribute? res = null;
-            if(attribute is ListAttribute list)
-            {
-                if (list.HasLabel(PredefinedLabels.LineString))
-                    return list;
-
-                var children = (List<ObjectAttribute>)list.Value;
-                foreach (var child in children)
-                {
-                    res = FindLinestringAttribute(child);
-                    if (res is not null)
-                        return res;
-                }
-            }
-            return res;
         }
     }
 }
