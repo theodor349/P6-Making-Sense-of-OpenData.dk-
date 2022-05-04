@@ -29,7 +29,7 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             labelGenerator.AddLabels(inputDataset).Wait();
 
             // Assert 
-            var res = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Polygon);
+            var res = inputDataset.Objects[0].Attributes[0].HasLabel(PredefinedLabels.Polygon);
             res.Should().BeTrue();
         }
 
@@ -48,7 +48,7 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             labelGenerator.AddLabels(inputDataset).Wait();
 
             // Assert 
-            var res = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Polygon);
+            var res = inputDataset.Objects[0].Attributes[0].HasLabel(PredefinedLabels.Polygon);
             res.Should().BeFalse();
         }
 
@@ -67,7 +67,7 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             labelGenerator.AddLabels(inputDataset).Wait();
 
             // Assert 
-            var res = inputDataset.Objects[0].Attributes[0].HasLabel(ObjectLabel.Polygon);
+            var res = inputDataset.Objects[0].Attributes[0].HasLabel(PredefinedLabels.Polygon);
             res.Should().BeFalse();
         }
     }

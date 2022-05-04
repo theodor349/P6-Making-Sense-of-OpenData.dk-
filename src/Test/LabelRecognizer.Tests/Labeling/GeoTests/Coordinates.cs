@@ -33,7 +33,7 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             labelGenerator.AddLabels(inputDataset).Wait();
 
             // Assert 
-            var res = inputDataset.Objects[0].Attributes[0].Labels.FirstOrDefault(x => x.Label == ObjectLabel.Point);
+            var res = inputDataset.Objects[0].Attributes[0].Labels.FirstOrDefault(x => x.Label == PredefinedLabels.Point);
             res.Should().NotBeNull();
         }
         [TestMethod]
@@ -59,13 +59,13 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             var coordinates = inputDataset.Objects[0].Attributes[0];
             var coordinateList = (List<ObjectAttribute>)coordinates.Value;
             // Coordinates not flagged as Coordinate
-            var res1 = coordinates.Labels.FirstOrDefault(x => x.Label == ObjectLabel.Point);
+            var res1 = coordinates.Labels.FirstOrDefault(x => x.Label == PredefinedLabels.Point);
             res1.Should().BeNull();
             // Coord 1 flagged as Coordinate
-            var res2 = coordinateList[0].Labels.FirstOrDefault(x => x.Label == ObjectLabel.Point);
+            var res2 = coordinateList[0].Labels.FirstOrDefault(x => x.Label == PredefinedLabels.Point);
             res2.Should().NotBeNull();
             // Coord 2 flagged as Coordinate
-            var res3 = coordinateList[1].Labels.FirstOrDefault(x => x.Label == ObjectLabel.Point);
+            var res3 = coordinateList[1].Labels.FirstOrDefault(x => x.Label == PredefinedLabels.Point);
             res3.Should().NotBeNull();
         }
 
@@ -96,7 +96,7 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             var labelGenerator = setup.LabelGenerator();
             labelGenerator.AddLabels(inputDataset).Wait();
 
-            var res = ((List<ObjectAttribute>)inputDataset.Objects[0].Attributes[0].Value)[1].Labels.FirstOrDefault(x => x.Label == ObjectLabel.Point);
+            var res = ((List<ObjectAttribute>)inputDataset.Objects[0].Attributes[0].Value)[1].Labels.FirstOrDefault(x => x.Label == PredefinedLabels.Point);
             res.Should().NotBeNull();
         }
 
@@ -142,13 +142,13 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             var coordinates = ((List<ObjectAttribute>)inputDataset.Objects[0].Attributes[0].Value)[1];
             var coordinateList = (List<ObjectAttribute>)coordinates.Value;
             // Coordinates not flagged as Coordinate
-            var res1 = coordinates.Labels.FirstOrDefault(x => x.Label == ObjectLabel.Point);
+            var res1 = coordinates.Labels.FirstOrDefault(x => x.Label == PredefinedLabels.Point);
             res1.Should().BeNull();
             // Coord 1 flagged as Coordinate
-            var res2 = coordinateList[0].Labels.FirstOrDefault(x => x.Label == ObjectLabel.Point);
+            var res2 = coordinateList[0].Labels.FirstOrDefault(x => x.Label == PredefinedLabels.Point);
             res2.Should().NotBeNull();
             // Coord 2 flagged as Coordinate
-            var res3 = coordinateList[1].Labels.FirstOrDefault(x => x.Label == ObjectLabel.Point);
+            var res3 = coordinateList[1].Labels.FirstOrDefault(x => x.Label == PredefinedLabels.Point);
             res3.Should().NotBeNull();
         }
     }
