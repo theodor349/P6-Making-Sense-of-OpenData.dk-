@@ -43,11 +43,8 @@ namespace DatasetDecider
             return table;
         }
 
-        public async Task Classify(DatasetObject dataset)
+        public Task<OutputLogObject> Classify(DatasetObject dataset)
         {
-         await Task.Run(() =>
-         {
-
              GetAllLabels(dataset);
              Dictionary<string, float> datasetTypeScore = GenerateDataTypeScores(dataset);
 
@@ -81,9 +78,7 @@ namespace DatasetDecider
                  datasetLabelClassifications.Add(new LabelClassification() { Label =  label.Key, Amount = label.Value.amount, Confidence = label.Value.confidence});
              }
 
-             // start here!
-
-             OuputLogObject ouputLogObject = new OuputLogObject(
+             var result = new OutputLogObject(
                  dataset.originalName,
                  succesfullyClassified,
                  new DatasetClassification()
@@ -97,7 +92,8 @@ namespace DatasetDecider
                  totalClassifiedObjects,
                  customLabeledObjects
             );
-         });
+
+            return Task.FromResult(result);
         }
 
         private void GetAllLabels(DatasetObject dataset)

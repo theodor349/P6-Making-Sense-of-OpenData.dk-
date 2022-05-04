@@ -21,9 +21,9 @@ namespace Shared.Models
     }
 
 
-    public class OuputLogObject
+    public class OutputLogObject
     {
-        public OuputLogObject(string fileName, bool succesfullyClassified, DatasetClassification datasetClassification, List<DatasetClassification> otherClassifications, List<LabelClassification> labels, int totalDataSetObjects, int totalClassifiedObjects, int customLabeledObjects)
+        public OutputLogObject(string fileName, bool succesfullyClassified, DatasetClassification datasetClassification, List<DatasetClassification> otherClassifications, List<LabelClassification> labels, int totalDataSetObjects, int totalClassifiedObjects, int customLabeledObjects)
         {
             FileName = fileName;
             SuccesfullyClassified = succesfullyClassified;

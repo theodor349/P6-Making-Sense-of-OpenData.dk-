@@ -12,9 +12,11 @@
 
   <ItemGroup>
     <None Remove="CoordinateSharp" />
+    <None Remove="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CoordinateSharp" Version="2.12.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
   </ItemGroup>
 </Project>

@@ -70,15 +70,24 @@ namespace OpenDataParser
                 await PostProcess(dataset);
                 _logger.LogInformation("Post processing done");
 
-                await GetClassification(dataset);
+                var outputLog = await GetClassification(dataset);
                 _logger.LogInformation("Dataset classified");
 
                 var output = await datasetParser.Parse(dataset, iteration);
                 _logger.LogInformation("Output generated");
 
+                await PrintOutputLog(outputLog);
                 await PrintToFile(iteration, output);
                 _logger.LogInformation("Output printed to file");
             }
+        }
+
+        private async Task PrintOutputLog(OutputLogObject outputLog)
+        {
+            await Task.Run(() =>
+            {
+                var s = JsonSerializer.Serialize(outputLog);
+            });
         }
 
         private Task Preprocessing(DatasetObject dataset)
@@ -99,10 +108,10 @@ namespace OpenDataParser
             await pritner.Print(dataset, iteration);
         }
 
-        private async Task GetClassification(DatasetObject dataset)
+        private async Task<OutputLogObject> GetClassification(DatasetObject dataset)
         {
             var datasetClassifier = _serviceProvider.GetService<IDatasetClassifier>();
-            await datasetClassifier.Classify(dataset);
+            return await datasetClassifier.Classify(dataset);
         }
 
         private async Task AddLabels(DatasetObject dataset)
