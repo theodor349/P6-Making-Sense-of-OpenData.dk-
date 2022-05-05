@@ -70,11 +70,25 @@ namespace Printers.GeoJson
 
         private JObject GenerateGeometry(IntermediateOutput io)
         {
-            if(io is ParkingSpot)
+            if(io is GeodataOutput<MultiPolygon>)
             {
                 return GenerateMultiPolygon(((GeodataOutput<MultiPolygon>)io).GeoFeatures);
             }
+            else if (io is GeodataOutput<LineString>)
+            {
+                return GenerateLineString(((GeodataOutput<LineString>)io).GeoFeatures);
+            }
             return new JObject();
+        }
+
+        private JObject GenerateLineString(LineString geoFeatures)
+        {
+            var root = new JObject();
+            var lineString = GenerateLinearRing(geoFeatures.Coordinates);
+
+            root.Add(new JProperty("type", "LineString"));
+            root.Add("coordinates", lineString);
+            return root;
         }
 
         private JObject GenerateMultiPolygon(MultiPolygon geoFeatures)
