@@ -121,22 +121,22 @@ namespace DatasetParser.Test
             var iteration = fixture.Create<int>();
 
             var setup = new TestSetup();
-            var factory = setup.RouteFactory();
+            var factory = setup.GenericFactory();
 
             var task = factory.BuildDataset(dataset, iteration);
             task.Wait();
-            var res = task.Result.ConvertAll(x => (RouteSpecialization)x);
+            var res = task.Result.ConvertAll(x => (GenericSpecialization<LineString>)x);
 
             res.Count.Should().Be(objects.Count);
             EvaluateLinering(objects[0].Attributes[0], res[0].GeoFeatures);
         }
 
-        private void EvaluateLinering(ObjectAttribute objectAttribute, LineString polygon)
+        private void EvaluateLinering(ObjectAttribute objectAttribute, LineString lineString)
         {
             var list = (List<ObjectAttribute>)objectAttribute.Value;
             for (int i = 0; i < list.Count; i++)
             {
-                EvaluatePoint(list[i], polygon.Coordinates[i]);
+                EvaluatePoint(list[i], lineString.Coordinates[i]);
             }
         }
 
@@ -167,14 +167,14 @@ namespace DatasetParser.Test
             var iteration = fixture.Create<int>();
 
             var setup = new TestSetup();
-            var factory = setup.RouteFactory();
+            var factory = setup.GenericFactory();
 
             var task = factory.BuildDataset(dataset, iteration);
             task.Wait();
-            var res = task.Result.ConvertAll(x => (RouteSpecialization)x);
+            var res = task.Result.ConvertAll(x => (GenericSpecialization<LineString>)x);
 
-            res.First().Name.Should().Be(name);
-            res.First().Description.Should().Be(description);
+            res.First().Properties.First(x => x.Name == "Name").Value.Should().BeEquivalentTo(name);
+            res.First().Properties.First(x => x.Name == "Description").Value.Should().BeEquivalentTo(description);
         }
     }
 }

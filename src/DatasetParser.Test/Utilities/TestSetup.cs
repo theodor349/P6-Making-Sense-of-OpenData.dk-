@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DatasetParser;
 using DatasetParser.Factories;
+using Shared.Models.Output.Specializations;
 
 namespace DatasetParser.Test.Utilities
 {
@@ -18,6 +19,15 @@ namespace DatasetParser.Test.Utilities
         internal RouteFactory RouteFactory()
         {
             return new RouteFactory(); 
+        }
+
+        internal GenericFactory GenericFactory()
+        {
+            var description = new SpecializationDescription();
+            description.GeoFeatureType = GeoFeatureType.LineString;
+            description.Properties.Add(new SpecializationPropertyDescription("Name", "Name"));
+            description.Properties.Add(new SpecializationPropertyDescription("Description", "Description"));
+            return new GenericFactory(description);
         }
     }
 }
