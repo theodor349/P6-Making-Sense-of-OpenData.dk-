@@ -58,11 +58,11 @@ namespace Printers.GeoJson
             var root = new JObject();
             
             var geoProperties = typeof(GeodataOutput<GeoFeature>).GetProperties().ToLookup(y => y.Name);
-            var properties = io.GetType().GetProperties().Where(x => !geoProperties.Contains(x.Name)).ToArray();
+            var properties = io.Properties;
 
             foreach (var p in properties)
             {
-                root.Add(new JProperty(p.Name, p.GetValue(io)));
+                root.Add(new JProperty(p.Name, p.Value));
             }
 
             return root;

@@ -13,7 +13,7 @@ using System.Reflection;
 
 namespace Printers.Tests
 {
-    class MultiPolygonPolygon : ISpecimenBuilder
+    class MultiPolygonSpecimen : ISpecimenBuilder
     {
         public object Create(object request, ISpecimenContext context)
         {
@@ -34,6 +34,18 @@ namespace Printers.Tests
         }
     }
 
+    class SpecializationPropertySpecimen : ISpecimenBuilder
+    {
+        public object Create(object request, ISpecimenContext context)
+        {
+            if (request is Type type && type == typeof(SpecializationProperty))
+            {
+                return new SpecializationProperty("name_" + context.Create<string>(), "value_" + context.Create<string>());
+            }
+            return new NoSpecimen();
+        }
+    }
+
     [TestClass]
     public class GeoJsonTests
     {
@@ -42,11 +54,12 @@ namespace Printers.Tests
         {
             // Arange 
             var fixture = new Fixture();
-            fixture.Customizations.Add(new MultiPolygonPolygon());
+            fixture.Customizations.Add(new MultiPolygonSpecimen());
+            fixture.Customizations.Add(new SpecializationPropertySpecimen());
             fixture.Customizations.Add(
             new TypeRelay(
                 typeof(IntermediateOutput),
-                typeof(ParkingSpot)));
+                typeof(GenericSpecialization<MultiPolygon>)));
 
             var dataset = fixture.Create<OutputDataset>();
             var setup = new TestSetup();
@@ -72,15 +85,14 @@ namespace Printers.Tests
         private void VerifyIOData(IntermediateOutput intermediateOutput, JToken jToken)
         {
             var geoProperties = typeof(GeodataOutput<GeoFeature>).GetProperties().ToLookup(y => y.Name);
-            var expected = intermediateOutput.GetType().GetProperties();
-            expected = expected.Where(x => !geoProperties.Contains(x.Name)).ToArray();
+            var expected = intermediateOutput.Properties;
 
             var properties = jToken.Children().ToList()[2].ToList()[0].ToList().ConvertAll(x => (JProperty)x);
 
             properties.Count.Should().Be(expected.Count());
             foreach (var e in expected)
             {
-                var v = e.GetValue(intermediateOutput).ToString();
+                var v = e.Value.ToString();
                 bool found = false;
                 foreach (var p in properties)
                 {
@@ -99,7 +111,8 @@ namespace Printers.Tests
         {
             // Arange 
             var fixture = new Fixture();
-            fixture.Customizations.Add(new MultiPolygonPolygon());
+            fixture.Customizations.Add(new MultiPolygonSpecimen());
+            fixture.Customizations.Add(new SpecializationPropertySpecimen());
             fixture.Customizations.Add(
             new TypeRelay(
                 typeof(IntermediateOutput),

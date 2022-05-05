@@ -8,8 +8,6 @@ namespace Shared.Models.Output.Specializations
 {
     public class GenericSpecialization<T> : GeodataOutput<T> where T : GeoFeature
     {
-        public List<SpecializationProperty> Properties { get; set; } = new();
-
         public GenericSpecialization(T geoFeature, List<SpecializationProperty> properties)
         {
             GeoFeatures = geoFeature;
