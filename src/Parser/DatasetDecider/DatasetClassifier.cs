@@ -52,12 +52,12 @@ namespace DatasetDecider
 
              if (datasetTypeScoreMax.Value == 0)
              {
-                 succesfullyClassified = true;
+                 succesfullyClassified = false;
                  dataset.DatasetType = (DatasetType)Enum.Parse(typeof(DatasetType), _lookupTable.DefaultSpecification);
              }
              else
              {
-                 succesfullyClassified = false;
+                 succesfullyClassified = true;
                  dataset.DatasetType = (DatasetType)Enum.Parse(typeof(DatasetType), datasetTypeScoreMax.Key);
              }
 
@@ -134,7 +134,7 @@ namespace DatasetDecider
 
                     float averagePercentage = ((oldAmount * oldPercentage) + newPercentage) / (oldAmount + 1);
 
-                    _objectLabels[label.Label] = new LabelInfo() { amount = labelInfo.amount++, confidence = averagePercentage};
+                    _objectLabels[label.Label] = new LabelInfo() { amount = ++labelInfo.amount, confidence = averagePercentage};
                 }
                 if (PredefinedLabels.Labels.Contains(label.Label) == false)
                 {

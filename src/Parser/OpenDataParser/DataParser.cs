@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using Printers.OutputLog;
 using Shared.ComponentInterfaces;
 using Shared.Models;
 using Shared.Models.Output;
@@ -76,22 +77,21 @@ namespace OpenDataParser
                 var output = await datasetParser.Parse(dataset, iteration);
                 _logger.LogInformation("Output generated");
 
-                await PrintOutputLog(outputLog);
+                await PrintOutputLog(outputLog, iteration);
                 await PrintToFile(iteration, output);
                 _logger.LogInformation("Output printed to file");
             }
         }
 
-        private async Task PrintOutputLog(OutputLogObject outputLog)
+        private async Task PrintOutputLog(OutputLogObject outputLog, int iteration)
         {
-            await Task.Run(() =>
-            {
-                var s = JsonSerializer.Serialize(outputLog);
-            });
+                var printer = _serviceProvider.GetService<IOutputLogPrinter>();
+                var output = await printer.GetOutputLog(outputLog);
+                await printer.Print(output, iteration, outputLog.FileName);
         }
 
         private Task Preprocessing(DatasetObject dataset)
-        {
+        { 
             // TODO: Preprocessing
             return Task.CompletedTask;
         }
@@ -104,8 +104,8 @@ namespace OpenDataParser
 
         private async Task PrintToFile(int iteration, OutputDataset dataset)
         {
-            var pritner = _serviceProvider.GetService<IPrinter>();
-            await pritner.Print(dataset, iteration);
+            var printer = _serviceProvider.GetService<IPrinter>();
+            await printer.Print(dataset, iteration);
         }
 
         private async Task<OutputLogObject> GetClassification(DatasetObject dataset)

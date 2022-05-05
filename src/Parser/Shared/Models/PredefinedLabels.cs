@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Shared.Models
@@ -19,17 +20,11 @@ namespace Shared.Models
         public const string Bool = "Bool";
         public const string LineString = "LineString";
         public const string MultiPoint = "MultiPoint";
-        public const string Amount = "Amount";
-        public const string Address = "Address";
-        public const string Remark = "Remark";
-        public const string Parking = "Parking";
-        public const string Route = "Route";
 
         public static List<string> Labels { get
             {
-                var t = typeof(string);
-                return new List<string>(t.GetFields().Select(x => x.Name));           
-            } 
+                return typeof(PredefinedLabels).GetFields().Select(f => f.Name).ToList();
+            }
         }
 
     }

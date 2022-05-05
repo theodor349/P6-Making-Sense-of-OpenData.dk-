@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Printers.GeoJson;
+using Printers.OutputLog;
 using Shared.ComponentInterfaces;
 
 namespace Printers
@@ -11,6 +12,7 @@ namespace Printers
             services.AddTransient<IPrinter, Printer>();
             services.AddTransient<IGeoJsonPrinter, GeoJsonPrinter>();
             services.AddTransient<IFilePrinter, FilePrinter>();
+            services.AddTransient<IOutputLogPrinter, OutputLogPrinter>();
         }
     }
 }

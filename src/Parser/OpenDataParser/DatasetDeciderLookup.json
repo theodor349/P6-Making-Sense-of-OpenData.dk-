@@ -8,6 +8,16 @@
             "Parking",
             "Parkering"
         ]
+    },
+    {
+        "DatasetClassification": "Routes",
+        "Score": 1,
+        "Requirements": [
+            "Rute",
+            "Route",
+            "sti",
+            "tur"
+        ]
     }
   ],
   "ContentSpecification": 
@@ -21,7 +31,7 @@
       ]
     },
     {
-      "DatasetClassification": "Route",
+      "DatasetClassification": "Routes",
       "Score": 0.6,
       "Requirements": [
         "Routes",

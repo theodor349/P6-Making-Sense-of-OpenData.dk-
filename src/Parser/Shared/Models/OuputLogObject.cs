@@ -53,7 +53,7 @@ namespace Shared.Models
         public float PercentageOfClassifiedObjects { 
             get
             {
-                return TotalDataSetObjects / TotalClassifiedObjects * 100f;
+                return TotalClassifiedObjects / (float)TotalDataSetObjects * 100f;
             } 
         }
     }
