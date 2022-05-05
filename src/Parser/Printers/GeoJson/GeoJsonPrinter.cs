@@ -122,18 +122,5 @@ namespace Printers.GeoJson
         {
             return new JValue(value);
         }
-
-        internal static JProperty ReturnPolygonProperty()
-        {
-            JArray coords = new JArray();
-            coords.Add(new JArray(1.1, 1.2));
-            coords.Add(new JArray(1.3, 1.4));
-            coords.Add(new JArray(1.5, 1.6));
-            coords.Add(new JArray(1.1, 1.2));
-            JArray JArr = new JArray();
-            JArr.Add(coords);
-            JProperty JProp = new JProperty("coordinates", JArr);
-            return JProp;
-        }
     }
 }
