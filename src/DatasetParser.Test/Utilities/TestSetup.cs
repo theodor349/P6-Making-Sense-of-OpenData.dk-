@@ -21,7 +21,7 @@ namespace DatasetParser.Test.Utilities
             return new RouteFactory(); 
         }
 
-        internal GenericFactory GenericFactory()
+        internal GenericFactory GenericFactoryRoute()
         {
             var description = new SpecializationDescription();
             description.GeoFeatureType = GeoFeatureType.LineString;

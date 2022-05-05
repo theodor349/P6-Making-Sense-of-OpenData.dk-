@@ -121,7 +121,7 @@ namespace DatasetParser.Test
             var iteration = fixture.Create<int>();
 
             var setup = new TestSetup();
-            var factory = setup.GenericFactory();
+            var factory = setup.GenericFactoryRoute();
 
             var task = factory.BuildDataset(dataset, iteration);
             task.Wait();
@@ -167,7 +167,7 @@ namespace DatasetParser.Test
             var iteration = fixture.Create<int>();
 
             var setup = new TestSetup();
-            var factory = setup.GenericFactory();
+            var factory = setup.GenericFactoryRoute();
 
             var task = factory.BuildDataset(dataset, iteration);
             task.Wait();
