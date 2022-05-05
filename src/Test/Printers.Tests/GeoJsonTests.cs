@@ -34,6 +34,27 @@ namespace Printers.Tests
         }
     }
 
+    class LineStringSpecimen : ISpecimenBuilder
+    {
+        public object Create(object request, ISpecimenContext context)
+        {
+            if (request is Type type && type == typeof(LineString))
+            {
+                return new LineString()
+                {
+                    Coordinates = new List<Point>()
+                    {
+                        context.Create<Point>(),
+                        context.Create<Point>(),
+                        context.Create<Point>(),
+                        context.Create<Point>(),
+                    }
+                };
+            }
+            return new NoSpecimen();
+        }
+    }
+
     class SpecializationPropertySpecimen : ISpecimenBuilder
     {
         public object Create(object request, ISpecimenContext context)
@@ -116,7 +137,7 @@ namespace Printers.Tests
             fixture.Customizations.Add(
             new TypeRelay(
                 typeof(IntermediateOutput),
-                typeof(ParkingSpot)));
+                typeof(GenericSpecialization<MultiPolygon>)));
 
             var dataset = fixture.Create<OutputDataset>();
             var setup = new TestSetup();
@@ -144,31 +165,28 @@ namespace Printers.Tests
 
         private void VerifyIOMultiPolygon(IntermediateOutput intermediateOutput, JToken jToken)
         {
-            if(intermediateOutput is GeodataOutput<MultiPolygon>)
-            {
-                var io = (GeodataOutput<MultiPolygon>)intermediateOutput;
+            var io = (GeodataOutput<MultiPolygon>)intermediateOutput;
 
-                var geometry = jToken.Children().ToList()[1].ToList()[0];
-                var multipolygonRoot = geometry.Children().ToList();
-                var multipolygon = multipolygonRoot.Children().ToList()[1];
-                var polygons = multipolygon.Children().ToList();
-                for (int i = 0; i < io.GeoFeatures.Polygons.Count; i++)
-                {
-                    VerifyPolygon(io.GeoFeatures.Polygons[i], polygons[i]);
-                }
+            var geometry = jToken.Children().ToList()[1].ToList()[0];
+            var multipolygonRoot = geometry.Children().ToList();
+            var multipolygon = multipolygonRoot.Children().ToList()[1];
+            var polygons = multipolygon.Children().ToList();
+            for (int i = 0; i < io.GeoFeatures.Polygons.Count; i++)
+            {
+                VerifyPolygon(io.GeoFeatures.Polygons[i], polygons[i]);
             }
         }
 
         private void VerifyPolygon(Polygon expected, JToken polygon)
         {
-            VerifyLineRing(expected, polygon[0]);
+            VerifyLineRing(expected.Coordinates, polygon[0]);
         }
 
-        private void VerifyLineRing(Polygon expected, JToken? lineRing)
+        private void VerifyLineRing(List<Point> coordinates, JToken? lineRing)
         {
-            for (int i = 0; i < expected.Coordinates.Count; i++)
+            for (int i = 0; i < coordinates.Count; i++)
             {
-                VerifyPoint(expected.Coordinates[i], lineRing[i]);
+                VerifyPoint(coordinates[i], lineRing[i]);
             }
         }
 
@@ -179,6 +197,48 @@ namespace Printers.Tests
             var v1 = ((double)coords[1]);
             v0.Should().Be(expected.Longitude);
             v1.Should().Be(expected.Latitude);
+        }
+
+        [TestMethod]
+        public void Print_ParkingSpot_CorrectLineString()
+        {
+            // Arange 
+            var fixture = new Fixture();
+            fixture.Customizations.Add(new LineStringSpecimen());
+            fixture.Customizations.Add(new SpecializationPropertySpecimen());
+            fixture.Customizations.Add(
+            new TypeRelay(
+                typeof(IntermediateOutput),
+                typeof(GenericSpecialization<LineString>)));
+
+            var dataset = fixture.Create<OutputDataset>();
+            var setup = new TestSetup();
+            JObject? res = null;
+            setup.OnPrintToFile(x => res = x);
+
+            // Act
+            var printer = setup.GeoJsonPrinter();
+            printer.Print(dataset, 0);
+
+            // Assert
+            res.Should().NotBeNull();
+            res.Children().Should().ContainEquivalentOf(new JProperty("type", "FeatureCollection"));
+            var children = GetIOs(res);
+            for (int i = 0; i < dataset.Objects.Count; i++)
+            {
+                var linestringObject = (GeodataOutput<LineString>)dataset.Objects[i];
+                VerifyLineString(linestringObject.GeoFeatures.Coordinates, children[i]);
+            }
+        }
+
+        private void VerifyLineString(List<Point> coordinates, JToken jToken)
+        {
+
+            var geometry = jToken.Children().ToList()[1].ToList()[0];
+            var multipolygonRoot = geometry.Children().ToList();
+            var multipolygon = multipolygonRoot.Children().ToList()[1];
+            var lineString = multipolygon;
+            VerifyLineRing(coordinates, lineString);
         }
     }
 }
