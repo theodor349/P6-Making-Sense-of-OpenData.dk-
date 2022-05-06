@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Shared.Models
@@ -17,6 +18,7 @@ namespace Shared.Models
         public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
         public bool HasProperty(string key) => Properties.ContainsKey(key);
         public string GetProperty(string key) => Properties[key];
+        public CoordinateReferenceSystem Crs => JsonSerializer.Deserialize<CoordinateReferenceSystem>(Properties["CoordinateReferenceSystem"]);
 
 
         public DatasetObject(string originalExtensionName, string originalName)

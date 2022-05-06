@@ -26,16 +26,29 @@ namespace DatasetParser.Factories
         public Task<List<IntermediateOutput>> BuildDataset(DatasetObject dataset, int iteration)
         {
             var res = new List<IntermediateOutput>();
+            var threads = new List<Task<IntermediateOutput>>();
 
-            foreach (var io in dataset.Objects)
+            for (int i = 0; i < dataset.Objects.Count; i++)
             {
-                res.Add(GenerateModel(io, Description));
+                IntermediateObject? io = dataset.Objects[i];
+                threads.Add(GenerateModelAsync(io, Description, dataset.Crs, i));
+            }
+
+            Task.WaitAll(threads.ToArray());
+            foreach (var thread in threads)
+            {
+                res.Add(thread.Result);
             }
 
             return Task.FromResult(res);
         }
 
-        private IntermediateOutput GenerateModel(IntermediateObject io, SpecializationDescription description)
+        private Task<IntermediateOutput> GenerateModelAsync(IntermediateObject io, SpecializationDescription description, CoordinateReferenceSystem crs, int i)
+        {
+            return Task.Run(() => GenerateModel(io, description, crs, i));
+        }
+
+        private IntermediateOutput GenerateModel(IntermediateObject io, SpecializationDescription description, CoordinateReferenceSystem crs, int i)
         {
             var properties = new List<SpecializationProperty>();
             ObjectAttribute geoFeatureObject = null;
@@ -50,10 +63,12 @@ namespace DatasetParser.Factories
                     properties.Add(new SpecializationProperty(find.Key, finds.BestFit(find.Key).Value));
             }
 
-            return GenerateSpecialization(description, geoFeatureObject, properties);
+            var model = GenerateSpecialization(description, geoFeatureObject, properties, crs);
+            model.Properties.Add(new SpecializationProperty("Index", i));
+            return model;
         }
 
-        private IntermediateOutput GenerateSpecialization(SpecializationDescription description, ObjectAttribute? geoFeatureObject, List<SpecializationProperty> properties)
+        private IntermediateOutput GenerateSpecialization(SpecializationDescription description, ObjectAttribute? geoFeatureObject, List<SpecializationProperty> properties, CoordinateReferenceSystem crs)
         {
             switch (description.GeoFeatureType)
             {
@@ -63,7 +78,7 @@ namespace DatasetParser.Factories
                 case GeoFeatureType.MultiPoint:
                     throw new NotImplementedException();
                 case GeoFeatureType.LineString:
-                    return new GenericSpecialization<LineString>(GetLineString(geoFeatureObject), properties);
+                    return new GenericSpecialization<LineString>(GetLineString(geoFeatureObject, crs), properties);
                 case GeoFeatureType.MultiLineString:
                     throw new NotImplementedException();
                 case GeoFeatureType.Polygon:
@@ -75,31 +90,28 @@ namespace DatasetParser.Factories
             }
         }
 
-        private LineString GetLineString(ObjectAttribute? polygonAttribute)
+        private LineString GetLineString(ObjectAttribute? polygonAttribute, CoordinateReferenceSystem crs)
         {
             var res = new LineString();
             if (polygonAttribute != null)
-                res.Coordinates = GetCoordinates((ListAttribute)polygonAttribute);
+                res.Coordinates = GetCoordinates((ListAttribute)polygonAttribute, crs);
             return res;
         }
 
-        private List<Point> GetCoordinates(ListAttribute attribute)
+        private List<Point> GetCoordinates(ListAttribute attribute, CoordinateReferenceSystem crs)
         {
             var points = new List<Point>();
             foreach (var child in (List<ObjectAttribute>)attribute.Value)
             {
-                points.Add(GetCoordinate(child));
+                points.Add(GetCoordinate(child, crs));
             }
             return points;
         }
 
-        private Point GetCoordinate(ObjectAttribute child)
+        private Point GetCoordinate(ObjectAttribute child, CoordinateReferenceSystem crs)
         {
-            var children = (List<ObjectAttribute>)child.Value;
-            var point = new Point();
-            point.Longitude = GetDouble(children[0]);
-            point.Latitude = GetDouble(children[1]);
-            return point;
+            var coord = new GenericCoordinate(child, crs);
+            return new Point(coord.Longitude, coord.Latitude);
         }
 
         private double GetDouble(ObjectAttribute objectAttribute)
