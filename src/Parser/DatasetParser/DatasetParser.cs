@@ -35,17 +35,13 @@ namespace DatasetParser
                     description = new SpecializationDescription()
                     {
                         GeoFeatureType = GeoFeatureType.LineString,
+                        Properties = new List<SpecializationPropertyDescription>()
+                        {
+                            new SpecializationPropertyDescription("Spots", new List<string>(){ "Type", "Route" })
+                        }
                     };
                     break;
             }
-            description = new SpecializationDescription()
-            {
-                GeoFeatureType = GeoFeatureType.LineString,
-                Properties = new List<SpecializationPropertyDescription>()
-                {
-                    new SpecializationPropertyDescription("Spots", new List<string>(){ "Type", "Route" })
-                }
-            };
 
             var factory = new GenericFactory(description);
             res.Objects = await factory.BuildDataset(dataset, iteration);

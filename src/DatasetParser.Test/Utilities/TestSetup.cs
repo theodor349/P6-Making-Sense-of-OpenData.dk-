@@ -24,5 +24,14 @@ namespace DatasetParser.Test.Utilities
             description.Properties.Add(new SpecializationPropertyDescription("Description", new List<string>() { "Description", "Beskrivelse" }));
             return new GenericFactory(description);
         }
+
+        internal GenericFactory GenericFactoryParking()
+        {
+            var description = new SpecializationDescription();
+            description.GeoFeatureType = GeoFeatureType.Polygon;
+            description.Properties.Add(new SpecializationPropertyDescription("Name", new List<string>() { "Name", "Navn" }));
+            description.Properties.Add(new SpecializationPropertyDescription("Description", new List<string>() { "Description", "Beskrivelse" }));
+            return new GenericFactory(description);
+        }
     }
 }

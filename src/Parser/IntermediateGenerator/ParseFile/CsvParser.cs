@@ -70,7 +70,22 @@ namespace DatasetGenerator.ParseFile
                 return CreateMultipolygonAttribute(value, name);
             if (value.Contains("POLYGON ", StringComparison.OrdinalIgnoreCase))
                 return CreatePolygonAttribute(value, name);
+            if (value.Contains("LineString", StringComparison.OrdinalIgnoreCase))
+                return CreateLineString(value, name);
             throw new NotImplementedException("Unable to handle geometric type: " + value.Substring(0, Math.Min(value.Length, 16)));
+        }
+
+        private ObjectAttribute CreateLineString(string value, string name)
+        {
+            var points = new List<ObjectAttribute>();
+            foreach (var pointMatch in _pointRegx.Matches(value).AsEnumerable())
+            {
+                points.Add(GeneratePoint(pointMatch.Value));
+            }
+            var polygon = new ListAttribute("LineString", points);
+            if (name != null)
+                polygon = new ListAttribute(name, new List<ObjectAttribute>() { polygon });
+            return polygon;
         }
 
         private ObjectAttribute CreateMultipolygonAttribute(string value, string name)

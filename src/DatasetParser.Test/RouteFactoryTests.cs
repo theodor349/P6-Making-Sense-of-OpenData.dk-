@@ -129,6 +129,7 @@ namespace DatasetParser.Test
                     typeof(ListAttribute)));
             var objects = fixture.CreateMany<IntermediateObject>(1).ToList();
             var dataset = new DatasetObject("filename.geojson", "geojson", objects);
+            dataset.Properties.Add("CoordinateReferenceSystem", JsonSerializer.Serialize(new CoordinateReferenceSystem(true)));
             var iteration = fixture.Create<int>();
 
             var setup = new TestSetup();

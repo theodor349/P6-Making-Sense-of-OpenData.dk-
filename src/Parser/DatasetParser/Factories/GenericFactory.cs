@@ -31,7 +31,9 @@ namespace DatasetParser.Factories
             for (int i = 0; i < dataset.Objects.Count; i++)
             {
                 IntermediateObject? io = dataset.Objects[i];
-                threads.Add(GenerateModelAsync(io, Description, dataset.Crs, i));
+                var thread = GenerateModelAsync(io, Description, dataset.Crs, i);
+                thread.Wait();
+                threads.Add(thread);
             }
 
             Task.WaitAll(threads.ToArray());
@@ -54,6 +56,7 @@ namespace DatasetParser.Factories
             ObjectAttribute geoFeatureObject = null;
 
             var labels = description.Properties;
+            labels.Add(new SpecializationPropertyDescription(description.GeoFeatureType.ToString(), new List<string>() { description.GeoFeatureType.ToString() }));
             var finds = LabelFinder.FindLabels(io, labels);
             foreach (var find in finds.Result)
             {
