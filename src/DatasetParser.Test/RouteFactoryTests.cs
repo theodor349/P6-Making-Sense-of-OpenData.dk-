@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DatasetParser.Test
@@ -93,10 +94,20 @@ namespace DatasetParser.Test
                 var attributes = _context.CreateMany<ListAttribute>(1).ToList().ConvertAll(x => (ObjectAttribute)x);
                 var nameAttribute = new TextAttribute("name", name);
                 nameAttribute.AddLabel("Name", 1);
+                nameAttribute.AddLabel("Navn", 1);
+                var otherNameAttribute = new TextAttribute("name", name + " should not be this");
+                otherNameAttribute.AddLabel("Name", 1);
+
                 var descriptionAttribute = new TextAttribute("description", description);
                 descriptionAttribute.AddLabel("Description", 1);
+                descriptionAttribute.AddLabel("Beskrivelse", 1);
+                var otherDescriptionAttribute = new TextAttribute("description", description + " should not be this");
+                otherDescriptionAttribute.AddLabel("Description", 1);
+                
                 attributes.Add(nameAttribute);
+                attributes.Add(otherNameAttribute);
                 attributes.Add(descriptionAttribute);
+                attributes.Add(otherDescriptionAttribute);
                 return new IntermediateObject(attributes);
             }
             return new NoSpecimen();
@@ -164,6 +175,7 @@ namespace DatasetParser.Test
                     typeof(ListAttribute)));
             var objects = fixture.CreateMany<IntermediateObject>(1).ToList();
             var dataset = new DatasetObject("filename.geojson", "geojson", objects);
+            dataset.Properties.Add("CoordinateReferenceSystem", JsonSerializer.Serialize(new CoordinateReferenceSystem(true)));
             var iteration = fixture.Create<int>();
 
             var setup = new TestSetup();

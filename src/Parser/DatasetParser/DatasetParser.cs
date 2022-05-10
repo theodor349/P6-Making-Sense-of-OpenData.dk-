@@ -34,13 +34,17 @@ namespace DatasetParser
                 case DatasetType.Routes:
                     description = new SpecializationDescription()
                     {
-                        GeoFeatureType = GeoFeatureType.LineString
+                        GeoFeatureType = GeoFeatureType.LineString,
                     };
                     break;
             }
             description = new SpecializationDescription()
             {
-                GeoFeatureType = GeoFeatureType.LineString
+                GeoFeatureType = GeoFeatureType.LineString,
+                Properties = new List<SpecializationPropertyDescription>()
+                {
+                    new SpecializationPropertyDescription("Spots", new List<string>(){ "Type", "Route" })
+                }
             };
 
             var factory = new GenericFactory(description);

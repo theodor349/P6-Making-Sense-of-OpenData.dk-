@@ -61,6 +61,25 @@
       ]
     },
     {
+      "Target": "Type",
+      "Languages": [
+        {
+          "Language": "ENG",
+          "Values": [
+            "Type",
+            "Ty"
+          ]
+        },
+        {
+          "Language": "DK",
+          "Values": [
+            "Type",
+            "Ty"
+          ]
+        }
+      ]
+    },
+    {
       "Target": "Address",
       "Languages": [
         {

@@ -53,14 +53,18 @@ namespace DatasetParser.Factories
             var properties = new List<SpecializationProperty>();
             ObjectAttribute geoFeatureObject = null;
 
-            var labels = description.GetLabels();
+            var labels = description.Properties;
             var finds = LabelFinder.FindLabels(io, labels);
             foreach (var find in finds.Result)
             {
                 if (geoFeatureTargets.Contains(find.Key))
                     geoFeatureObject = finds.BestFit(find.Key);
-                else 
-                    properties.Add(new SpecializationProperty(find.Key, finds.BestFit(find.Key).Value));
+                else
+                {
+                    var fit = finds.BestFit(find.Key);
+                    if(fit != null)
+                        properties.Add(new SpecializationProperty(find.Key, fit.Value));
+                }
             }
 
             var model = GenerateSpecialization(description, geoFeatureObject, properties, crs);

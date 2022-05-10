@@ -32,24 +32,17 @@ namespace Shared.Models.Output.Specializations
     {
         public GeoFeatureType GeoFeatureType { get; set; }
         public List<SpecializationPropertyDescription> Properties { get; set; } = new List<SpecializationPropertyDescription>();
-
-        public List<string> GetLabels()
-        {
-            var res = Properties.ConvertAll(x => x.Target);
-            res.Add(GeoFeatureType.ToString());
-            return res;
-        }
     }
 
     public class SpecializationPropertyDescription
     {
         public string Name { get; set; }
-        public string Target { get; set; }
+        public List<string> Targets { get; set; }
 
-        public SpecializationPropertyDescription(string name, string target)
+        public SpecializationPropertyDescription(string name, List<string> target)
         {
             Name = name;
-            Target = target;
+            Targets = target;
         }
     }
 }

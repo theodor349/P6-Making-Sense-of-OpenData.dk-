@@ -2,18 +2,40 @@
 
 namespace DatasetParser.Helper
 {
+    public class LabelResult : IComparable<LabelResult>
+    {
+        public float Probability { get; set; }
+        public int Count { get; set; }
+        public ObjectAttribute Attribute { get; set; }
+
+        public LabelResult(float probability, int count, ObjectAttribute attribute)
+        {
+            Probability = probability;
+            Count = count;
+            Attribute = attribute;
+        }
+
+        public int CompareTo(LabelResult? other)
+        {
+            if(Count == other.Count)
+                return Probability.CompareTo(other.Probability);
+            else 
+                return Count.CompareTo(other.Count);
+        }
+    }
+
     public class LabelFindeResult
     {
-        public Dictionary<string, List<KeyValuePair<float, ObjectAttribute>>> Result { get; private set; } = new();
+        public Dictionary<string, List<LabelResult>> Result { get; private set; } = new();
 
-        public void AddFind(string label, float probability, ObjectAttribute attribute)
+        public void AddFind(string label, float probability, int count, ObjectAttribute attribute)
         {
             if (Result.ContainsKey(label))
-                Result[label].Add(new KeyValuePair<float, ObjectAttribute>(probability, attribute));
+                Result[label].Add(new LabelResult(probability, count, attribute));
             else
             {
-                var list = new List<KeyValuePair<float, ObjectAttribute>>();
-                list.Add(new KeyValuePair<float, ObjectAttribute>(probability, attribute));
+                var list = new List<LabelResult>();
+                list.Add(new LabelResult(probability, count, attribute));
                 Result.Add(label, list);
             }
         }
@@ -30,19 +52,19 @@ namespace DatasetParser.Helper
         {
             if (Result.ContainsKey(label))
             {
-                Result[label].Sort((x, y) => x.Key.CompareTo(y.Key));
-                return Result[label].Last().Value;
+                Result[label].Sort();
+                return Result[label].Last().Attribute;
             }
             else
                 return null;
 
         }
 
-        private void AddFind(string label, List<KeyValuePair<float, ObjectAttribute>> findings)
+        private void AddFind(string label, List<LabelResult> findings)
         {
             foreach (var find in findings)
             {
-                AddFind(label, find.Key, find.Value);
+                AddFind(label, find.Probability, find.Count, find.Attribute);
             }
         }
     }
