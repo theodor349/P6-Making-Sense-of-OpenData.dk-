@@ -107,6 +107,29 @@
           ]
         }
       ]
+    },
+    {
+      "Target": "Toilet",
+      "Languages": [
+        {
+          "Language": "ENG",
+          "Values": [
+            "Toilet",
+            "WC",
+            "Bathroom",
+            "Lavatory",
+            "Urinal",
+            "Water Closet"
+          ]
+        },
+        {
+          "Language": "DK",
+          "Values": [
+            "Badeværelse",
+            "Pissoir"
+          ]
+        }
+      ]
     }
   ]
 }

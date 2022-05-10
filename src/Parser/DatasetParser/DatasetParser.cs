@@ -31,7 +31,7 @@ namespace DatasetParser
                         GeoFeatureType = GeoFeatureType.MultiPolygon
                     };
                     break;
-                case DatasetType.Routes:
+                case DatasetType.Route:
                     description = new SpecializationDescription()
                     {
                         GeoFeatureType = GeoFeatureType.LineString

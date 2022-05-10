@@ -122,7 +122,7 @@ namespace DatasetParser
             {
                 case DatasetType.Parking:
                     return ParkingAttrTagOrder(objAttr);
-                case DatasetType.Routes:
+                case DatasetType.Route:
                     return RoutesAttrTagOrder(objAttr);
             }
             throw new NullReferenceException();

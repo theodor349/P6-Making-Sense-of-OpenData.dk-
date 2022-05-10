@@ -10,14 +10,14 @@
         ]
     },
     {
-        "DatasetClassification": "Routes",
-        "Score": 1,
-        "Requirements": [
-            "Rute",
-            "Route",
-            "sti",
-            "tur"
-        ]
+      "DatasetClassification": "Route",
+      "Score": 1,
+      "Requirements": [
+        "Rute",
+        "Route",
+        "Sti",
+        "Tur"
+      ]
     }
   ],
   "ContentSpecification": 
@@ -31,10 +31,10 @@
       ]
     },
     {
-      "DatasetClassification": "Routes",
+      "DatasetClassification": "Route",
       "Score": 0.6,
       "Requirements": [
-        "Routes",
+        "Route",
         "Point"
       ]
     }
