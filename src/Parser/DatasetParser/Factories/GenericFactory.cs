@@ -68,8 +68,10 @@ namespace DatasetParser.Factories
                 else
                 {
                     var fit = finds.BestFit(find.Key);
-                    if(fit != null)
+                    if (fit != null)
                         properties.Add(new SpecializationProperty(find.Key, fit.Value));
+                    else
+                        properties.Add(new SpecializationProperty(find.Key, null));
                 }
             }
 
