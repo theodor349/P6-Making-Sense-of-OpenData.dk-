@@ -42,9 +42,6 @@ namespace DatasetGenerator.ParseFile
 
         private ObjectAttribute GetAttribute(string name, string value)
         {
-            if(value.Contains("Silkeborg Langsø rundt"))
-                Console.WriteLine("Stop");
-
             if (value.Length == 0)
                 return new NullAttribute(name);
             if (IsGeometricColumn(name))
