@@ -92,10 +92,30 @@ namespace DatasetParser.Factories
                 case GeoFeatureType.Polygon:
                     throw new NotImplementedException();
                 case GeoFeatureType.MultiPolygon:
-                    throw new NotImplementedException();
+                    return new GenericSpecialization<MultiPolygon>(GetMultiPolygon(geoFeatureObject, crs), properties);
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        private MultiPolygon GetMultiPolygon(ObjectAttribute? geoFeatureObject, CoordinateReferenceSystem crs)
+        {
+            var multiPolygon = new MultiPolygon();
+            var polygons = new List<Polygon>();
+            foreach (var p in (List<ObjectAttribute>)geoFeatureObject.Value)
+            {
+                polygons.Add(GetPolygon(p, crs));
+            }
+            multiPolygon.Polygons = polygons;
+            return multiPolygon;
+        }
+
+        private Polygon GetPolygon(ObjectAttribute polygonAttribute, CoordinateReferenceSystem crs)
+        {
+            var res = new Polygon();
+            if (polygonAttribute != null)
+                res.Coordinates = GetCoordinates((ListAttribute)polygonAttribute, crs);
+            return res;
         }
 
         private LineString GetLineString(ObjectAttribute? polygonAttribute, CoordinateReferenceSystem crs)

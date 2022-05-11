@@ -28,7 +28,7 @@ namespace DatasetParser.Test.Utilities
         internal GenericFactory GenericFactoryParking()
         {
             var description = new SpecializationDescription();
-            description.GeoFeatureType = GeoFeatureType.Polygon;
+            description.GeoFeatureType = GeoFeatureType.MultiPolygon;
             description.Properties.Add(new SpecializationPropertyDescription("Name", new List<string>() { "Name", "Navn" }));
             description.Properties.Add(new SpecializationPropertyDescription("Description", new List<string>() { "Description", "Beskrivelse" }));
             return new GenericFactory(description);

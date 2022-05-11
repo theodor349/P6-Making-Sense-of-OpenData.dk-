@@ -20,6 +20,7 @@ namespace Shared.Models
         public const string Bool = "Bool";
         public const string LineString = "LineString";
         public const string MultiPoint = "MultiPoint";
+        public const string MultiPolygon = "MultiPolygon";
 
         public static List<string> Labels { get
             {

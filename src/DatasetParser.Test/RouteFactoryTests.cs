@@ -16,6 +16,71 @@ using System.Threading.Tasks;
 
 namespace DatasetParser.Test
 {
+    class ListAttributeMultiPolygon : ISpecimenBuilder
+    {
+        ISpecimenContext _context;
+
+        public object Create(object request, ISpecimenContext context)
+        {
+            _context = context;
+            if (request is Type type && type == typeof(ListAttribute))
+            {
+                return GenerateMultiPolygon();
+            }
+            return new NoSpecimen();
+        }
+
+        private ListAttribute GenerateMultiPolygon()
+        {
+            var polygons = new List<ObjectAttribute>();
+            for (int i = 0; i < 3; i++)
+            {
+                polygons.Add(GeneratePolygon());
+            }
+            var multiPolygon = new ListAttribute("", polygons);
+            multiPolygon.AddLabel(PredefinedLabels.MultiPolygon, 1);
+            return multiPolygon;
+        }
+
+        private ListAttribute GeneratePolygon()
+        {
+            var points = GeneratePoints(4);
+            var polygon = new ListAttribute("", points);
+            polygon.AddLabel(PredefinedLabels.List, 1);
+            polygon.AddLabel(PredefinedLabels.LineString, 1);
+            polygon.AddLabel(PredefinedLabels.Polygon, 1);
+            return polygon;
+        }
+
+        private List<ObjectAttribute> GeneratePoints(int n)
+        {
+            var points = new List<ObjectAttribute>();
+            for (int i = 0; i < n; i++)
+            {
+                points.Add(GeneratePoint());
+            }
+            return points;
+        }
+
+        private ListAttribute GeneratePoint()
+        {
+            var values = new List<ObjectAttribute>();
+            values.Add(GenerateDouble());
+            values.Add(GenerateDouble());
+            var point = new ListAttribute("", values);
+            point.AddLabel(PredefinedLabels.List, 1);
+            point.AddLabel(PredefinedLabels.Point, 1);
+            return point;
+        }
+
+        private DoubleAttribute GenerateDouble()
+        {
+            var res = new DoubleAttribute("", _context.Create<double>());
+            res.AddLabel(PredefinedLabels.Double, 1);
+            return res;
+        }
+    }
+
     class ListAttributeRoute : ISpecimenBuilder
     {
         ISpecimenContext _context;
@@ -119,6 +184,49 @@ namespace DatasetParser.Test
     {
         [TestMethod]
         public void Route_SingleIO_GetsPolygon()
+        {
+            var fixture = new Fixture();
+            fixture.Customizations.Add(new IntermediateObjectRoute());
+            fixture.Customizations.Add(new ListAttributeMultiPolygon());
+            fixture.Customizations.Add(
+                new TypeRelay(
+                    typeof(ObjectAttribute),
+                    typeof(ListAttribute)));
+            var objects = fixture.CreateMany<IntermediateObject>(1).ToList();
+            var dataset = new DatasetObject("filename.geojson", "geojson", objects);
+            dataset.Properties.Add("CoordinateReferenceSystem", JsonSerializer.Serialize(new CoordinateReferenceSystem(true)));
+            var iteration = fixture.Create<int>();
+
+            var setup = new TestSetup();
+            var factory = setup.GenericFactoryParking();
+
+            var task = factory.BuildDataset(dataset, iteration);
+            task.Wait();
+            var res = task.Result.ConvertAll(x => (GenericSpecialization<MultiPolygon>)x);
+
+            res.Count.Should().Be(objects.Count);
+            EvaluateMultiPolygon(objects[0].Attributes[0], res[0].GeoFeatures);
+        }
+
+        private void EvaluateMultiPolygon(ObjectAttribute objectAttribute, MultiPolygon geoFeatures)
+        {
+            for (int i = 0; i < geoFeatures.Polygons.Count; i++)
+            {
+                EvaluatePolygon(((List<ObjectAttribute>)objectAttribute.Value)[i], geoFeatures.Polygons[i]);
+            }
+        }
+
+        private void EvaluatePolygon(ObjectAttribute objectAttribute, Polygon polygon)
+        {
+            var list = (List<ObjectAttribute>)objectAttribute.Value;
+            for (int i = 0; i < list.Count; i++)
+            {
+                EvaluatePoint(list[i], polygon.Coordinates[i]);
+            }
+        }
+
+        [TestMethod]
+        public void Route_SingleIO_GetsLineString()
         {
             var fixture = new Fixture();
             fixture.Customizations.Add(new IntermediateObjectRoute());
