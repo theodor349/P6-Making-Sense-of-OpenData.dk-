@@ -71,12 +71,12 @@ namespace DatasetParser.Factories
                 }
             }
 
-            var model = GenerateSpecialization(description, geoFeatureObject, properties, crs);
+            var model = GenerateSpecialization(description, geoFeatureObject, properties, crs, io);
             model.Properties.Add(new SpecializationProperty("Index", i));
             return model;
         }
 
-        private IntermediateOutput GenerateSpecialization(SpecializationDescription description, ObjectAttribute? geoFeatureObject, List<SpecializationProperty> properties, CoordinateReferenceSystem crs)
+        private IntermediateOutput GenerateSpecialization(SpecializationDescription description, ObjectAttribute? geoFeatureObject, List<SpecializationProperty> properties, CoordinateReferenceSystem crs, IntermediateObject io)
         {
             switch (description.GeoFeatureType)
             {
@@ -92,20 +92,32 @@ namespace DatasetParser.Factories
                 case GeoFeatureType.Polygon:
                     throw new NotImplementedException();
                 case GeoFeatureType.MultiPolygon:
-                    return new GenericSpecialization<MultiPolygon>(GetMultiPolygon(geoFeatureObject, crs), properties);
+                    return new GenericSpecialization<MultiPolygon>(GetMultiPolygon(geoFeatureObject, crs, io), properties);
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private MultiPolygon GetMultiPolygon(ObjectAttribute? geoFeatureObject, CoordinateReferenceSystem crs)
+        private MultiPolygon GetMultiPolygon(ObjectAttribute? geoFeatureObject, CoordinateReferenceSystem crs, IntermediateObject io)
         {
             var multiPolygon = new MultiPolygon();
             var polygons = new List<Polygon>();
-            foreach (var p in (List<ObjectAttribute>)geoFeatureObject.Value)
+            if (geoFeatureObject is null)
             {
-                polygons.Add(GetPolygon(p, crs));
+                var labels = new List<SpecializationPropertyDescription>();
+                labels.Add(new SpecializationPropertyDescription(PredefinedLabels.Polygon, new List<string>() { PredefinedLabels.Polygon }));
+                var finds = LabelFinder.FindLabels(io, labels);
+                geoFeatureObject = finds.BestFit(PredefinedLabels.Polygon);
+                polygons.Add(GetPolygon(geoFeatureObject, crs));
             }
+            else
+            {
+                foreach (var p in (List<ObjectAttribute>)geoFeatureObject.Value)
+                {
+                    polygons.Add(GetPolygon(p, crs));
+                }
+            }
+
             multiPolygon.Polygons = polygons;
             return multiPolygon;
         }
