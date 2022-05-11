@@ -27,12 +27,11 @@ namespace DatasetParser.Factories
         {
             var res = new List<IntermediateOutput>();
             var threads = new List<Task<IntermediateOutput>>();
-
-            for (int i = 0; i < dataset.Objects.Count; i++)
+            if (dataset.HasCrs)
             {
-                IntermediateObject? io = dataset.Objects[i];
-                if (dataset.HasCrs)
+                for (int i = 0; i < dataset.Objects.Count; i++)
                 {
+                    IntermediateObject? io = dataset.Objects[i];
                     var thread = GenerateModelAsync(io, Description, dataset.Crs, i);
                     threads.Add(thread);
                 }
