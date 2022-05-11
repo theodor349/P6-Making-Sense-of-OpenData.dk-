@@ -64,12 +64,12 @@ namespace LabelRecognizer.Helpers
 
         private bool IsMultiPoint(int numCoordinates, bool sameStartAndEnd)
         {
-            return numCoordinates > 0 && !sameStartAndEnd;
+            return numCoordinates > 0;
         }
 
         private bool IsLine(int numCoordinates, bool sameStartAndEnd)
         {
-            return numCoordinates > 0 && !sameStartAndEnd;
+            return numCoordinates > 0;
         }
 
         private bool IsPolygon(int numCoordinates, bool sameStartAndEnd)

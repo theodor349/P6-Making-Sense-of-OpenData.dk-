@@ -52,8 +52,8 @@ namespace LabelRecognizer.Tests.Labeling.GeoTests
             // Assert 
             var isLine = inputDataset.Objects[0].Attributes[0].HasLabel(PredefinedLabels.LineString);
             var isListOfPoints = inputDataset.Objects[0].Attributes[0].HasLabel(PredefinedLabels.MultiPoint);
-            isLine.Should().BeFalse();
-            isListOfPoints.Should().BeFalse();
+            isLine.Should().BeTrue();
+            isListOfPoints.Should().BeTrue();
         }
     }
 }
