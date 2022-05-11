@@ -149,6 +149,41 @@
           ]
         }
       ]
+    },
+    {
+      "Target": "Length",
+      "Languages": [
+        {
+          "Language": "ENG",
+          "Values": [
+            "Length"
+          ]
+        },
+        {
+          "Language": "DK",
+          "Values": [
+            "Længde",
+            "Laengde"
+          ]
+        }
+      ]
+    },
+    {
+      "Target": "Name",
+      "Languages": [
+        {
+          "Language": "ENG",
+          "Values": [
+            "Name"
+          ]
+        },
+        {
+          "Language": "DK",
+          "Values": [
+            "Navn"
+          ]
+        }
+      ]
     }
   ]
 }

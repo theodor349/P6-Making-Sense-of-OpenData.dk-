@@ -28,7 +28,11 @@ namespace DatasetParser
                 case DatasetType.Parking:
                     description = new SpecializationDescription()
                     {
-                        GeoFeatureType = GeoFeatureType.MultiPolygon
+                        GeoFeatureType = GeoFeatureType.MultiPolygon,
+                        Properties = new List<SpecializationPropertyDescription>()
+                        {
+                            new SpecializationPropertyDescription("Spots", new List<string>(){ "Type", "Route" })
+                        }
                     };
                     break;
                 case DatasetType.Route:
@@ -37,7 +41,8 @@ namespace DatasetParser
                         GeoFeatureType = GeoFeatureType.LineString,
                         Properties = new List<SpecializationPropertyDescription>()
                         {
-                            new SpecializationPropertyDescription("Spots", new List<string>(){ "Type", "Route" })
+                            new SpecializationPropertyDescription("Name", new List<string>(){ "Name" }),
+                            new SpecializationPropertyDescription("Length", new List<string>(){ "Length" }),
                         }
                     };
                     break;

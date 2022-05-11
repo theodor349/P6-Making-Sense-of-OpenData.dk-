@@ -19,6 +19,7 @@ namespace DatasetParser.Helper
         private static LabelFindeResult FindLabels(ObjectAttribute attribute, List<SpecializationPropertyDescription> labels)
         {
             var result = new LabelFindeResult();
+
             foreach (var labelTarget in labels)
             {
                 int count = 0;

@@ -32,7 +32,6 @@ namespace DatasetParser.Factories
             {
                 IntermediateObject? io = dataset.Objects[i];
                 var thread = GenerateModelAsync(io, Description, dataset.Crs, i);
-                thread.Wait();
                 threads.Add(thread);
             }
 
@@ -55,7 +54,9 @@ namespace DatasetParser.Factories
             var properties = new List<SpecializationProperty>();
             ObjectAttribute geoFeatureObject = null;
 
-            var labels = description.Properties;
+            var temp = new SpecializationPropertyDescription[description.Properties.Count()];
+            description.Properties.CopyTo(temp);
+            var labels = temp.ToList();
             labels.Add(new SpecializationPropertyDescription(description.GeoFeatureType.ToString(), new List<string>() { description.GeoFeatureType.ToString() }));
             var finds = LabelFinder.FindLabels(io, labels);
             foreach (var find in finds.Result)
