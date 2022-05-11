@@ -71,6 +71,11 @@ namespace OpenDataParser
                 await PostProcess(dataset);
                 _logger.LogInformation("Post processing done");
 
+                foreach (var p in dataset.Properties)
+                {
+                    _logger.LogWarning("{0}: {1}", p.Key, p.Value);
+                }
+
                 var outputLog = await GetClassification(dataset);
                 _logger.LogInformation("Dataset classified");
 
