@@ -20,6 +20,7 @@ namespace Shared.Models
         public string GetProperty(string key) => Properties[key];
         public CoordinateReferenceSystem Crs => JsonSerializer.Deserialize<CoordinateReferenceSystem>(Properties["CoordinateReferenceSystem"]);
 
+        public bool HasCrs => HasProperty("CoordinateReferenceSystem");
 
         public DatasetObject(string originalExtensionName, string originalName)
         {
