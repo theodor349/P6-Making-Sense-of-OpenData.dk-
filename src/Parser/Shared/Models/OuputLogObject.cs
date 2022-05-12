@@ -43,17 +43,11 @@ namespace Shared.Models
         public int TotalDataSetObjects { get; }
         public int TotalClassifiedObjects { get; }
         public int CustomLabeledObjects { get; }
-        public int UnclassifiedObjects { 
-            get
-            {
-                return TotalDataSetObjects - TotalClassifiedObjects;
-            }
-        }
 
-        public float PercentageOfClassifiedObjects { 
+        public float PercentageOfCustomObjects { 
             get
             {
-                return TotalClassifiedObjects / (float)TotalDataSetObjects * 100f;
+                return CustomLabeledObjects / (float)TotalDataSetObjects * 100f;
             } 
         }
     }

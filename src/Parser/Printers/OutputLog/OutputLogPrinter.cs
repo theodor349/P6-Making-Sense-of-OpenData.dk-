@@ -93,8 +93,7 @@ namespace Printers.OutputLog
             outputLines.Add("Total amount of data objects: " + logObject.TotalDataSetObjects);
             outputLines.Add("Classified data objects: " + logObject.TotalClassifiedObjects);
             outputLines.Add("Custom labeled data objects: " + logObject.CustomLabeledObjects);
-            outputLines.Add("Unclassified data objects: " + logObject.UnclassifiedObjects);
-            outputLines.Add("Percentage of data classified: " + logObject.PercentageOfClassifiedObjects);
+            outputLines.Add("Percentage of data that has custom labels: " + logObject.PercentageOfCustomObjects);
 
             return outputLines;
         }

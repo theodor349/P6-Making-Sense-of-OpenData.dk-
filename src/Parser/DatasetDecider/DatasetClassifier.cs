@@ -100,8 +100,6 @@ namespace DatasetDecider
         {
             foreach (var obj in dataset.Objects)
             {
-                totalDataSetObjects++;
-
                 foreach (var attr in obj.Attributes)
                 {
                     GetLabels(attr);
@@ -146,7 +144,6 @@ namespace DatasetDecider
             {
                 customLabeledObjects++;
             }
-
             if (attr.GetType() == typeof(ListAttribute))
             {
                 var children = (List<ObjectAttribute>)attr.Value;
