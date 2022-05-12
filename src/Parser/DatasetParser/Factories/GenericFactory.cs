@@ -130,7 +130,11 @@ namespace DatasetParser.Factories
         {
             var res = new Polygon();
             if (polygonAttribute != null)
+            {
                 res.Coordinates = GetCoordinates((ListAttribute)polygonAttribute, crs);
+                var coords = GenericCoordinate.SortAccordingToRightHandRule(res.Coordinates.ConvertAll(x => new GenericCoordinate(x.Latitude, x.Longitude)));
+                res.Coordinates = coords.ConvertAll(x => new Point(x.Longitude, x.Latitude));
+            }
             return res;
         }
 
@@ -138,7 +142,11 @@ namespace DatasetParser.Factories
         {
             var res = new LineString();
             if (polygonAttribute != null)
+            {
+                GenericCoordinate.FixSymetetricPolygonStructure(res.Coordinates.ConvertAll(x => new GenericCoordinate(x.Latitude, x.Longitude)), GenericCoordinate.IsSymetric((List<ObjectAttribute>)polygonAttribute.Value));
                 res.Coordinates = GetCoordinates((ListAttribute)polygonAttribute, crs);
+
+            }
             return res;
         }
 
