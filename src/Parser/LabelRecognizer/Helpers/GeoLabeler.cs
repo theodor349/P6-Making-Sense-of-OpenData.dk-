@@ -99,7 +99,7 @@ namespace LabelRecognizer.Helpers
             var right = children[1].GetLabel(PredefinedLabels.Double);
             if (right == null)
                 return;
-            attr.AddLabel(PredefinedLabels.Point, left.Probability * right.Probability);
+            attr.AddLabel(PredefinedLabels.Point, (left.Probability + right.Probability) / 2);
         }
     }
 }
