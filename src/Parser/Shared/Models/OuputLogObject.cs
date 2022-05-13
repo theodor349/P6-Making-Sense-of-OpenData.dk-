@@ -50,5 +50,17 @@ namespace Shared.Models
                 return CustomLabeledObjects / (float)TotalDataSetObjects * 100f;
             } 
         }
+        public float AvgTotalConfidence
+        {
+            get
+            {
+                float sum = 0;
+                foreach (var label in Labels)
+                {
+                    sum += label.Confidence;
+                }
+                return (sum / Labels.Count) * 100f;
+            }
+        }
     }
 }
