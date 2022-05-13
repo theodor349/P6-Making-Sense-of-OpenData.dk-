@@ -54,20 +54,23 @@ namespace LabelRecognizer.Helpers
                 return;
 
             bool sameStartAndEnd = GenericCoordinate.IsSameCoordinate(children.First(), children.Last());
+
+            bool isPolygon = IsPolygon(numCoordinates, sameStartAndEnd);
+
             if(IsPolygon(numCoordinates, sameStartAndEnd))
-                attr.AddLabel(PredefinedLabels.Polygon, 1);
-            if (IsLine(numCoordinates, sameStartAndEnd))
-                attr.AddLabel(PredefinedLabels.LineString, 1);
-            if (IsMultiPoint(numCoordinates, sameStartAndEnd))
-                attr.AddLabel(PredefinedLabels.MultiPoint, 1);
+                attr.AddLabel(PredefinedLabels.Polygon, 0.33f);
+            if (IsLine(numCoordinates))
+                attr.AddLabel(PredefinedLabels.LineString, isPolygon ? 0.33f : 0.5f);
+            if (IsMultiPoint(numCoordinates))
+                attr.AddLabel(PredefinedLabels.MultiPoint, isPolygon ? 0.33f : 0.5f);
         }
 
-        private bool IsMultiPoint(int numCoordinates, bool sameStartAndEnd)
+        private bool IsMultiPoint(int numCoordinates)
         {
             return numCoordinates > 0;
         }
 
-        private bool IsLine(int numCoordinates, bool sameStartAndEnd)
+        private bool IsLine(int numCoordinates)
         {
             return numCoordinates > 0;
         }
