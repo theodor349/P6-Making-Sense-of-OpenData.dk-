@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Printers.OutputLog;
 using Shared.ComponentInterfaces;
 using Shared.Models;
 using Shared.Models.ObjectAttributes;
@@ -22,6 +23,7 @@ namespace DatasetDecider
 
 
         private readonly IConfiguration _configuration;
+        private readonly IOutputLogPrinter _outputLogPrinter;
         private readonly DatasetLookupTable _lookupTable;
         private readonly Dictionary<string, LabelInfo> _objectLabels = new Dictionary<string, LabelInfo>();
 
@@ -30,9 +32,10 @@ namespace DatasetDecider
         private int totalClassifiedObjects;
         private int customLabeledObjects;
 
-        public DatasetClassifier(IConfiguration configuration)
+        public DatasetClassifier(IConfiguration configuration, IOutputLogPrinter outputLogPrinter)
         {
             _configuration = configuration;
+            _outputLogPrinter = outputLogPrinter;
             _lookupTable = GenerateLookuptable(configuration["Input:DatasetDeciderLookupPath"]);
         }
 
@@ -43,7 +46,7 @@ namespace DatasetDecider
             return table;
         }
 
-        public Task<OutputLogObject> Classify(DatasetObject dataset)
+        public async Task<OutputLogObject> Classify(DatasetObject dataset, int iteration)
         {
              GetAllLabels(dataset);
              Dictionary<string, float> datasetTypeScore = GenerateDataTypeScores(dataset);
@@ -93,7 +96,10 @@ namespace DatasetDecider
                  customLabeledObjects
             );
 
-            return Task.FromResult(result);
+            var output = await _outputLogPrinter.GetOutputLog(result);
+            await _outputLogPrinter.Print(output, iteration, result.FileName);
+
+            return result;
         }
 
         private void GetAllLabels(DatasetObject dataset)
