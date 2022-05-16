@@ -18,11 +18,6 @@ namespace DatasetParser.Helper
 
         public int CompareTo(LabelResult? other)
         {
-            if (other.Attribute.HasLabel(PredefinedLabels.Null))
-                return -1;
-            else if (Attribute.HasLabel(PredefinedLabels.Null))
-                return 1;
-
             if(Count == other.Count)
                 return Probability.CompareTo(other.Probability);
             else 
