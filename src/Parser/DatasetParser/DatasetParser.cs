@@ -31,7 +31,7 @@ namespace DatasetParser
                         GeoFeatureType = GeoFeatureType.MultiPolygon,
                         Properties = new List<SpecializationPropertyDescription>()
                         {
-                            new SpecializationPropertyDescription("Spots", new List<string>(){ "Type", "Route" })
+                            new SpecializationPropertyDescription("Spots", new List<string>(){ "Amount" })
                         }
                     };
                     break;

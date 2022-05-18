@@ -21,9 +21,9 @@ namespace DatasetGenerator.Test.Utilities
             ILogger<JsonParser> logger = Substitute.For<ILogger<JsonParser>>();
             return new JsonParser(logger);
         }
-        public DatasetObjectSplitter IntermediateObjectSplitter()
+        public IntermediateDatasetSplitter IntermediateObjectSplitter()
         {
-            return new DatasetObjectSplitter();
+            return new IntermediateDatasetSplitter();
         }
     }
 }
