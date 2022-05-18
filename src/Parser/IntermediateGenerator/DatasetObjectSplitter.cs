@@ -4,7 +4,7 @@ using DatasetGenerator.Models;
 
 namespace DatasetGenerator
 {
-    public class DatasetObjectSplitter : IDatasetObjectSplitter
+    public class IntermediateDatasetSplitter : IDatasetObjectSplitter
     {
         List<Pattern> patternList = new List<Pattern>();
 

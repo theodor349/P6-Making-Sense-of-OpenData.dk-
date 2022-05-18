@@ -11,7 +11,7 @@ namespace DatasetGenerator
             services.AddTransient<IDatasetGenerator, DatasetGenerator>();
             services.AddTransient<IJsonParser, JsonParser>();
             services.AddTransient<ICsvParser, CsvParser>();
-            services.AddTransient<IDatasetObjectSplitter, DatasetObjectSplitter>();
+            services.AddTransient<IDatasetObjectSplitter, IntermediateDatasetSplitter>();
         }
     }
 }
