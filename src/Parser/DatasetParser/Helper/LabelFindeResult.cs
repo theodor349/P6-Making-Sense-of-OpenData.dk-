@@ -1,4 +1,5 @@
-﻿using Shared.Models.ObjectAttributes;
+﻿using Shared.Models;
+using Shared.Models.ObjectAttributes;
 
 namespace DatasetParser.Helper
 {

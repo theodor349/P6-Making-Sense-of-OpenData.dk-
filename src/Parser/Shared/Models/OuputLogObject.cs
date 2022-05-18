@@ -43,18 +43,24 @@ namespace Shared.Models
         public int TotalDataSetObjects { get; }
         public int TotalClassifiedObjects { get; }
         public int CustomLabeledObjects { get; }
-        public int UnclassifiedObjects { 
-            get
-            {
-                return TotalDataSetObjects - TotalClassifiedObjects;
-            }
-        }
 
-        public float PercentageOfClassifiedObjects { 
+        public float PercentageOfCustomObjects { 
             get
             {
-                return TotalClassifiedObjects / (float)TotalDataSetObjects * 100f;
+                return CustomLabeledObjects / (float)TotalDataSetObjects * 100f;
             } 
+        }
+        public float AvgTotalConfidence
+        {
+            get
+            {
+                float sum = 0;
+                foreach (var label in Labels)
+                {
+                    sum += label.Confidence;
+                }
+                return (sum / Labels.Count) * 100f;
+            }
         }
     }
 }

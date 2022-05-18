@@ -69,6 +69,7 @@ namespace Printers.OutputLog
                 outputLines.Add("");
 
                 outputLines.Add("List of other classifications and scores (In descending order):");
+                logObject.OtherClassifications.Sort((x, y) => CompareConfidence(x.Score, y.Score));
                 foreach (var classification in logObject.OtherClassifications)
                 {
                     outputLines.Add(classification.Name + " had a score of " + classification.Score);
@@ -83,6 +84,7 @@ namespace Printers.OutputLog
             outputLines.Add("");
 
             outputLines.Add("List of labels found in dataset with occurance and confidence (In descending order):");
+            logObject.Labels.Sort((x, y) => CompareConfidence(x.Confidence, y.Confidence));
             foreach (var classification in logObject.Labels)
             {
                 outputLines.Add(classification.Label + " found " + classification.Amount + " times with an average confidence of " + classification.Confidence);
@@ -93,10 +95,25 @@ namespace Printers.OutputLog
             outputLines.Add("Total amount of data objects: " + logObject.TotalDataSetObjects);
             outputLines.Add("Classified data objects: " + logObject.TotalClassifiedObjects);
             outputLines.Add("Custom labeled data objects: " + logObject.CustomLabeledObjects);
-            outputLines.Add("Unclassified data objects: " + logObject.UnclassifiedObjects);
-            outputLines.Add("Percentage of data classified: " + logObject.PercentageOfClassifiedObjects);
+            outputLines.Add("Average confidence of all labels (in %): " + logObject.AvgTotalConfidence);
+            outputLines.Add("Percentage of data that has custom labels: " + logObject.PercentageOfCustomObjects);
 
             return outputLines;
+        }
+        int CompareConfidence(float x, float y)
+        {
+            if (x < y)
+            {
+                return 1;
+            }
+            else if (x == y)
+            {
+                return 0;
+            }
+            else
+            {
+                return -1;
+            }
         }
 
     }
