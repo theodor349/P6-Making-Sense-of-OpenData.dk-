@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using Shared.ComponentInterfaces;
+using Shared.Models.ObjectAttributes;
 using Shared.Models.Output;
 using Shared.Models.Output.Specializations;
 using System;
@@ -62,7 +63,10 @@ namespace Printers.GeoJson
 
             foreach (var p in properties)
             {
-                root.Add(new JProperty(p.Name, p.Value));
+                if (p.Value is TextAttribute t)
+                    root.Add(new JProperty(p.Name, (string)t.Value));
+                else
+                    root.Add(new JProperty(p.Name, p.Value.ToString()));
             }
 
             return root;

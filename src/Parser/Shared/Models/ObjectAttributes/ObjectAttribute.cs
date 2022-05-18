@@ -62,6 +62,10 @@
         {
             return Labels.FirstOrDefault(x => x.Label == label);
         }
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 
     public class LongAttribute : ObjectAttribute
@@ -82,6 +86,12 @@
     {
         public DateAttribute(string name, DateTime value) : base(name, value)
         {
+        }
+
+        public override string ToString()
+        {
+            var d = (DateTime)Value;
+            return d.ToString("dd/MM/yyyy HH:mm:ss");
         }
     }
 
