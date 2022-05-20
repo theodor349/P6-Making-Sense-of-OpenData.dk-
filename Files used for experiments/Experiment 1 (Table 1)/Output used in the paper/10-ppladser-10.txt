@@ -1,0 +1,25 @@
+Input file: ppladser.geojson
+Classification was: successful
+Classified as: Parking with the confidence score of: 0.6
+
+List of other classifications and scores (In descending order):
+Route had a score of 0
+
+List of labels found in dataset with occurance and confidence (In descending order):
+Text found 744 times with an average confidence of 1
+Type found 558 times with an average confidence of 1
+List found 3202 times with an average confidence of 1
+Long found 186 times with an average confidence of 1
+Point found 2458 times with an average confidence of 1
+Double found 4916 times with an average confidence of 1
+Parking found 186 times with an average confidence of 0.5
+Name found 186 times with an average confidence of 0.5
+Polygon found 186 times with an average confidence of 0.33000085
+LineString found 186 times with an average confidence of 0.33000085
+MultiPoint found 186 times with an average confidence of 0.33000085
+
+Total amount of data objects: 9048
+Classified data objects: 9048
+Custom labeled data objects: 930
+Average confidence of all labels (in %): 72.63639
+Percentage of data that has custom labels: 10.278515

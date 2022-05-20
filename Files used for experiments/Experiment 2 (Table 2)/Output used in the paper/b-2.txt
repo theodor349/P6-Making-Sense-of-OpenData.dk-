@@ -1,0 +1,21 @@
+Input file: b.csv
+Classification was: unsuccessful
+Classification set to default: Route
+
+List of labels found in dataset with occurance and confidence (In descending order):
+Long found 360 times with an average confidence of 1
+Text found 900 times with an average confidence of 1
+Name found 270 times with an average confidence of 1
+Null found 855 times with an average confidence of 1
+Remark found 90 times with an average confidence of 1
+Double found 45 times with an average confidence of 1
+Length found 45 times with an average confidence of 1
+Type found 180 times with an average confidence of 0.7499998
+Address found 315 times with an average confidence of 0.71428573
+Route found 225 times with an average confidence of 0.6999999
+
+Total amount of data objects: 2160
+Classified data objects: 2160
+Custom labeled data objects: 855
+Average confidence of all labels (in %): 91.64285
+Percentage of data that has custom labels: 39.583336

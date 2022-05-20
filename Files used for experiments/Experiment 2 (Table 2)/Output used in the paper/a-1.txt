@@ -1,0 +1,12 @@
+Input file: a.geojson
+Classification was: unsuccessful
+Classification set to default: Route
+
+List of labels found in dataset with occurance and confidence (In descending order):
+Double found 720 times with an average confidence of 1
+
+Total amount of data objects: 720
+Classified data objects: 720
+Custom labeled data objects: 0
+Average confidence of all labels (in %): 100
+Percentage of data that has custom labels: 0

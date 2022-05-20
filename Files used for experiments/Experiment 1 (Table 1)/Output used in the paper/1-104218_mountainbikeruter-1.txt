@@ -1,0 +1,15 @@
+Input file: 10.42.18_mountainbikeruter.geojson
+Classification was: successful
+Classified as: Route with the confidence score of: 1
+
+List of other classifications and scores (In descending order):
+Parking had a score of 0
+
+List of labels found in dataset with occurance and confidence (In descending order):
+Double found 720 times with an average confidence of 1
+
+Total amount of data objects: 720
+Classified data objects: 720
+Custom labeled data objects: 0
+Average confidence of all labels (in %): 100
+Percentage of data that has custom labels: 0

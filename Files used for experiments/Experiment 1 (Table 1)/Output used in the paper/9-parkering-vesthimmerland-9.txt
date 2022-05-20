@@ -1,0 +1,20 @@
+Input file: parkering-vesthimmerland.csv
+Classification was: successful
+Classified as: Parking with the confidence score of: 1
+
+List of other classifications and scores (In descending order):
+Route had a score of 0
+
+List of labels found in dataset with occurance and confidence (In descending order):
+Long found 56 times with an average confidence of 1
+Text found 56 times with an average confidence of 1
+Type found 56 times with an average confidence of 1
+Double found 112 times with an average confidence of 1
+Route found 56 times with an average confidence of 0.5
+Address found 56 times with an average confidence of 0.5
+
+Total amount of data objects: 224
+Classified data objects: 224
+Custom labeled data objects: 56
+Average confidence of all labels (in %): 83.33333
+Percentage of data that has custom labels: 25

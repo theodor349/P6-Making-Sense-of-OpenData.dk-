@@ -1,0 +1,26 @@
+Input file: c.geojson
+Classification was: unsuccessful
+Classification set to default: Route
+
+List of labels found in dataset with occurance and confidence (In descending order):
+Text found 4896 times with an average confidence of 1
+Type found 544 times with an average confidence of 1
+List found 6542 times with an average confidence of 1
+Long found 272 times with an average confidence of 1
+Address found 544 times with an average confidence of 1
+Amount found 816 times with an average confidence of 1
+Remark found 272 times with an average confidence of 1
+Date found 544 times with an average confidence of 1
+Double found 11390 times with an average confidence of 1
+Length found 272 times with an average confidence of 1
+Point found 5423 times with an average confidence of 1
+Name found 544 times with an average confidence of 0.75
+Polygon found 285 times with an average confidence of 0.33000112
+LineString found 285 times with an average confidence of 0.33000112
+MultiPoint found 285 times with an average confidence of 0.33000112
+
+Total amount of data objects: 23644
+Classified data objects: 23644
+Custom labeled data objects: 2992
+Average confidence of all labels (in %): 84.93335
+Percentage of data that has custom labels: 12.654373

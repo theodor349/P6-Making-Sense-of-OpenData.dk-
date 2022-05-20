@@ -1,0 +1,25 @@
+Input file: clientcuserspihodocumentsgisfileropendatavesthimmerland-vandre-cykel-og-sejl-ruter.csv
+Classification was: successful
+Classified as: Route with the confidence score of: 1
+
+List of other classifications and scores (In descending order):
+Parking had a score of 0
+
+List of labels found in dataset with occurance and confidence (In descending order):
+Null found 1176 times with an average confidence of 1
+Long found 2254 times with an average confidence of 1
+Route found 784 times with an average confidence of 1
+Text found 2548 times with an average confidence of 1
+Name found 392 times with an average confidence of 1
+Double found 98 times with an average confidence of 1
+Length found 98 times with an average confidence of 1
+Date found 196 times with an average confidence of 1
+Type found 784 times with an average confidence of 0.7500002
+Address found 294 times with an average confidence of 0.6666668
+Amount found 196 times with an average confidence of 0.5
+
+Total amount of data objects: 6272
+Classified data objects: 6272
+Custom labeled data objects: 1960
+Average confidence of all labels (in %): 90.15152
+Percentage of data that has custom labels: 31.25

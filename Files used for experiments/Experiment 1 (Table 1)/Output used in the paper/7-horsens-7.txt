@@ -1,0 +1,24 @@
+Input file: horsens.geojson
+Classification was: unsuccessful
+Classification set to default: Route
+
+List of labels found in dataset with occurance and confidence (In descending order):
+Text found 5313 times with an average confidence of 1
+Type found 1449 times with an average confidence of 1
+List found 10314 times with an average confidence of 1
+Point found 7865 times with an average confidence of 1
+Double found 15731 times with an average confidence of 1
+Long found 1933 times with an average confidence of 1
+Address found 966 times with an average confidence of 1
+Amount found 483 times with an average confidence of 1
+Remark found 483 times with an average confidence of 1
+Name found 966 times with an average confidence of 0.7500001
+Polygon found 499 times with an average confidence of 0.3300013
+LineString found 499 times with an average confidence of 0.3300013
+MultiPoint found 499 times with an average confidence of 0.3300013
+
+Total amount of data objects: 33291
+Classified data objects: 33291
+Custom labeled data objects: 4347
+Average confidence of all labels (in %): 82.6154
+Percentage of data that has custom labels: 13.057584

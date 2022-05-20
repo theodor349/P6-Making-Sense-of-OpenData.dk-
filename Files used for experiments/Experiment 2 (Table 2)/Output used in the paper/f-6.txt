@@ -1,0 +1,29 @@
+Input file: f.csv
+Classification was: successful
+Classified as: Route with the confidence score of: 0.6
+
+List of other classifications and scores (In descending order):
+Parking had a score of 0
+
+List of labels found in dataset with occurance and confidence (In descending order):
+Text found 336 times with an average confidence of 1
+Long found 168 times with an average confidence of 1
+Null found 168 times with an average confidence of 1
+Date found 84 times with an average confidence of 1
+Route found 84 times with an average confidence of 1
+Type found 42 times with an average confidence of 1
+Length found 42 times with an average confidence of 1
+List found 27368 times with an average confidence of 1
+Point found 27284 times with an average confidence of 1
+Double found 54568 times with an average confidence of 1
+Name found 210 times with an average confidence of 0.80000013
+Address found 84 times with an average confidence of 0.5
+LineString found 42 times with an average confidence of 0.47166666
+MultiPoint found 42 times with an average confidence of 0.47166666
+Polygon found 7 times with an average confidence of 0.32999998
+
+Total amount of data objects: 82692
+Classified data objects: 82692
+Custom labeled data objects: 378
+Average confidence of all labels (in %): 83.82222
+Percentage of data that has custom labels: 0.45711797

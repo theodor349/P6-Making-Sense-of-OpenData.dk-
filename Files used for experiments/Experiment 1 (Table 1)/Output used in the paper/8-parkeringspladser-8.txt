@@ -1,0 +1,29 @@
+Input file: parkeringspladser.json
+Classification was: successful
+Classified as: Parking with the confidence score of: 1
+
+List of other classifications and scores (In descending order):
+Route had a score of 0.6
+
+List of labels found in dataset with occurance and confidence (In descending order):
+Text found 68110 times with an average confidence of 1
+Type found 48650 times with an average confidence of 1
+List found 90007 times with an average confidence of 1
+Long found 48650 times with an average confidence of 1
+Double found 131364 times with an average confidence of 1
+Amount found 19460 times with an average confidence of 1
+Null found 19460 times with an average confidence of 1
+Length found 9730 times with an average confidence of 1
+Point found 51087 times with an average confidence of 1
+Route found 9730 times with an average confidence of 0.5
+Address found 9730 times with an average confidence of 0.5
+Name found 9730 times with an average confidence of 0.5
+Polygon found 9730 times with an average confidence of 0.330017
+LineString found 9730 times with an average confidence of 0.330017
+MultiPoint found 9730 times with an average confidence of 0.330017
+
+Total amount of data objects: 357591
+Classified data objects: 357591
+Custom labeled data objects: 87570
+Average confidence of all labels (in %): 76.60034
+Percentage of data that has custom labels: 24.48887
