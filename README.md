@@ -14,15 +14,15 @@ Both of these paths should be set in ```src/Parser/OpenDataParser/appsettings.Pr
         "JsonText": "/Users/<username>/Desktop/output/"
     },
     "Input": {
-        "FolderPath": "/Users<username>/Desktop/input"
+        "FolderPath": "/Users/<username>/Desktop/input"
     },
 ```
 The ```src/Parser/OpenDataParser/appsettings.json``` file is a template for what can be put into ```src/Parser/OpenDataParser/appsettings.Production.json```.
 
-### Acceptable input
+### Acceptable Input
 TWISTER currently only supports input files of .csv or .geojson. Furthermore TWISTER is currently only intended to work with datasets that contain data about parking spots, or routes (bike routes, running trails etc.)
 
-### Chaning labels
+### Changing Labels
 This will cover how to change the labesl in both the labeler and the decider.
 
 #### Labeler
