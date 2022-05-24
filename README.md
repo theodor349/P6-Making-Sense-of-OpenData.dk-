@@ -89,3 +89,19 @@ The format of a new content specification is as seen below, and should be put in
 ```
 If the content of a dataset has the required labels then the dataset will be classified with the given ```DatasetClassification```.
 
+### Output Specializations 
+Updating or adding output specializations can be done in the DatasetParser.cs file located in the DatsetParser project.
+Adding a new specialization can be done by creating a new switch case and making sure that the Classifer can create that classification.
+When adding/updateing a specialization, the Geofeature must be specefied together with a list of properties.
+An example of a Route specilization can be seen below
+```c#
+description = new SpecializationDescription()
+{
+        GeoFeatureType = GeoFeatureType.LineString,
+        Properties = new List<SpecializationPropertyDescription>()
+        {
+                new SpecializationPropertyDescription("Name", new List<string>(){ "Name" }),
+                new SpecializationPropertyDescription("Length", new List<string>(){ "Length" }),
+        }
+};
+```
