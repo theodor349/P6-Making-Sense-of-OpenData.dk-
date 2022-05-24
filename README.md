@@ -1,6 +1,6 @@
 # TWISTER
 ## A tool for data wrangling geographical data from open data portals such as Opendata.dk
-The acompaneing paper is also avaliable [here](https://github.com/theodor349/P6-Making-Sense-of-OpenData.dk-/Paper.pdf).
+The accompanying paper describing the tool is avaliable [here](https://github.com/theodor349/P6-Making-Sense-of-OpenData.dk-/blob/main/Paper.pdf).
 
 ### Requirements/ Installation
 1. Make sure you have .NET 6.0 installed.
